@@ -1,0 +1,45 @@
+[{
+  "id": "page-001",
+  "blocks": [{
+    "id": "page-001-block-002",
+    "height": 100,
+    "activated":false,
+    "widgets": [{
+      "type": "text",
+      "text": "Hallo Welt"
+    }]
+  }, {
+    "id": "page-001-block-004",
+    "height": 170,
+    "activated":false,
+    "widgets": [{
+      "type": "button",
+      "id": "btn-001",
+      "text": "Knopf 1"
+    }, {
+      "type": "button",
+      "id": "btn-002",
+      "text": "Knopf 2"
+    }, {
+      "type": "button",
+      "id": "btn-003",
+      "text": "Knopf 3"
+    }, {
+      "type": "button",
+      "id": "btn-004",
+      "text": "Knopf 4"
+    }]
+  }, {
+    "id": "page-001-block-005",
+    "height": 300,
+    "activated":false,
+    "styles": {
+      "background": "#e7e4f1"
+    },
+    "widgets": [{
+      "type": "calendar",
+      "id": "calendar-001",
+      "text": "Kalender 2021"
+    }]
+  }]
+}]

@@ -1,0 +1,30 @@
+.sidenav {
+  height: 100%;
+  width: 100%;
+
+  .mat-sidenav {
+    width: 300px;
+  }
+
+  .mat-sidenav-content {
+    height: 100%;
+  }
+
+  .mat-drawer-opened+.mat-sidenav-content {
+    width: calc(100% - 300px);
+  }
+
+  .content {
+    height: calc(100% - 64px);
+  }
+
+  .main-toolbar {
+    background: #2C5CE1;
+    color: white;
+  }
+
+  .sidenav-toolbar {
+    background: #262040;
+    color: white;
+  }
+}

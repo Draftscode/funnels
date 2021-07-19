@@ -1,0 +1,74 @@
+$white: #f8f8f8;
+
+
+::ng-deep {
+  ng-scrollbar.virtual-scroll.preview {
+
+    height: calc(100% - 46px);
+    max-height: 100%;
+    width: 60px;
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  ng-scrollbar.virtual-scroll.editor {
+    display: inline-block;
+    width: calc(100% - 0px);
+    height: calc(100% - 46px);
+  }
+}
+
+.edit-blocks {
+  padding: 10px;
+}
+
+.sidenav {
+  height: 100%;
+
+  .side-drawer {
+    width: 300px;
+  }
+}
+
+.example-item {
+  height: 74px;
+  cursor: pointer;
+  width: 36px;
+  background-color: var(--widget-background-color);
+  margin: 5px;
+  display: inline-block;
+}
+
+
+.action-bar {
+  width: calc(100% - 60px);
+  display: inline-block;
+}
+
+span.grippy {
+  content: '....';
+  width: 10px;
+  height: 20px;
+  cursor: move;
+  margin-top: -10px;
+  margin-left: -5px;
+  font-size: 12px;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  color: #cccccc;
+  text-shadow: 1px 0 1px white;
+  left: 50%;
+  top: 50%;
+  line-height: 5px;
+  position: absolute;
+  letter-spacing: 2px;
+}
+
+span.grippy::after {
+  content: '.. .. .. ..';
+}
+
+.sidenav-toolbar {
+  background: #262040;
+  color: white;
+}

@@ -1,0 +1,35 @@
+<mat-drawer-container class="sidenav">
+  <mat-drawer class="side-drawer" #sideNav mode="side" [opened]="hasActiveBlock" position="end">
+
+    <div *ngIf="currentPage">
+      <ng-container *ngFor="let block of currentPage.blocks;let blockIdx = index">
+        <ng-container *ngIf="block.activated">
+          <mat-toolbar class="sidenav-toolbar">
+            <h2>Block {{blockIdx+1}} editieren</h2>
+          </mat-toolbar>
+          <div class="edit-blocks">
+            <ng-container *ngFor="let widget of block.widgets">
+              <ng-container *ngIf="widget.type === 'button' || widget.type === 'text'">
+                <mat-form-field>
+                  <input matInput [(ngModel)]="widget.text">
+                </mat-form-field>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <ng-scrollbar [visibility]="'hover'" class="virtual-scroll editor" thumbClass="white-scrollbars">
+      <app-page class="app-page" *ngIf="currentPage" [zoom]="1" [page]="currentPage"></app-page>
+    </ng-scrollbar>
+    <div class="action-bar">
+      <button mat-button (click)="createPage()">
+        <mat-icon>add</mat-icon> neue Seite
+      </button>
+    </div>
+  </mat-drawer-content>
+
+
+</mat-drawer-container>

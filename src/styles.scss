@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --widget-background-color: #262040;
+}
+
+
+ng-scrollbar.virtual-scroll {
+  // --scrollbar-size: 8px;
+  --scrollbar-thumb-color: rgba(0, 0, 0, 0.4);
+  // --scrollbar-hover-size: 12px;
+  --scrollbar-track-color: rgba(0, 0, 0, 0.05);
+  --scrollbar-border-radius: 10px;
+}
