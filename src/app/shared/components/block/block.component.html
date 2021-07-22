@@ -2,10 +2,10 @@
   <div [class.active]="item.activated" (click)="activateBlock(item)" (cdkDragStarted)="activateBlock(item)"
     (cdkDragEnded)="activateBlock(item)" [cdkDragLockAxis]="'y'" cdkDrag class="block" [cdkDragData]="item"
     [style.height]="height+'px'" [style.background]="item.styles?.background">
-    <mat-grid-list class="grid-list" [cols]="item && item.widgets && item.widgets.length > 1 ? 2:1" rowHeight="fit">
-      <ng-container *ngFor="let widget of item?.widgets">
+    <mat-grid-list class="grid-list" [cols]="widgetCount > 1 ? 2:1" rowHeight="fit">
+      <ng-container *ngFor="let widget of item?.widgets | keyvalue">
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-          <ng-container *ngTemplateOutlet="element;context:{$implicit: widget}"></ng-container>
+          <ng-container *ngTemplateOutlet="element;context:{$implicit: widget.value}"></ng-container>
         </mat-grid-tile>
       </ng-container>
     </mat-grid-list>

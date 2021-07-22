@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { IBlock } from "src/app/editor/block";
+import { IBlock } from "src/app/shared/components/editor/block.interface";
 import * as actions from './block.actions';
 
 export const blockAdapter = createEntityAdapter<IBlock>();

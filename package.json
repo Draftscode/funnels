@@ -25,6 +25,7 @@
     "@ngrx/entity": "^12.2.0",
     "@ngrx/store": "^12.2.0",
     "@ngrx/store-devtools": "^12.2.0",
+    "@swimlane/ngx-charts": "^18.0.1",
     "angular-split": "^5.0.0",
     "moment": "^2.29.1",
     "ngx-scrollbar": "^7.5.6",

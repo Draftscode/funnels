@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared.module';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
-import { PageModule } from '../components/page/page.module';
+import { PageModule } from '../page/page.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 

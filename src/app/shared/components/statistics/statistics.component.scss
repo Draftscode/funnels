@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.toolbar {
+  background-color: rgb(75, 75, 75);
+  color: white;
+  height: 80px;
+
+  .title {
+    margin-top: -20px;
+  }
+}
+
+.grid {
+  margin: -20px 20px 20px 20px;
+}

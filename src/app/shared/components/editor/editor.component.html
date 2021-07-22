@@ -2,16 +2,16 @@
   <mat-drawer class="side-drawer" #sideNav mode="side" [opened]="hasActiveBlock" position="end">
 
     <div *ngIf="currentPage">
-      <ng-container *ngFor="let block of currentPage.blocks;let blockIdx = index">
-        <ng-container *ngIf="block.activated">
+      <ng-container *ngFor="let item of currentPage.blocks | keyvalue;let blockIdx = index">
+        <ng-container *ngIf="item.value.activated">
           <mat-toolbar class="sidenav-toolbar">
             <h2>Block {{blockIdx+1}} editieren</h2>
           </mat-toolbar>
           <div class="edit-blocks">
-            <ng-container *ngFor="let widget of block.widgets">
-              <ng-container *ngIf="widget.type === 'button' || widget.type === 'text'">
+            <ng-container *ngFor="let widget of item.value.widgets | keyvalue">
+              <ng-container *ngIf="widget.value.type === 'button' || widget.value.type === 'text'">
                 <mat-form-field>
-                  <input matInput [(ngModel)]="widget.text">
+                  <input matInput [(ngModel)]="widget.value.text">
                 </mat-form-field>
               </ng-container>
             </ng-container>
@@ -25,7 +25,7 @@
       <app-page class="app-page" *ngIf="currentPage" [zoom]="1" [page]="currentPage"></app-page>
     </ng-scrollbar>
     <div class="action-bar">
-      <button mat-button (click)="createPage()">
+      <button mat-button>
         <mat-icon>add</mat-icon> neue Seite
       </button>
     </div>

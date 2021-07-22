@@ -1,3 +1,4 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -5,9 +6,9 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { reducers } from './store/reducer';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { reducers } from './store';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { SharedModule } from './shared/shared.module';
       maxAge: 25,
     }),
   ],
-  providers: [],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

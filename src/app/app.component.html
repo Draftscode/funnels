@@ -3,11 +3,23 @@
     <mat-toolbar class="sidenav-toolbar"><button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>close</mat-icon>
       </button></mat-toolbar>
-    <div>
-      <button mat-button [routerLink]="'editor'">
-        <mat-icon>edit</mat-icon> Editor
-      </button>
-    </div>
+    <mat-list>
+      <mat-list-item>
+        <button mat-button [routerLink]="['home']">
+          <mat-icon>table_chart</mat-icon> Home
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-button [routerLink]="['editor','funndel-001']">
+          <mat-icon>pivot_table_chart</mat-icon> Funnel-Editor
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-button [routerLink]="['statistics']">
+          <mat-icon>show_chart</mat-icon> Statistiken
+        </button>
+      </mat-list-item>
+    </mat-list>
   </mat-sidenav>
 
   <mat-sidenav-content>

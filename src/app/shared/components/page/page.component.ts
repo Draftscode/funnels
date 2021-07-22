@@ -1,7 +1,7 @@
 import { CdkDrag, CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { IBlock } from "src/app/editor/block";
+import { IBlock } from "src/app/shared/components/editor/block.interface";
 import * as pageActions from './page.actions';
 import { IPage } from "./page.interface";
 import * as fromPage from './page.reducer';
@@ -26,7 +26,8 @@ export class PageComponent implements OnChanges, OnInit {
 
   activateBlock(item: IBlock): void {
     if (!this.page) { return; }
-    this.page.blocks.forEach((b: IBlock) => b.activated = false);
+    const blocks: Record<string, IBlock> = this.page.blocks;
+    Object.keys(blocks).forEach((id: string) => blocks[id].activated = false);
     item.activated = true;
     // this.store.dispatch(new pageActions.Update(this.page.id, this.page));
   }
@@ -53,10 +54,33 @@ export class PageComponent implements OnChanges, OnInit {
     return true;
   }
 
+  get sortedBlocks(): string[] {
+    const blocks: Record<string, IBlock> | undefined = this.page?.blocks;
+    if (!blocks) { return []; }
+    const s: string[] = Object.keys(blocks)
+      .sort((id1: string, id2: string) => {
+        return blocks[id1].index < blocks[id2].index ? -1 : 1;
+      });
+
+    return s;
+  }
+
   drop(event: CdkDragDrop<IBlock[]>): void {
     if (!this.page) { return; }
-    const blocks = this.page.blocks;
-    moveItemInArray(blocks, event.previousIndex, event.currentIndex);
+    const blocks: Record<string, IBlock> = this.page.blocks;
+    // const tempName: string | undefined = Object.keys(blocks).find((id: string) => blocks[id].index === event.previousIndex);
+    // if (!tempName) { return; }
+    // const tmpIdx: number = blocks[tempName].index;
+
+
+    // blocks[event.previousIndex].index = blocks[event.currentIndex].index;
+    // blocks[event.currentIndex].index = tempIdx;
+    // Object.keys(blocks).forEach((id: string) => {
+    //   if (blocks[id].index >= event.currentIndex) {
+    //     blocks[id].index++;
+    //   }
+    // });
+    // moveItemInArray(blocks, event.previousIndex, event.currentIndex);
     // this.page.blocks = blocks;
   }
 

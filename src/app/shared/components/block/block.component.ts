@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IBlock } from 'src/app/editor/block';
+import { IBlock } from 'src/app/shared/components/editor/block.interface';
 import * as fromBlock from './block.reducer';
 import * as blockActions from './block.actions';
 import { IWidget } from 'src/app/model/widget';
@@ -26,6 +26,12 @@ export class BlockComponent implements OnInit, OnChanges {
     // this.blocks.subscribe((a: IBlock | null) => {
     //   this.item = a;
     // });
+  }
+
+  get widgetCount(): number {
+    if (!this.item) { return 0; }
+
+    return Object.keys(this.item.widgets || {}).length;
   }
 
 

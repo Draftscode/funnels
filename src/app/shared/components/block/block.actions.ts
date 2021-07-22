@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { IBlock } from "src/app/editor/block";
+import { IBlock } from "src/app/shared/components/editor/block.interface";
 
 export enum EBlockActionType {
     CREATE = '[Blocks] Create',

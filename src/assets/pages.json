@@ -1,45 +1,92 @@
 [{
-  "id": "page-001",
-  "blocks": [{
-    "id": "page-001-block-002",
-    "height": 100,
-    "activated":false,
-    "widgets": [{
-      "type": "text",
-      "text": "Hallo Welt"
-    }]
-  }, {
-    "id": "page-001-block-004",
-    "height": 170,
-    "activated":false,
-    "widgets": [{
-      "type": "button",
-      "id": "btn-001",
-      "text": "Knopf 1"
-    }, {
-      "type": "button",
-      "id": "btn-002",
-      "text": "Knopf 2"
-    }, {
-      "type": "button",
-      "id": "btn-003",
-      "text": "Knopf 3"
-    }, {
-      "type": "button",
-      "id": "btn-004",
-      "text": "Knopf 4"
-    }]
-  }, {
-    "id": "page-001-block-005",
-    "height": 300,
-    "activated":false,
-    "styles": {
-      "background": "#e7e4f1"
-    },
-    "widgets": [{
-      "type": "calendar",
-      "id": "calendar-001",
-      "text": "Kalender 2021"
-    }]
-  }]
+  "id": "funndel-001",
+  "name": "Cooler Funnel",
+  "pages": {
+    "page-001": {
+      "id": "page-001",
+      "blocks": {
+        "page-001-block-002": {
+          "id": "page-001-block-002",
+          "height": 100,
+          "activated": false,
+          "widgets": {
+            "text-00001": {
+              "id": "text-00001",
+              "type": "text",
+              "text": "Hallo Welt"
+            }
+          }
+        },
+        "page-001-block-004": {
+          "id": "page-001-block-004",
+          "height": 170,
+          "activated": false,
+          "widgets": {
+            "btn-001": {
+              "type": "button",
+              "id": "btn-001",
+              "text": "Knopf 1"
+            },
+            "btn-002": {
+              "type": "button",
+              "id": "btn-002",
+              "text": "Knopf 2"
+            },
+            "btn-003": {
+              "type": "button",
+              "id": "btn-003",
+              "text": "Knopf 3"
+            },
+            "btn-004": {
+              "type": "button",
+              "id": "btn-004",
+              "text": "Knopf 4"
+            }
+          }
+        },
+        "page-001-block-005": {
+          "id": "page-001-block-005",
+          "height": 300,
+          "activated": false,
+          "styles": {
+            "background": "#e7e4f1"
+          },
+          "widgets": {
+            "calendar-001": {
+              "type": "calendar",
+              "id": "calendar-001",
+              "text": "Kalender 2021"
+            }
+          }
+        }
+      }
+    }
+  }
+}, {
+  "id": "01",
+  "name": "aasda"
+}, {
+  "id": "02",
+  "name": "aasasdfdda"
+}, {
+  "id": "03",
+  "name": "fsadasd"
+}, {
+  "id": "04",
+  "name": "aasdfasdafsda"
+}, {
+  "id": "05",
+  "name": "aasdfsda"
+}, {
+  "id": "06",
+  "name": "aasfsda"
+}, {
+  "id": "07",
+  "name": "aasdf sda"
+}, {
+  "id": "08",
+  "name": "aafds sda"
+}, {
+  "id": "09",
+  "name": "sf adf sda"
 }]

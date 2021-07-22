@@ -1,0 +1,14 @@
+table {
+  width: calc(100% - 40px);
+  margin: -20px 20px 20px 20px;
+}
+
+.toolbar {
+  background-color: rgb(75, 75, 75);
+  color: white;
+  height: 80px;
+
+  .title {
+    margin-top: -20px;
+  }
+}
