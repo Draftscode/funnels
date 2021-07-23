@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
@@ -30,12 +31,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatStepperModule,
   ],
   exports: [
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
     MatSidenavModule,
+    MatStepperModule,
     MatListModule,
     ScrollingModule,
     DragDropModule,
@@ -50,5 +53,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   providers: [{
     provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE],
   }],
+  declarations: [],
 })
 export class SharedModule { }

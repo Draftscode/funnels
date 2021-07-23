@@ -12,6 +12,7 @@ import * as fromPage from './page.reducer';
   styleUrls: ['page.component.scss'],
 })
 export class PageComponent implements OnChanges, OnInit {
+  @Input() editable: boolean = false;
   @Input() page: IPage | null = null;
   @Input() zoom: number = 1;
   width: number = 592;
@@ -34,7 +35,6 @@ export class PageComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.zoom) { this.scale(); }
-    console.log(changes);
   }
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 $white: #f8f8f8;
-
+$offset: 108px;
 
 ::ng-deep {
   ng-scrollbar.virtual-scroll.preview {
@@ -18,12 +18,18 @@ $white: #f8f8f8;
   }
 }
 
+.page-content {
+  margin-top: -$offset;
+  height: calc(100% - 20px);
+}
+
 .edit-blocks {
   padding: 10px;
 }
 
 .sidenav {
   height: 100%;
+  background: transparent;
 
   .side-drawer {
     width: 300px;
@@ -71,4 +77,29 @@ span.grippy::after {
 .sidenav-toolbar {
   background: #262040;
   color: white;
+}
+
+.page-wrapper {
+  margin: auto;
+  width: 288px;
+  margin-top: 24px;
+}
+
+
+:host ::ng-deep mat-stepper.mat-stepper-horizontal {
+  height: 100%;
+  background: transparent;
+
+  div.mat-horizontal-content-container {
+    height: calc(100% - #{$offset});
+    padding: 0;
+
+    div.mat-horizontal-stepper-content {
+      height: 100%;
+    }
+  }
+
+  mat-step-header.mat-step-header .mat-step-label {
+    color: white;
+  }
 }

@@ -1,35 +1,52 @@
-<mat-drawer-container class="sidenav">
-  <mat-drawer class="side-drawer" #sideNav mode="side" [opened]="hasActiveBlock" position="end">
-
-    <div *ngIf="currentPage">
-      <ng-container *ngFor="let item of currentPage.blocks | keyvalue;let blockIdx = index">
-        <ng-container *ngIf="item.value.activated">
-          <mat-toolbar class="sidenav-toolbar">
-            <h2>Block {{blockIdx+1}} editieren</h2>
-          </mat-toolbar>
-          <div class="edit-blocks">
-            <ng-container *ngFor="let widget of item.value.widgets | keyvalue">
-              <ng-container *ngIf="widget.value.type === 'button' || widget.value.type === 'text'">
-                <mat-form-field>
-                  <input matInput [(ngModel)]="widget.value.text">
-                </mat-form-field>
-              </ng-container>
+<mat-toolbar>
+  <mat-toolbar-row>Editor
+  </mat-toolbar-row>
+  <mat-toolbar-row></mat-toolbar-row>
+</mat-toolbar>
+<div class="page-content">
+  <mat-stepper labelPosition="bottom"  #stepper>
+    <!-- <ng-template matStepperIcon="edit">
+      <mat-icon>home</mat-icon>
+    </ng-template> -->
+    <mat-step *ngFor="let currentPage of pages">
+      <ng-template matStepLabel>Name</ng-template>
+      <mat-drawer-container class="sidenav">
+        <mat-drawer class="side-drawer" #sideNav mode="side" [opened]="currentPage?true:false" position="end">
+          <mat-toolbar>Seite bearbeiten</mat-toolbar>
+          <ng-container *ngFor="let item of currentPage.blocks | keyvalue;let blockIdx = index">
+            <ng-container *ngIf="item.value.activated">
+              <mat-toolbar class="sidenav-toolbar">
+                <h2>Block {{blockIdx+1}} editieren</h2>
+              </mat-toolbar>
+              <div class="edit-blocks">
+                <ng-container *ngFor="let widget of item.value.widgets | keyvalue">
+                  <ng-container *ngIf="widget.value.type === 'button' || widget.value.type === 'text'">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="widget.value.text">
+                    </mat-form-field>
+                  </ng-container>
+                </ng-container>
+              </div>
             </ng-container>
+          </ng-container>
+        </mat-drawer>
+        <mat-drawer-content>
+          <ng-scrollbar [visibility]="'hover'" class="virtual-scroll editor" thumbClass="white-scrollbars">
+            <div class="page-wrapper">
+              <app-page class="app-page" [editable]="true" *ngIf="currentPage" [zoom]="1" [page]="currentPage">
+              </app-page>
+            </div>
+          </ng-scrollbar>
+          <div class="action-bar">
+            <button mat-button>
+              <mat-icon>add</mat-icon> neue Seite
+            </button>
           </div>
-        </ng-container>
-      </ng-container>
-    </div>
-  </mat-drawer>
-  <mat-drawer-content>
-    <ng-scrollbar [visibility]="'hover'" class="virtual-scroll editor" thumbClass="white-scrollbars">
-      <app-page class="app-page" *ngIf="currentPage" [zoom]="1" [page]="currentPage"></app-page>
-    </ng-scrollbar>
-    <div class="action-bar">
-      <button mat-button>
-        <mat-icon>add</mat-icon> neue Seite
-      </button>
-    </div>
-  </mat-drawer-content>
+        </mat-drawer-content>
 
 
-</mat-drawer-container>
+      </mat-drawer-container>
+
+    </mat-step>
+  </mat-stepper>
+</div>

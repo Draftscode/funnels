@@ -1,44 +1,33 @@
-<mat-sidenav-container class="sidenav">
-  <mat-sidenav #sidenav mode="side" class="example-sidenav">
-    <mat-toolbar class="sidenav-toolbar"><button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>close</mat-icon>
-      </button></mat-toolbar>
-    <mat-list>
-      <mat-list-item>
-        <button mat-button [routerLink]="['home']">
-          <mat-icon>table_chart</mat-icon> Home
-        </button>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-button [routerLink]="['editor','funndel-001']">
-          <mat-icon>pivot_table_chart</mat-icon> Funnel-Editor
-        </button>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-button [routerLink]="['statistics']">
-          <mat-icon>show_chart</mat-icon> Statistiken
-        </button>
-      </mat-list-item>
-    </mat-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
+<app-main-nav [items]="links" #main>
+  <app-main-nav-content>
     <mat-toolbar class="main-toolbar">
-      <button (click)="sidenav.toggle()" mat-icon-button class="example-icon"
-        aria-label="Example icon-button with menu icon">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span>Funnels</span>
-      <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        <mat-icon>favorite</mat-icon>
-      </button>
-      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-        <mat-icon>share</mat-icon>
-      </button>
+      <mat-toolbar-row>
+        <button mat-icon-button class="example-icon" (click)="main.toggle()"
+          aria-label="Example icon-button with menu icon">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>Funnels</span>
+        <span class="spacer"></span>
+        <mat-form-field appearance="outline" class="searchbar">
+          <input [placeholder]="'Suche'" matInput>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <span class="example-spacer"></span>
+        <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+          <mat-icon>favorite</mat-icon>
+        </button>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+          <mat-icon>share</mat-icon>
+        </button>
+      </mat-toolbar-row>
+      <!-- <mat-toolbar-row>
+        Current Link
+      </mat-toolbar-row>
+      <mat-toolbar-row>
+      </mat-toolbar-row> -->
     </mat-toolbar>
     <div class="content">
       <router-outlet></router-outlet>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </app-main-nav-content>
+</app-main-nav>

@@ -20,7 +20,6 @@ export function pageReducer(
     action: actions.PageActions): PageState {
     switch (action.type) {
         case EPageActionType.CREATE:
-            console.log('CREATE',action);
             return pageAdapter.addOne(action.page, state);
         case EPageActionType.UPDATE:
             return pageAdapter.updateOne({

@@ -22,3 +22,19 @@ ng-scrollbar.virtual-scroll {
   --scrollbar-track-color: rgba(0, 0, 0, 0.05);
   --scrollbar-border-radius: 10px;
 }
+
+
+mat-toolbar.mat-toolbar {
+  color: white;
+  background: rgb(199, 20, 114);
+  background: linear-gradient(90deg, rgba(199, 20, 114, 1) 0%, rgba(226, 130, 104, 1) 89%);
+}
+
+div.page-content {
+  height: calc(100% - 64px);
+  overflow: auto;
+}
+
+span.spacer {
+  flex: 1 1 auto;
+}

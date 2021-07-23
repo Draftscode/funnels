@@ -1,5 +1,5 @@
 [{
-  "id": "funndel-001",
+  "id": "funnel-001",
   "name": "Cooler Funnel",
   "pages": {
     "page-001": {
@@ -60,6 +60,33 @@
           }
         }
       }
+    },
+    "Zweite-seite": {
+      "id": "Zweite-seite"
+    },
+    "Zweite-seite1": {
+      "id": "Zweite-seite1"
+    },
+    "Zweite-seite2": {
+      "id": "Zweite-seite2"
+    },
+    "Zweite-seite3": {
+      "id": "Zweite-seite3"
+    },
+    "Zweite-seite4": {
+      "id": "Zweite-seite4"
+    },
+    "Zweite-seite5": {
+      "id": "Zweite-seite5"
+    },
+    "Zweite-seite6": {
+      "id": "Zweite-seite6"
+    },
+    "Zweite-seite7": {
+      "id": "Zweite-seite7"
+    },
+    "Zweite-seite8": {
+      "id": "Zweite-seite8"
     }
   }
 }, {
