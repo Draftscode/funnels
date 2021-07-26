@@ -1,6 +1,6 @@
 <app-main-nav [items]="links" #main>
   <app-main-nav-content>
-    <mat-toolbar class="main-toolbar">
+    <!-- <mat-toolbar class="main-toolbar">
       <mat-toolbar-row>
         <button mat-icon-button class="example-icon" (click)="main.toggle()"
           aria-label="Example icon-button with menu icon">
@@ -19,15 +19,15 @@
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
           <mat-icon>share</mat-icon>
         </button>
-      </mat-toolbar-row>
-      <!-- <mat-toolbar-row>
+      </mat-toolbar-row> -->
+    <!-- <mat-toolbar-row>
         Current Link
       </mat-toolbar-row>
       <mat-toolbar-row>
       </mat-toolbar-row> -->
-    </mat-toolbar>
-    <div class="content">
+    <!-- </mat-toolbar> -->
+    <ng-scrollbar [visibility]="'hover'" class="virtual-scroll" thumbClass="white-scrollbars">
       <router-outlet></router-outlet>
-    </div>
+    </ng-scrollbar>
   </app-main-nav-content>
 </app-main-nav>

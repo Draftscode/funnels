@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IMainNavLink } from './shared/components/main-nav/main-nav-links';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -31,6 +30,9 @@ export class AppComponent {
     {
       icon: 'folder_open',
       name: 'Meine Dateien',
-      link: ['statistics'],
+      link: ['images'],
     }];
+
+  constructor() {
+  }
 }

@@ -1,0 +1,22 @@
+<mat-toolbar>
+    Bilder
+</mat-toolbar>
+<mat-toolbar class="fixed">
+    <form [formGroup]="formGroup" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="searchbar">
+        <input formControlName="term" [placeholder]="'Suche'" matInput>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </form>
+</mat-toolbar>
+<mat-toolbar>
+</mat-toolbar>
+
+<div>
+  <mat-grid-list [cols]="(layoutSmall$ | async) ? 1 : (layoutLarge$ | async) ? 6 : 3"
+    [rowHeight]="(layoutSmall$ | async) ? '200px': (layoutLarge$ | async) ? '108px' : '150px'">
+    <mat-grid-tile *ngFor="let img of images" [colspan]="1" [rowspan]="1">
+      <img class="preview-image" [src]="img.previewURL">
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

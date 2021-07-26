@@ -1,0 +1,41 @@
+.preview-image {
+  width: 100%;
+}
+
+.fixed {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+:host ::ng-deep {
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: rgb(224, 224, 224);
+  }
+
+  .mat-form-field-placeholder {
+    color: rgb(224, 224, 224);
+  }
+
+  .searchbar {
+
+    .mat-form-field-flex,
+    .mat-form-field-label-wrapper {
+      padding-top: 0
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0
+    }
+
+    .mat-form-field-underline {
+      bottom: 0
+    }
+
+    .mat-form-field-infix {
+      border-top: 0
+    }
+  }
+
+}

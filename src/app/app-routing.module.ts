@@ -9,6 +9,7 @@ const routes: Routes = [{
 // { path: 'home', loadChildren: () => import('./shared/components/home/home.module').then(m => m.HomeModule), },
 { path: 'editor', loadChildren: () => import('./shared/components/editor/editor.module').then(m => m.EditorModule), },
 { path: 'statistics', loadChildren: () => import('./shared/components/statistics/statistics.module').then(m => m.StatisticsModule) },
+{ path: 'images', loadChildren: () => import('./shared/components/images/images.module').then(m => m.ImagesModule) },
 ];
 
 @NgModule({
