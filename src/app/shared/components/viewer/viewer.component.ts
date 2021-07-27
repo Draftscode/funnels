@@ -49,11 +49,10 @@ export class ViewerComponent implements OnInit, OnDestroy {
   }
 
   afterClicked(widget: IWidget): void {
+
     if (widget.type === 'button') {
       if (!widget.linkedTo) { return; }
       this.currentPage = this.currentFunnel?.pages[widget.linkedTo];
-
-      console.log(this.currentPage);
     }
   }
 }

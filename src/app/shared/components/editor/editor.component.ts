@@ -86,6 +86,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   }
 
+  createPage():void {
+    this.funnelApi.createPage(this.funnelId);
+  }
+
   ngOnInit(): void {
     this.currentRoute.params.subscribe(params => { this.funnelId = params.funnelId; this.init(); });
     this.funnel$.subscribe((f: IFunnel[]) => {

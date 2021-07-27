@@ -10,6 +10,7 @@ import { SharedModule } from '../../shared.module';
 import { PageModule } from '../page/page.module';
 import { CreateDialogModule } from './create-dialog/create-dialog.module';
 import { CtxComponent } from './ctx/ctx.component';
+import { EditDialogModule } from './edit-dialog/edit-dialog.module';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
 @NgModule({
@@ -29,6 +30,7 @@ import { EditorComponent } from './editor.component';
     PageModule,
     MatSidenavModule,
     CreateDialogModule,
+    EditDialogModule,
   ]
 })
 export class EditorModule { }

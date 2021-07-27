@@ -8,9 +8,7 @@
     </ng-container>
     <!-- text -->
     <ng-container *ngSwitchCase="'text'">
-      <p *ngIf="!widget.editable" (dblclick)="onDoubleClick($event,widget)" class="text">{{widget.text}}</p>
-      <input (change)="storeIt(widget,textEditor.value)" (blur)="storeIt(widget,textEditor.value)" #textEditor
-        *ngIf="widget.editable" [value]="widget.text">
+      <p  (dblclick)="onDoubleClick($event,widget)" class="text">{{widget.text}}</p>
     </ng-container>
     <!-- calendar -->
     <ng-container *ngSwitchCase="'calendar'">

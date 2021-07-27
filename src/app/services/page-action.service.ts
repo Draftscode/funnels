@@ -1,8 +1,10 @@
 import { ComponentRef, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import { IWidget } from "../model/widget.interface";
 import { IBlock } from "../shared/components/editor/block.interface";
 import { CreateDialogComponent } from "../shared/components/editor/create-dialog/create-dialog.component";
 import { CtxComponent, IAction } from "../shared/components/editor/ctx/ctx.component";
+import { EditDialogComponent } from "../shared/components/editor/edit-dialog/edit-dialog.component";
 import { FunnelService } from "./funnel.service";
 import { OverlayService } from "./overlay.service";
 
@@ -26,8 +28,21 @@ export class PageActionService {
   createWidget(funnelId: string, pageId: string, blockId: string): void {
     this.dialog.open(CreateDialogComponent, { data: {} }).afterClosed().subscribe((r) => {
       if (!r) { return; }
-      console.log(r);
       this.funnelApi.addWidget(funnelId, pageId, blockId, r.widget);
+    });
+  }
+
+
+  editWidget(funnelId: string, pageId: string, blockId: string): void {
+
+
+    this.dialog.open(EditDialogComponent, {
+      data: {
+        widget: this.funnelApi.getActivatedWidget(funnelId, pageId, blockId)!
+      }
+    }).afterClosed().subscribe((r) => {
+      if (!r) { return; }
+      this.funnelApi.addWidget(funnelId, pageId, blockId, r.widgets);
     });
   }
 
@@ -39,6 +54,10 @@ export class PageActionService {
         name: 'Erstellen',
         icon: 'add',
         id: 'addBlock',
+      }, {
+        name: 'Editieren',
+        icon: 'edit',
+        id: 'editBlock',
       }, {
         name: 'Löschen',
         icon: 'delete',
@@ -59,6 +78,9 @@ export class PageActionService {
           break;
         case 'addBlock':
           this.createWidget(funnelId, pageId, blockId);
+          break;
+        case 'editBlock':
+          this.editWidget(funnelId, pageId, blockId);
           break;
       }
     });

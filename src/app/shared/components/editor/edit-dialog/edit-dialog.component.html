@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>    Widget bearbeiten
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+<ng-container *ngIf="widget">
+  <ng-container [ngSwitch]=" widget.type">
+    <ng-container *ngSwitchCase="'text'">
+      <mat-form-field>
+        <input matInput [(ngModel)]="widget.text">
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngSwitchCase="'button'">
+      <mat-form-field>
+        <input matInput [(ngModel)]="widget.text">
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngSwitchCase="'calendar'">
+      <mat-form-field>
+        <input matInput [(ngModel)]="widget.text">
+      </mat-form-field>
+    </ng-container>
+  </ng-container>
+</ng-container>

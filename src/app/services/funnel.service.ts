@@ -5,6 +5,7 @@ import { IFunnel } from "../model/funnel.interface";
 import { IWidget } from "../model/widget.interface";
 import { IBlock } from "../shared/components/editor/block.interface";
 import { IPage } from "../shared/components/page/page.interface";
+import { GlobalUtils } from "../utils/global.utils";
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,11 @@ export class FunnelService {
   private funnels: BehaviorSubject<IFunnel[]> = new BehaviorSubject<IFunnel[]>([]);
 
   constructor(private http: HttpClient) {
-    this.http.get<IFunnel[]>('./assets/pages.json').subscribe((a: IFunnel[]) => {
-      this.funnels.next(a);
-    });
+    // this.http.get<IFunnel[]>('./assets/pages.json').subscribe((a: IFunnel[]) => {
+    //   this.funnels.next(a);
+    // });
+
+    this.funnels.next(this.load());
   }
 
   getFunnels(): Observable<IFunnel[]> {
@@ -35,7 +38,7 @@ export class FunnelService {
 
     if (!funnel.pages[pageId]) { return; }
     delete funnel.pages[pageId].blocks[blockId];
-    this.funnels.next(this.funnels.getValue());
+    this.store();
   }
 
   deleteWidgetOrBlock(funnelId: string, pageId: string, blockId: string): void {
@@ -53,7 +56,7 @@ export class FunnelService {
     } else {
       delete funnel.pages[pageId].blocks[blockId];
     }
-    this.funnels.next(this.funnels.getValue());
+    this.store();
   }
 
   activateWidget(funnelId: string, pageId: string, blockId: string, widgetId: string, state: boolean): void {
@@ -80,8 +83,37 @@ export class FunnelService {
     if (!widget) { return; }
 
     widget.activated = true;
-    this.funnels.next(this.funnels.getValue());
+    this.store();
+  }
 
+  public createPage(funnelId: string): void {
+    const funnel: IFunnel | undefined = this.funnels.getValue().find((f: IFunnel) => f.id === funnelId);
+    if (!funnel) { return; }
+
+    const page: IPage = {
+      id: GlobalUtils.uuidv4(),
+      blocks: {},
+      index: 0,
+    };
+
+    funnel.pages[page.id] = page;
+
+    this.store();
+  }
+
+  private store(): void {
+    const s: string = JSON.stringify(this.funnels.getValue());
+    localStorage.setItem('funnels', s);
+
+    this.funnels.next(this.funnels.getValue());
+  }
+
+  private load(): IFunnel[] {
+    const s: string | null = localStorage.getItem('funnels');
+    if (!s) { return []; }
+
+    const funnels: IFunnel[] = JSON.parse(s);
+    return funnels;
   }
 
   public getBlock(funnelId: string, pageId: string, blockId: string): IBlock | undefined {
@@ -91,18 +123,16 @@ export class FunnelService {
     const page: IPage = funnel.pages[pageId];
     if (!page) { return; }
 
-    Object.keys(page.blocks || {}).forEach((_blockId: string) => {
-      const block: IBlock = page.blocks[_blockId];
-      if (!block) { return; }
-      Object.keys(block.widgets || {}).forEach((_widgetId: string) => {
-        const widget: IWidget = block.widgets[_widgetId];
-        if (!widget) { return; }
-        widget.activated = false;
-      });
-    });
-
     return page.blocks[blockId];
+  }
 
+  public getActivatedWidget(funnelId: string, pageId: string, blockId: string): IWidget | undefined {
+    const b: IBlock | undefined = this.getBlock(funnelId, pageId, blockId);
+    if (!b) { return undefined; }
+    const key: string | undefined = Object.keys(b.widgets).find((wKey: string) => b.widgets[wKey].activated);
+    if (!key) { return undefined; }
+
+    return b.widgets[key];
   }
 
   addWidget(funnelId: string, pageId: string, blockId: string, widget: IWidget): void {
@@ -110,6 +140,6 @@ export class FunnelService {
     if (!block) { return; }
 
     block.widgets[widget.id] = widget;
-    this.funnels.next(this.funnels.getValue());
+    this.store();
   }
 }
