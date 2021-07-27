@@ -1,32 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, ContentChild, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { IWidget } from 'src/app/model/widget.interface';
+import { FunnelService } from 'src/app/services/funnel.service';
 import { IBlock } from 'src/app/shared/components/editor/block.interface';
-import * as fromBlock from './block.reducer';
-import * as blockActions from './block.actions';
-import { IWidget } from 'src/app/model/widget';
-import { Observable } from 'rxjs';
+import { WidgetComponent } from '../widget/widget.component';
 
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss']
 })
-export class BlockComponent implements OnInit, OnChanges {
+export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   @Input('item') item: IBlock | null = null;
   @Input() zoom: number = 1;
   @Output() selected: EventEmitter<IBlock> = new EventEmitter<IBlock>();
-  // blocks: Observable<IBlock | null> | null = null;
-  // constructor(private store: Store<fromBlock.BlockState>) {
-  // }
+  ngOnInit(): void { }
+  @ContentChild('widgetTemplate') template: TemplateRef<WidgetComponent> | undefined;
 
-  ngOnInit(): void {
-    // this.blocks = this.store.select(fromBlock.getItemById(this.itemId));
-    // if (!this.blocks) { return; }
-
-    // this.blocks.subscribe((a: IBlock | null) => {
-    //   this.item = a;
-    // });
-  }
+  constructor(private funnelApi: FunnelService) { }
 
   get widgetCount(): number {
     if (!this.item) { return 0; }
@@ -37,14 +27,10 @@ export class BlockComponent implements OnInit, OnChanges {
 
   activateBlock(item: IBlock): void {
     if (!item) { return; }
-
-    item.activated = true;
     this.selected.emit(item);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
+  ngOnChanges(changes: SimpleChanges): void { }
 
   get height(): number {
     if (!this.item) { return 0; }
@@ -52,12 +38,9 @@ export class BlockComponent implements OnInit, OnChanges {
   }
 
 
-  storeIt(widget: IWidget, value: any): void {
-    widget.text = value;
-    widget.editable = false;
+
+  ngOnDestroy(): void {
+    // this.funnelApi.activateWidget(this.widget.id)
   }
 
-  onDoubleClick(event: MouseEvent, widget: IWidget): void {
-    widget.editable = true;
-  }
 }

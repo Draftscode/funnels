@@ -1,34 +1,14 @@
 <div class="block" [style.height]="item.height" *ngIf="item">
-  <div [class.active]="item.activated" (click)="activateBlock(item)" (cdkDragStarted)="activateBlock(item)"
-    (cdkDragEnded)="activateBlock(item)" [cdkDragLockAxis]="'y'" cdkDrag class="block" [cdkDragData]="item"
-    [style.height]="height+'px'" [style.background]="item.styles?.background">
+  <div [class.active]="item.activated" (click)="activateBlock(item)" class="block" [style.height]="height+'px'"
+    [style.background]="item.styles?.background">
     <mat-grid-list class="grid-list" [cols]="widgetCount > 1 ? 2:1" rowHeight="fit">
       <ng-container *ngFor="let widget of item?.widgets | keyvalue">
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-          <ng-container *ngTemplateOutlet="element;context:{$implicit: widget.value}"></ng-container>
+          <ng-container *ngIf="template">
+            <ng-container *ngTemplateOutlet="template; context:{$implicit: widget.value}"></ng-container>
+          </ng-container>
         </mat-grid-tile>
       </ng-container>
     </mat-grid-list>
   </div>
 </div>
-
-<ng-template #element let-element>
-  <ng-container [ngSwitch]="element.type">
-    <!-- button -->
-    <ng-container *ngSwitchCase="'button'">
-      <button mat-button class="generic-btn">
-        <mat-icon>home</mat-icon> <span class="text">{{element.text}}</span>
-      </button>
-    </ng-container>
-    <!-- text -->
-    <ng-container *ngSwitchCase="'text'">
-      <p *ngIf="!element.editable" (dblclick)="onDoubleClick($event,element)" class="text">{{element.text}}</p>
-      <input (change)="storeIt(element,textEditor.value)" (blur)="storeIt(element,textEditor.value)" #textEditor
-        *ngIf="element.editable" [value]="element.text">
-    </ng-container>
-    <!-- calendar -->
-    <ng-container *ngSwitchCase="'calendar'">
-      <mat-calendar></mat-calendar>
-    </ng-container>
-  </ng-container>
-</ng-template>

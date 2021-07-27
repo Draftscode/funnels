@@ -1,6 +1,12 @@
 $white: #f8f8f8;
 $offset: 108px;
 
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 ::ng-deep {
   ng-scrollbar.virtual-scroll.preview {
 
@@ -18,9 +24,32 @@ $offset: 108px;
   }
 }
 
-.page-content {
-  margin-top: -$offset;
-  height: calc(100% - 20px);
+.fab {
+  right: 25px;
+  bottom: 25px;
+  position: absolute;
+}
+
+.stepper {
+  width: 100%;
+  background: transparent;
+  height: 100%;
+}
+
+.pages-wrapper {
+  height: calc(100% - 128px);
+  width: 200px;
+  position: absolute;
+  left: 0;
+  top: 128px;
+}
+
+.page-wrapper {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 592px;
+  width: 288px;
+  margin: auto;
 }
 
 .edit-blocks {
@@ -101,5 +130,128 @@ span.grippy::after {
 
   mat-step-header.mat-step-header .mat-step-label {
     color: white;
+  }
+}
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+  cursor: grabbing;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.virtual-scroll.widget.cdk-drop-list-dragging .block:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-container {
+  width: 100%;
+  display: block;
+  height: 300px;
+  background-color: red;
+}
+
+.drag-border {
+  display: block;
+  position: relative;
+
+  .handle-circle {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 90px;
+    margin-left: -12px;
+    left: 50%;
+    top: 50%;
+    margin-top: -12px;
+    background-color: white;
+    cursor: ns-resize;
+    z-index: 99;
+  }
+}
+
+span.grippy {
+  content: '....';
+  width: 10px;
+  height: 20px;
+  cursor: move;
+  margin-top: -10px;
+  margin-left: -5px;
+  font-size: 12px;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  color: #cccccc;
+  text-shadow: 1px 0 1px white;
+  left: 50%;
+  top: 50%;
+  line-height: 5px;
+  position: absolute;
+  letter-spacing: 2px;
+}
+
+span.grippy::after {
+  content: '.. .. .. ..';
+}
+
+
+app-block.activated {
+  border: 2px solid red;
+  border-radius: 4px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+}
+
+
+app-widget.activated {
+  width: calc(100% - 4px);
+  border: 2px solid red;
+  height: calc(100% - 4px);
+}
+
+
+.list-entry {
+  padding: 24px;
+  cursor: pointer;
+}
+
+.num {
+  padding: 5px;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  margin-right: 5px;
+  display: inline-block;
+  border-radius: 99px;
+  background-color: rgb(60, 118, 185);
+  color: white;
+}
+
+
+
+.list-entry.selected {
+  background: #d5dde6;
+}
+
+.list-entry.activated {
+  background: #386cff;
+  color: white;
+
+  .num {
+    background-color: white;
+    color: black;
   }
 }

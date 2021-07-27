@@ -6,6 +6,7 @@ import { MatMomentDateModule, MomentDateAdapter } from "@angular/material-moment
 import { MatButtonModule } from '@angular/material/button';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +30,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatNativeDateModule,
     MatMomentDateModule,
     FormsModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatStepperModule,
@@ -44,6 +46,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     DragDropModule,
     MatGridListModule,
     MatDatepickerModule,
+    MatDialogModule,
     MatNativeDateModule,
     MatMomentDateModule,
     FormsModule,

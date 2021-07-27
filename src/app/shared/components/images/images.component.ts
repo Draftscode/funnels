@@ -36,7 +36,6 @@ export class ImagesComponent implements OnInit {
     this.imgApi.search(term, 100, 0)
       .pipe(finalize(() => this.loading = false))
       .subscribe((r) => {
-        console.log(r);
         this.slices = Math.ceil(r.total / 3);
         this.images = r.hits;
       });

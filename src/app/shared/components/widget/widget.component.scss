@@ -1,0 +1,33 @@
+:host {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  color: white;
+}
+
+.generic-btn {
+  background: #2e60ea;
+  color: white;
+  width: calc(100% - 10px);
+  margin: 5px;
+  height: calc(100% - 10px);
+  max-height: 150px;
+  min-height: 75px;
+
+  .text {
+    display: block;
+  }
+}
+
+:host ::ng-deep {
+  .mat-badge-content {
+    top: 0px !important;
+    right: 0px !important;
+    background: red;
+  }
+}

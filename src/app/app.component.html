@@ -1,32 +1,12 @@
-<app-main-nav [items]="links" #main>
+<ng-container *ngIf="lockSideNav">
+  <router-outlet></router-outlet>
+</ng-container>
+
+
+<app-main-nav *ngIf="!lockSideNav" [items]="links" #main>
   <app-main-nav-content>
-    <!-- <mat-toolbar class="main-toolbar">
-      <mat-toolbar-row>
-        <button mat-icon-button class="example-icon" (click)="main.toggle()"
-          aria-label="Example icon-button with menu icon">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span>Funnels</span>
-        <span class="spacer"></span>
-        <mat-form-field appearance="outline" class="searchbar">
-          <input [placeholder]="'Suche'" matInput>
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-        <span class="example-spacer"></span>
-        <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-          <mat-icon>favorite</mat-icon>
-        </button>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-          <mat-icon>share</mat-icon>
-        </button>
-      </mat-toolbar-row> -->
-    <!-- <mat-toolbar-row>
-        Current Link
-      </mat-toolbar-row>
-      <mat-toolbar-row>
-      </mat-toolbar-row> -->
-    <!-- </mat-toolbar> -->
-    <ng-scrollbar [visibility]="'hover'" class="virtual-scroll" thumbClass="white-scrollbars">
+    <ng-scrollbar [visibility]="'hover'" [style.width]="'100%'" [style.height]="'100%'" class="virtual-scroll"
+      thumbClass="white-scrollbars">
       <router-outlet></router-outlet>
     </ng-scrollbar>
   </app-main-nav-content>

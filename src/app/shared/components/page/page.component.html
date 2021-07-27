@@ -1,16 +1,4 @@
-<ng-scrollbar [style.font-size]="fontSize+'px'"
-  [style.width]="width+'px'" [style.height]="height+'px'" [cdkDropListSortPredicate]="enterPredicate"
-  (cdkDropListDropped)="drop($event)" cdkDropList [visibility]="'hover'" class="virtual-scroll widget"
+<ng-scrollbar [style.font-size]="fontSize+'px'" [visibility]="'hover'" class="virtual-scroll widget"
   thumbClass="white-scrollbars">
-  <ng-container *ngFor="let blockId of sortedBlocks; let idx = index">
-    <!-- block -->
-    <app-block [item]="page!.blocks[blockId]" (selected)="activateBlock($event)"></app-block>
-
-
-      <div *ngIf="page!.blocks[blockId].activated" (cdkDragEnded)="resize($event,page!.blocks[blockId])"
-        (cdkDragMoved)="onResize($event,page!.blocks[blockId])" cdkDragBoundary=".widget" [cdkDragLockAxis]="'y'" cdkDrag
-        class="drag-border" [cdkDragData]="null">
-        <span class="handle-circle" cdkDragHandle></span>
-      </div>
-  </ng-container>
+  <ng-content></ng-content>
 </ng-scrollbar>

@@ -1,10 +1,6 @@
-import { CdkDrag, CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
-import { Store } from "@ngrx/store";
 import { IBlock } from "src/app/shared/components/editor/block.interface";
-import * as pageActions from './page.actions';
 import { IPage } from "./page.interface";
-import * as fromPage from './page.reducer';
 
 @Component({
   selector: 'app-page',
@@ -34,25 +30,12 @@ export class PageComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.zoom) { this.scale(); }
+    console.log(changes);
   }
 
   ngOnInit(): void {
-    this.scale();
   }
 
-  scale(): void {
-    const zoom = this.zoom || 1;
-    this.height = 592 * zoom;
-    this.width = 288 * zoom;
-    this.fontSize = 14 * zoom;
-  }
-
-  /** Predicate function that only allows even numbers to be dropped into a list. */
-  enterPredicate(index: number, item: CdkDrag<IBlock>): boolean {
-    if (!item.data) { return false; }
-    return true;
-  }
 
   get sortedBlocks(): string[] {
     const blocks: Record<string, IBlock> | undefined = this.page?.blocks;
@@ -65,24 +48,6 @@ export class PageComponent implements OnChanges, OnInit {
     return s;
   }
 
-  drop(event: CdkDragDrop<IBlock[]>): void {
-    if (!this.page) { return; }
-    const blocks: Record<string, IBlock> = this.page.blocks;
-    // const tempName: string | undefined = Object.keys(blocks).find((id: string) => blocks[id].index === event.previousIndex);
-    // if (!tempName) { return; }
-    // const tmpIdx: number = blocks[tempName].index;
-
-
-    // blocks[event.previousIndex].index = blocks[event.currentIndex].index;
-    // blocks[event.currentIndex].index = tempIdx;
-    // Object.keys(blocks).forEach((id: string) => {
-    //   if (blocks[id].index >= event.currentIndex) {
-    //     blocks[id].index++;
-    //   }
-    // });
-    // moveItemInArray(blocks, event.previousIndex, event.currentIndex);
-    // this.page.blocks = blocks;
-  }
 
   onResize(e: { distance: { x: number; y: number; } }, block: IBlock): void {
     block.curDragHeight = (e?.distance?.y || 0);

@@ -1,0 +1,10 @@
+
+<ng-container *ngIf="currentPage">
+  <app-page [page]="currentPage">
+    <app-block [item]="block.value" *ngFor="let block of currentPage.blocks | keyvalue">
+      <ng-template #widgetTemplate let-widget>
+        <app-widget (afterClicked)="afterClicked(widget)" [widget]="widget"></app-widget>
+      </ng-template>
+    </app-block>
+  </app-page>
+</ng-container>

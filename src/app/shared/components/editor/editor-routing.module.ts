@@ -5,7 +5,7 @@ import { EditorComponent } from './editor.component';
 const routes: Routes = [{
   path: '',
   component: EditorComponent,
-},{
+}, {
   path: ':funnelId',
   component: EditorComponent,
 }];

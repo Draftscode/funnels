@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Dialog with elements
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div *ngFor="let btn of buttons">
+    <button mat-button (click)="close(btn)">
+      <mat-icon>{{btn.icon}}</mat-icon> {{btn.name}}
+    </button>
+  </div>
+</div>

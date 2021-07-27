@@ -1,5 +1,5 @@
 import { IStyles } from "../../../model/styles";
-import { IWidget } from "../../../model/widget";
+import { IWidget } from "../../../model/widget.interface";
 
 export interface IBlock {
   id: string;
@@ -7,6 +7,6 @@ export interface IBlock {
   curDragHeight: number;
   activated?: boolean;
   index: number;
-  widgets?: Record<string, IWidget>;
+  widgets: Record<string, IWidget>;
   styles?: IStyles;
 }
