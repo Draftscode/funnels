@@ -2,13 +2,14 @@
   <ng-container [ngSwitch]="widget.type">
     <!-- button -->
     <ng-container *ngSwitchCase="'button'">
-      <button [matBadge]="widget.linkedTo" mat-button class="generic-btn" (click)="onClick($event)">
+      <button [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'" [matBadge]="widget.linkedTo" mat-button class="generic-btn"
+        (click)="onClick($event)">
         <mat-icon>home</mat-icon> <span class="text">{{widget.text}}</span>
       </button>
     </ng-container>
     <!-- text -->
     <ng-container *ngSwitchCase="'text'">
-      <p  (dblclick)="onDoubleClick($event,widget)" class="text">{{widget.text}}</p>
+      <p [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'" (dblclick)="onDoubleClick($event,widget)" class="text">{{widget.text}}</p>
     </ng-container>
     <!-- calendar -->
     <ng-container *ngSwitchCase="'calendar'">

@@ -5,9 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { EditDialogComponent } from './edit-dialog.component';
-
-
 
 @NgModule({
   declarations: [
@@ -15,6 +14,7 @@ import { EditDialogComponent } from './edit-dialog.component';
   ],
   exports: [EditDialogComponent],
   imports: [
+    SharedModule,
     CommonModule,
     MatButtonModule,
     MatIconModule,
@@ -23,6 +23,8 @@ import { EditDialogComponent } from './edit-dialog.component';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-  ]
+  ],
+  providers: [
+  ],
 })
 export class EditDialogModule { }

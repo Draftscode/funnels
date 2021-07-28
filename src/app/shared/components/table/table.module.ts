@@ -3,11 +3,13 @@ import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { TranslateModule } from "@ngx-translate/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { TableComponent } from "./table.component";
 
 @NgModule({
   imports: [
+    TranslateModule,
     CommonModule,
     MatTableModule,
     NgScrollbarModule,

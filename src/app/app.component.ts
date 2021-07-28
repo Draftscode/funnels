@@ -1,6 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { takeWhile } from 'rxjs/operators';
+import { Funnel2Service } from './services/funnel2.service';
 import { IMainNavLink } from './shared/components/main-nav/main-nav-links';
 @Component({
   selector: 'app-root',
@@ -38,7 +40,13 @@ export class AppComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private currentRoute: ActivatedRoute) {
+    private translate: TranslateService,
+    private funnel2Service: Funnel2Service,
+  ) {
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+    console.log(this.translate.instant('BUTTON1'));
+
     this.router.events.pipe(takeWhile(() => this.alive)).subscribe((e) => {
       if (e instanceof NavigationEnd) {
         this.lockSideNav = e.url.includes('viewer') ? true : false;

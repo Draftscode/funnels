@@ -206,12 +206,12 @@ span.grippy::after {
 }
 
 
-app-block.activated {
-  border: 2px solid red;
-  border-radius: 4px;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-}
+// app-block.activated {
+//   border: 2px solid red;
+//   border-radius: 4px;
+//   width: calc(100% - 4px);
+//   height: calc(100% - 4px);
+// }
 
 
 app-widget.activated {
@@ -240,7 +240,10 @@ app-widget.activated {
   color: white;
 }
 
-
+.actions {
+  display: flex;
+  justify-content: center;
+}
 
 .list-entry.selected {
   background: #d5dde6;

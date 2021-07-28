@@ -21,7 +21,12 @@ export class EditDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  close(): void {
+  close(widget: IWidget | undefined = undefined): void {
+    if (!widget) {
+      this.dialogRef.close();
+      return;
+    }
 
+    this.dialogRef.close(widget);
   }
 }

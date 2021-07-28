@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EWidgetType } from 'src/app/model/widget-type.enum';
 import { IWidget } from 'src/app/model/widget.interface';
 import { GlobalUtils } from 'src/app/utils/global.utils';
+import { IBlock } from '../block.interface';
 
 interface IButton {
   name: string;
@@ -30,19 +31,38 @@ export class CreateDialogComponent implements OnInit {
     name: 'Kalender'
   }];
 
-  constructor(private dialogRef: MatDialogRef<CreateDialogComponent>) { }
+  constructor(
+    private dialogRef: MatDialogRef<CreateDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { block: IBlock },
+  ) { }
 
   ngOnInit(): void {
   }
 
-  close(btn: IButton): void {
+  close(btn: IButton | undefined = undefined): void {
+    if (!btn) { this.dialogRef.close(); return; }
+
+    const index: number = Object.keys(this.data?.block?.widgets || {}).length;
+
     const widget: IWidget = {
       id: GlobalUtils.uuidv4(),
       type: btn.type,
-      text: '',
+      text: this.getDefaultText(btn.type),
+      index,
     };
+
     this.dialogRef.close({
       widget,
     });
+  }
+
+  private getDefaultText(type: EWidgetType): string {
+    switch (type) {
+      case EWidgetType.TEXT:
+        return 'Neuer Text';
+      case EWidgetType.BUTTON:
+        return 'Neuer Button';
+    }
+    return '';
   }
 }

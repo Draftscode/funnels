@@ -39,14 +39,15 @@
         </div>
       </ng-container>
     </app-page>
+    <div class="actions">
+      <button mat-button (click)="createBlock()">
+        <mat-icon>add</mat-icon> {{'BUTTON.create_value'|translate:{value:'LABEL.block'|translate} }}
+      </button>
+    </div>
   </div>
 
-  <!-- <div class="action-bar">
-  <button mat-button>
-    <mat-icon>add</mat-icon> neue Seite
-  </button>
-</div> -->
-  <button mat-fab  (click)="createPage()" color="primary" class="fab" aria-label="Example icon button with a delete icon">
-    <mat-icon>add</mat-icon>
+  <button mat-fab (click)="createPage()" color="primary" class="fab"
+    aria-label="Example icon button with a delete icon">
+    <mat-icon>more_vert</mat-icon>
   </button>
 </div>

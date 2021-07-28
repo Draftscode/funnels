@@ -1,13 +1,16 @@
 import { CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { IWidget } from 'src/app/model/widget.interface';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageActionService } from 'src/app/services/page-action.service';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
-
+import * as funnelActions from './../funnel/funnel.actions';
+import * as fromFunnel from './../funnel/funnel.reducer';
+import { Store } from '@ngrx/store';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -16,6 +19,7 @@ import { IBlock } from './block.interface';
 })
 export class EditorComponent implements OnInit, OnDestroy {
   displayedBlocks: IBlock[] = [];
+  alive: boolean = true;
   pages: IPage[];
   // pageObs: Observable<IPage[]> = this.store.select(fromPage.selectAll);
   // hasActivatedBVlo: Observable<IPage[]> = this.store.select(fromPage.selectAll);
@@ -29,11 +33,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     private funnelApi: FunnelService,
     private currentRoute: ActivatedRoute,
     private pageActionApi: PageActionService,
-    // private store: Store<fromPage.PageState>,
-    // private blockStore: Store<fromBlock.BlockState>,
     private cd: ChangeDetectorRef,
+    private funnelStore: Store<fromFunnel.FunnelState>,
   ) {
     this.pages = [];
+
   }
 
   init(): void {
@@ -43,6 +47,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.pages = [];
     Object.keys(p).forEach((id: string) => { this.pages.push(p[id]); });
     this.selectPage(this.pages[0]);
+
+    this.funnelStore.select(fromFunnel.selectEntity(this.funnelId)).subscribe((f)=>{
+      console.log(f);
+    });
 
   }
 
@@ -86,19 +94,20 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   }
 
-  createPage():void {
+  createPage(): void {
     this.funnelApi.createPage(this.funnelId);
   }
 
   ngOnInit(): void {
     this.currentRoute.params.subscribe(params => { this.funnelId = params.funnelId; this.init(); });
-    this.funnel$.subscribe((f: IFunnel[]) => {
+    this.funnel$.pipe(takeWhile(() => this.alive)).subscribe((f: IFunnel[]) => {
       this.funnels = f; this.init();
     });
   }
 
   ngOnDestroy(): void {
     this.pageActionApi.closeCtx();
+    this.alive = false;
   }
 
 
@@ -135,6 +144,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.currentPage = page;
     const b: Record<string, IBlock> = this.currentPage?.blocks || {};
     this.displayedBlocks = Object.keys(b).map((key: string) => b[key]);
+    console.log('SELECTED PAGE',this.currentPage);
     this.cd.detectChanges();
   }
 
@@ -147,4 +157,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   }
 
+
+  createBlock(): void {
+    if (!this.currentPage) { return; }
+    this.funnelApi.addBlock(this.funnelId, this.currentPage.id);
+  }
 }

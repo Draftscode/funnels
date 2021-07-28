@@ -1,25 +1,46 @@
-<h1 mat-dialog-title>    Widget bearbeiten
-  <button mat-icon-button mat-dialog-close>
+<h1 mat-dialog-title> {{'BUTTON.edit_value'|translate:{value:'LABEL.widget'|translate} }}
+  <button mat-icon-button (click)="close()">
     <mat-icon>close</mat-icon>
   </button>
 </h1>
 <div mat-dialog-content>
-<ng-container *ngIf="widget">
-  <ng-container [ngSwitch]=" widget.type">
-    <ng-container *ngSwitchCase="'text'">
-      <mat-form-field>
-        <input matInput [(ngModel)]="widget.text">
-      </mat-form-field>
-    </ng-container>
-    <ng-container *ngSwitchCase="'button'">
-      <mat-form-field>
-        <input matInput [(ngModel)]="widget.text">
-      </mat-form-field>
-    </ng-container>
-    <ng-container *ngSwitchCase="'calendar'">
-      <mat-form-field>
-        <input matInput [(ngModel)]="widget.text">
-      </mat-form-field>
+  <ng-container *ngIf="widget">
+    <h2>
+      <mat-icon>palette</mat-icon>{{'STYLE.textColor'|translate}}
+    </h2>
+
+    <input type="color" id="color" name="body" [(ngModel)]="widget.textColor">
+
+    <h2>
+      <mat-icon>format_size</mat-icon>{{'STYLE.fontSize'|translate}}
+    </h2>
+    <mat-slider class="example-margin" [max]="60" [min]="8" [step]="1" [thumbLabel]="widget.fontSize" [tickInterval]="1"
+      [(ngModel)]="widget.fontSize" aria-labelledby="example-name-label">
+    </mat-slider>
+
+    <h2>
+      <mat-icon>title</mat-icon>{{'LABEL.text'|translate}}
+    </h2>
+    <ng-container [ngSwitch]=" widget.type">
+      <ng-container *ngSwitchCase="'text'">
+        <mat-form-field>
+          <input matInput [(ngModel)]="widget.text">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngSwitchCase="'button'">
+        <mat-form-field>
+          <input matInput [(ngModel)]="widget.text">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngSwitchCase="'calendar'">
+        <mat-form-field>
+          <input matInput [(ngModel)]="widget.text">
+        </mat-form-field>
+      </ng-container>
     </ng-container>
   </ng-container>
-</ng-container>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close(widget)">
+      {{'BUTTON.confirm'|translate}}
+    </button>
+  </div>

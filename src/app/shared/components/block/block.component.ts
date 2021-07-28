@@ -1,5 +1,4 @@
 import { Component, ContentChild, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
-import { IWidget } from 'src/app/model/widget.interface';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { IBlock } from 'src/app/shared/components/editor/block.interface';
 import { WidgetComponent } from '../widget/widget.component';
@@ -30,7 +29,8 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
     this.selected.emit(item);
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
+  ngOnChanges(changes: SimpleChanges): void {
+  }
 
   get height(): number {
     if (!this.item) { return 0; }

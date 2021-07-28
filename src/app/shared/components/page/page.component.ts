@@ -30,6 +30,7 @@ export class PageComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('PAGE',changes);
   }
 
   ngOnInit(): void {

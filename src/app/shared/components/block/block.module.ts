@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { BlockComponent } from './block.component';
 import { WidgetModule } from '../widget/widget.module';
+import { PipeModule } from '../../pipes/pipe.module';
 
 
 
@@ -17,6 +18,7 @@ import { WidgetModule } from '../widget/widget.module';
     CommonModule,
     SharedModule,
     WidgetModule,
+    PipeModule,
   ]
 })
 export class BlockModule { }

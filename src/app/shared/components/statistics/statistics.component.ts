@@ -14,10 +14,13 @@ export interface Tile {
   styleUrls: ['./statistics.component.scss']
 })
 export class StatisticsComponent {
-  layoutLarge$ = this.breakpointObserver.observe([Breakpoints.Large,Breakpoints.XLarge]).pipe(map(result => result.matches), shareReplay());
-  layoutSmall$ = this.breakpointObserver.observe([Breakpoints.Small,Breakpoints.XSmall]).pipe(map(result => result.matches), shareReplay());
+  layoutLarge$ = this.breakpointObserver.observe([Breakpoints.Large, Breakpoints.XLarge]).pipe(map(result => result.matches), shareReplay());
+  layoutSmall$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(map(result => result.matches), shareReplay());
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+  ) {
+
   }
 
 

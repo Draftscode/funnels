@@ -14,10 +14,6 @@ export class FunnelService {
   private funnels: BehaviorSubject<IFunnel[]> = new BehaviorSubject<IFunnel[]>([]);
 
   constructor(private http: HttpClient) {
-    // this.http.get<IFunnel[]>('./assets/pages.json').subscribe((a: IFunnel[]) => {
-    //   this.funnels.next(a);
-    // });
-
     this.funnels.next(this.load());
   }
 
@@ -56,6 +52,14 @@ export class FunnelService {
     } else {
       delete funnel.pages[pageId].blocks[blockId];
     }
+    this.store();
+  }
+
+  updateWidget(funnelId: string, pageId: string, blockId: string, widget: IWidget): void {
+    const b: IBlock | undefined = this.getBlock(funnelId, pageId, blockId);
+    if (!b) { return; }
+
+    b.widgets[widget.id] = widget;
     this.store();
   }
 
@@ -140,6 +144,25 @@ export class FunnelService {
     if (!block) { return; }
 
     block.widgets[widget.id] = widget;
+    this.store();
+  }
+
+  addBlock(funnelId: string, pageId: string): void {
+    const f: IFunnel | undefined = this.funnels.getValue().find((f: IFunnel) => f.id === funnelId);
+    if (!f) { return; }
+
+    const p: IPage | undefined = f.pages[pageId];
+    if (!p) { return; }
+
+    const blockIndex: number = Object.keys(p.blocks || {}).length;
+    const block: IBlock = {
+      id: GlobalUtils.uuidv4(),
+      widgets: {},
+      height: 300,
+      curDragHeight: 0,
+      index: blockIndex,
+    };
+    p.blocks[block.id] = block;
     this.store();
   }
 }

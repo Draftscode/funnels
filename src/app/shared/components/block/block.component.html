@@ -2,10 +2,10 @@
   <div [class.active]="item.activated" (click)="activateBlock(item)" class="block" [style.height]="height+'px'"
     [style.background]="item.styles?.background">
     <mat-grid-list class="grid-list" [cols]="widgetCount > 1 ? 2:1" rowHeight="fit">
-      <ng-container *ngFor="let widget of item?.widgets | keyvalue">
+      <ng-container *ngFor="let widget of item?.widgets | sortByIndex">
         <mat-grid-tile [colspan]="1" [rowspan]="1">
           <ng-container *ngIf="template">
-            <ng-container *ngTemplateOutlet="template; context:{$implicit: widget.value}"></ng-container>
+            <ng-container *ngTemplateOutlet="template; context:{$implicit: widget}"></ng-container>
           </ng-container>
         </mat-grid-tile>
       </ng-container>

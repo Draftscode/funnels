@@ -13,8 +13,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { TranslateModule } from '@ngx-translate/core';
+import { PipeModule } from './pipes/pipe.module';
 
 @NgModule({
   imports: [
@@ -25,6 +28,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatListModule,
     ScrollingModule,
     DragDropModule,
+    MatSliderModule,
     MatGridListModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -34,8 +38,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatFormFieldModule,
     MatInputModule,
     MatStepperModule,
+    PipeModule,
+    TranslateModule,
   ],
   exports: [
+    TranslateModule,
+    PipeModule,
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
@@ -47,15 +55,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatGridListModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatSliderModule,
     MatNativeDateModule,
     MatMomentDateModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
   ],
-  providers: [{
-    provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE],
-  }],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+  ],
   declarations: [],
 })
 export class SharedModule { }

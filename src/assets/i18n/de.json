@@ -1,0 +1,19 @@
+{
+  "BUTTON": {
+    "cancel": "Abbrechen",
+    "create_value": "{{value}} erstellen",
+    "edit_value": "{{value}} bearbeiten",
+    "add_value": "{{value}} hinzufügen",
+    "confirm": "Bestätigen"
+  },
+  "LABEL": {
+    "block": "Bereich",
+    "widget": "Widget",
+    "text": "Text",
+    "funnel": "Funnel"
+  },
+  "STYLE": {
+    "fontSize": "Shiftgröße",
+    "textColor": "Schriftfarbe"
+  }
+}

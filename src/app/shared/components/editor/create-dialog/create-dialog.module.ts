@@ -1,20 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { CreateDialogComponent } from './create-dialog.component';
 
 
 
 @NgModule({
-  declarations: [
-    CreateDialogComponent
-  ],
+  declarations: [CreateDialogComponent],
   exports: [CreateDialogComponent],
   imports: [
+    SharedModule,
     CommonModule,
-    MatButtonModule,
-    MatIconModule,
   ]
 })
 export class CreateDialogModule { }

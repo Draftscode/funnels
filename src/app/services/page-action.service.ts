@@ -26,7 +26,11 @@ export class PageActionService {
   }
 
   createWidget(funnelId: string, pageId: string, blockId: string): void {
-    this.dialog.open(CreateDialogComponent, { data: {} }).afterClosed().subscribe((r) => {
+    this.dialog.open(CreateDialogComponent, {
+      data: {
+        block: this.funnelApi.getBlock(funnelId, pageId, blockId),
+      }, panelClass: 'lightbox'
+    }).afterClosed().subscribe((r) => {
       if (!r) { return; }
       this.funnelApi.addWidget(funnelId, pageId, blockId, r.widget);
     });
@@ -34,15 +38,14 @@ export class PageActionService {
 
 
   editWidget(funnelId: string, pageId: string, blockId: string): void {
-
-
     this.dialog.open(EditDialogComponent, {
       data: {
         widget: this.funnelApi.getActivatedWidget(funnelId, pageId, blockId)!
-      }
+      },
+      panelClass: 'lightbox',
     }).afterClosed().subscribe((r) => {
       if (!r) { return; }
-      this.funnelApi.addWidget(funnelId, pageId, blockId, r.widgets);
+      this.funnelApi.updateWidget(funnelId, pageId, blockId, r);
     });
   }
 
