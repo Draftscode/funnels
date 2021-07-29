@@ -1,5 +1,5 @@
 <div class="block" [style.height]="item.height" *ngIf="item">
-  <div [class.active]="item.activated" (click)="activateBlock(item)" class="block" [style.height]="height+'px'"
+  <div (click)="activateBlock(item)" class="block" [style.height]="height+'px'"
     [style.background]="item.styles?.background">
     <mat-grid-list class="grid-list" [cols]="widgetCount > 1 ? 2:1" rowHeight="fit">
       <ng-container *ngFor="let widget of item?.widgets | sortByIndex">

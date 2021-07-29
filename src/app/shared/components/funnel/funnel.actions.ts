@@ -16,7 +16,7 @@ export class Create implements Action {
 export class Update implements Action {
   readonly type = EFunnelActionType.UPDATE;
 
-  constructor(public id: string, public changes: IFunnel) { }
+  constructor(public id: string, public changes: Record<string,any>) { }
 }
 
 export class Delete implements Action {

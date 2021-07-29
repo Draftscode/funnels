@@ -6,7 +6,7 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <ng-scrollbar class="pages-wrapper">
-    <mat-list>
+    <mat-list *ngIf="pages">
       <div [class.selected]="currentPage?.id === page.id" matRipple (click)="selectPage(page)" class="list-entry"
         mat-list-item #listItem *ngFor="let page of pages; let pageIdx = index">
         <span class="num">{{pageIdx+1}}</span><span>{{page.id}}</span>
@@ -20,17 +20,17 @@
       <ng-container *ngFor="let block of displayedBlocks">
         <div #container (cdkDragStarted)="dragStart(container,block)" (cdkDragEnded)="dragEnd(container,block)"
           [cdkDragLockAxis]="'y'" [cdkDragData]="block" cdkDrag>
-          <app-block [class.activated]="block.activated" (selected)="selectBlock(container,$event)" [item]="block">
+          <app-block [class.activated]="block.id === selectedBlockId" (selected)="selectBlock(container,$event)" [item]="block">
             <ng-template #widgetTemplate let-widget>
               <app-widget (cdkDragEnded)="dragExited($event,widget)" cdkDrag (cdkDragMoved)="dragMove($event)"
                 (click)="activateWidget($event,currentPage.id,block.id,widget)" [slot]="widget.id"
-                [class.activated]="widget.activated" [widget]="widget">
+                [class.activated]="widget.id === selectedWidgetId" [widget]="widget">
               </app-widget>
             </ng-template>
           </app-block>
 
 
-          <div *ngIf="block.activated" [cdkDragData]="null" (cdkDragEnded)="resize($event,block)"
+          <div *ngIf="block.id === selectedBlockId" [cdkDragData]="null" (cdkDragEnded)="resize($event,block)"
             (cdkDragMoved)="onResize($event,block)" cdkDragBoundary=".widget" [cdkDragLockAxis]="'y'" cdkDrag
             class="drag-border">
             <span class="handle-circle mat-elevation-z4" cdkDragHandle></span>
