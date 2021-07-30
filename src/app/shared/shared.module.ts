@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
+import { DirectivesModule } from './directives/directive.module';
 import { PipeModule } from './pipes/pipe.module';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { PipeModule } from './pipes/pipe.module';
     MatStepperModule,
     PipeModule,
     TranslateModule,
+    DirectivesModule,
   ],
   exports: [
     TranslateModule,
@@ -61,6 +63,7 @@ import { PipeModule } from './pipes/pipe.module';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    DirectivesModule,
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },

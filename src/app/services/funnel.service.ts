@@ -159,7 +159,6 @@ export class FunnelService {
       id: GlobalUtils.uuidv4(),
       widgets: {},
       height: 300,
-      curDragHeight: 0,
       index: blockIndex,
     };
     p.blocks[block.id] = block;

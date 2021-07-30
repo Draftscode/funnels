@@ -1,7 +1,3 @@
-<mat-list *ngIf="actions">
-  <mat-list-item *ngFor="let action of actions">
-    <button mat-button (click)="trigger(action)">
-      <mat-icon>{{action.icon}}</mat-icon> {{action.name}}
-    </button>
-  </mat-list-item>
-</mat-list>
+<button mat-icon-button (click)="trigger('add')">
+  <mat-icon>add</mat-icon>
+</button>

@@ -13,6 +13,7 @@ import { CtxComponent } from './ctx/ctx.component';
 import { EditDialogModule } from './edit-dialog/edit-dialog.module';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
+import { NameEditorModule } from './name-editor/name-editor.module';
 @NgModule({
   declarations: [
     EditorComponent,
@@ -22,6 +23,7 @@ import { EditorComponent } from './editor.component';
     DragDropModule,
     CommonModule,
     EditorRoutingModule,
+    NameEditorModule,
     SharedModule,
     MatDialogModule,
     MatRippleModule,

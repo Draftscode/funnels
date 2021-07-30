@@ -9,16 +9,19 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { TranslateModule } from '@ngx-translate/core';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsModule } from '@ngxs/store';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { MainNavModule } from './shared/components/main-nav/main-nav.module';
 import { SharedModule } from './shared/shared.module';
-import { reducers } from './store';
+import { BlockState } from './shared/state/block/block.state';
+import { FunnelState } from './shared/state/funnel/funnel.state';
+import { PageState } from './shared/state/page/page.state';
+import { WidgetState } from './shared/state/widget/widget.state';
 
 
 @NgModule({
@@ -32,13 +35,17 @@ import { reducers } from './store';
     BrowserAnimationsModule,
     HttpClientModule,
     SharedModule,
-    StoreModule,
     NgScrollbarModule,
     CoreModule,
-    StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-    }),
+    NgxsModule.forRoot([
+      // RouterState,
+      FunnelState,
+      PageState,
+      BlockState,
+      WidgetState,
+    ]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot(),
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,

@@ -4,4 +4,7 @@ export interface IPage {
   id: string;
   blocks: Record<string, IBlock>;
   index: number;
+  name?: string;
+  funnelId?: string;
+  blockIds?: string[];
 }

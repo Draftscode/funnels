@@ -1,0 +1,8 @@
+<span *ngIf="!editable">
+  <button mat-icon-button (click)="editable = true">
+    <mat-icon>edit</mat-icon>
+  </button>{{name}}
+</span>
+<mat-form-field (focusout)="editable=false" *ngIf="editable">
+  <input [autofocus]="true" #nameEditor (change)="rename(nameEditor)" matInput [value]="name">
+</mat-form-field>

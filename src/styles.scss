@@ -12,6 +12,9 @@ body {
 
 :root {
   --widget-background-color: #262040;
+
+  --main-color-primary: #AB7CFC;
+  --main-color-secondary: #52D9DF;
 }
 
 
@@ -25,9 +28,21 @@ ng-scrollbar.virtual-scroll {
 
 
 mat-toolbar.mat-toolbar {
-  color: white;
-  background: rgb(199, 20, 114);
-  background: linear-gradient(90deg, rgba(199, 20, 114, 1) 0%, rgba(226, 130, 104, 1) 89%);
+  color: rgb(245, 245, 245);
+  background: var(--main-color-primary);
+  background: linear-gradient(90deg, var(--main-color-primary) 0%, var(--main-color-secondary) 89%);
+}
+
+mat-sidenav.mat-sidenav {
+  background-color: #383838;
+
+  .mat-list-item-content {
+    color: #b9b9b9;
+  }
+
+  .mat-toolbar {
+    color: white;
+  }
 }
 
 div.page-content {

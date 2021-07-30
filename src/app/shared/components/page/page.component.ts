@@ -1,5 +1,8 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Select } from "@ngxs/store";
+import { Observable } from "rxjs";
 import { IBlock } from "src/app/shared/components/editor/block.interface";
+import { BLOCK_STORAGE_NAME } from "../../state/block/block.state";
 import { IPage } from "./page.interface";
 
 @Component({
@@ -14,6 +17,8 @@ export class PageComponent implements OnChanges, OnInit {
   width: number = 592;
   height: number = 288;
   fontSize: number = 14;
+  @Select((state: any) => state[BLOCK_STORAGE_NAME].entities) blocks$!: Observable<Record<string, IBlock>>;
+
   @ViewChild('textEditor') set editor(textEditor: ElementRef) {
     if (!textEditor) { return; }
     textEditor.nativeElement.focus();
@@ -30,7 +35,6 @@ export class PageComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('PAGE',changes);
   }
 
   ngOnInit(): void {
@@ -50,11 +54,11 @@ export class PageComponent implements OnChanges, OnInit {
 
 
   onResize(e: { distance: { x: number; y: number; } }, block: IBlock): void {
-    block.curDragHeight = (e?.distance?.y || 0);
+    // block.curDragHeight = (e?.distance?.y || 0);
   }
 
   resize(e: { distance: { x: number; y: number; } }, block: IBlock): void {
-    block.curDragHeight = 0;
+    // block.curDragHeight = 0;
     block.height = (block.height + e.distance.y);
 
   }

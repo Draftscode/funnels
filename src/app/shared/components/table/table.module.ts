@@ -5,6 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
+import { SharedModule } from "../../shared.module";
 import { TableComponent } from "./table.component";
 
 @NgModule({
@@ -12,6 +13,7 @@ import { TableComponent } from "./table.component";
     TranslateModule,
     CommonModule,
     MatTableModule,
+    SharedModule,
     NgScrollbarModule,
     MatIconModule,
     MatButtonModule,

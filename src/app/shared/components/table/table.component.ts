@@ -1,14 +1,13 @@
-import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { IFunnel } from 'src/app/model/funnel.interface';
-import { Funnel2Service } from 'src/app/services/funnel2.service';
 import { GlobalUtils } from 'src/app/utils/global.utils';
+import { CreateFunnel } from '../../state/funnel/funnel.actions';
+import { FunnelState, IFunnelStateModel } from '../../state/funnel/funnel.state';
+import { CreatePage } from '../../state/page/page.actions';
 import { IPage } from '../page/page.interface';
-import * as funnelActions from './../funnel/funnel.actions';
-import * as fromFunnel from './../funnel/funnel.reducer';
 
 @Component({
   selector: 'app-table',
@@ -16,17 +15,19 @@ import * as fromFunnel from './../funnel/funnel.reducer';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'template', 'pages', 'weight', 'symbol', 'actions'];
-  dataSource: ExampleDataSource | undefined;
-  funnels$: Observable<IFunnel[]> = this.funnelStore.select(fromFunnel.selectAll);
+  displayedColumns: string[] = ['position','pages','actions'];
 
+  // @Select((state: any) => state.funnel) funnelState$!: Observable<IFunnelStateModel>;
+  funnels$: Observable<IFunnel[]>;
   constructor(
     private router: Router,
-    private funnel2Api: Funnel2Service,
-    private funnelStore: Store<fromFunnel.FunnelState>,
+    private store: Store,
   ) {
-    this.dataSource = new ExampleDataSource(this.funnelStore);
+    this.funnels$ = this.store.select(state => {
+      return Object.keys(state.funnel.entities).map((key: string) => state.funnel.entities[key]) || [];
+    });
   }
+
   ngOnInit(): void {
   }
 
@@ -35,45 +36,30 @@ export class TableComponent implements OnInit {
   }
 
   deleteFunnel(funnel: IFunnel): void {
-    this.funnel2Api.delete(funnel.id).subscribe(() => {
-      this.funnelStore.dispatch(new funnelActions.Delete(funnel.id));
-    });
+
   }
 
   createFunnel(): void {
-    const f: IFunnel = {
-      id: GlobalUtils.uuidv4(),
-      name: '',
-      pages: {},
-      websites: {},
-    };
     const defaultPage: IPage = {
       id: GlobalUtils.uuidv4(),
       index: 0,
+      name: 'Neue Seite',
       blocks: {},
+    };
+
+    const f: IFunnel = {
+      id: GlobalUtils.uuidv4(),
+      name: 'Neuer Funnel',
+      pages: {},
+      websites: {},
+      pageIds: [defaultPage.id]
     };
 
     f.pages[defaultPage.id] = defaultPage;
 
-    this.funnel2Api.create(f).subscribe(() => {
-      this.funnelStore.dispatch(new funnelActions.Create(f));
-    });
+    this.store.dispatch([
+      new CreateFunnel(f),
+      new CreatePage(defaultPage),
+    ]);
   }
-}
-
-class ExampleDataSource extends DataSource<IFunnel> {
-  private _dataStream: Observable<IFunnel[]> = this.funnelStore.select(fromFunnel.selectAll);
-
-  constructor(
-    private funnelStore: Store<fromFunnel.FunnelState>,
-  ) {
-    super();
-  }
-
-
-  connect(): Observable<IFunnel[]> {
-    return this._dataStream;
-  }
-
-  disconnect() { }
 }

@@ -1,19 +1,5 @@
 $white: #f8f8f8;
 
-:host {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-::ng-deep {
-
-
-  ng-scrollbar.virtual-scroll.widget {
-    background: var(--widget-background-color);
-    border-radius: 4px;
-  }
-}
 
 
 
@@ -21,11 +7,16 @@ $white: #f8f8f8;
   height: 100%;
 }
 
-.block {
+:host {
   border-bottom: 1px solid rgba(255, 255, 255, .4);
   min-height: 50px;
   display: block;
   overflow: hidden;
+
+  .block {
+    width: 100%;
+    height: 300px;
+  }
 
   .handle-border {
     left: 0;

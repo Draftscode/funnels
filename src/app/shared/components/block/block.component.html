@@ -1,14 +1,13 @@
-<div class="block" [style.height]="item.height" *ngIf="item">
-  <div (click)="activateBlock(item)" class="block" [style.height]="height+'px'"
-    [style.background]="item.styles?.background">
-    <mat-grid-list class="grid-list" [cols]="widgetCount > 1 ? 2:1" rowHeight="fit">
-      <ng-container *ngFor="let widget of item?.widgets | sortByIndex">
-        <mat-grid-tile [colspan]="1" [rowspan]="1">
-          <ng-container *ngIf="template">
-            <ng-container *ngTemplateOutlet="template; context:{$implicit: widget}"></ng-container>
-          </ng-container>
-        </mat-grid-tile>
-      </ng-container>
-    </mat-grid-list>
-  </div>
+<div *ngIf="item" (click)="activateBlock(item)" class="block" [style.color]="item.height+'px'"
+  [style.background]="item.styles?.background">
+  <mat-grid-list class="grid-list" [cols]="(item?.widgetIds?.length ||0) > 1 ? 2:1" rowHeight="fit">
+    <ng-container *ngFor="let widgetId of item?.widgetIds">
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <ng-container *ngIf="template">
+          <ng-container *ngTemplateOutlet="template; context:{$implicit: widgetId}"></ng-container>
+        </ng-container>
+      </mat-grid-tile>
+    </ng-container>
+  </mat-grid-list>
 </div>
+<!-- <div *ngIf="item" [style.height]="item.height+'px'"></div> -->

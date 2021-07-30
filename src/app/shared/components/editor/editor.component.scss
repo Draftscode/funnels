@@ -213,6 +213,10 @@ span.grippy::after {
 //   height: calc(100% - 4px);
 // }
 
+.list-entry-editor {
+  width: calc(100% - 30px);
+}
+
 
 app-widget.activated {
   width: calc(100% - 4px);
@@ -222,7 +226,8 @@ app-widget.activated {
 
 
 .list-entry {
-  padding: 24px;
+  white-space: nowrap;
+  padding: 0px;
   cursor: pointer;
 }
 
