@@ -1,40 +1,38 @@
-<div>
+<div *ngIf="selectedFunnelId">
   <mat-toolbar>
     <mat-toolbar-row>
-      <app-name-editor (changes)="renameFunnel(funnelId,$event)" [name]="(funnel$|async)![funnelId]?.name">
+      <app-name-editor (changes)="renameFunnel(selectedFunnelId,$event)" [name]="funnels[selectedFunnelId]?.name">
       </app-name-editor>
     </mat-toolbar-row>
     <mat-toolbar-row>
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <!-- <ng-scrollbar class="pages-wrapper"> -->
-  <mat-list *ngIf="pages$">
-    <div [class.selected]="currentPageId === pageId" matRipple (click)="selectPage(pageId)" class="list-entry"
-      mat-list-item #listItem *ngFor="let pageId of (funnel$|async)![funnelId]?.pageIds; let pageIdx = index">
-      <span class="num">{{pageIdx+1}}</span>
+  <ng-scrollbar class="pages-wrapper">
+    <mat-list *ngIf="pages">
+      <div [id]="pageId" [class.selected]="selectedPageId === pages[pageId].id" matRipple
+        (click)="selectPage(pages[pageId].id)" class="list-entry" mat-list-item #listItem
+        *ngFor="let pageId of funnels[selectedFunnelId]?.pageIds; let pageIdx = index">
+        <span class="num">{{pageIdx+1}}</span>
 
-      <app-name-editor class="list-entry-editor" (changes)="renamePage(pageId,$event)"
-        [name]="(pages$|async)![pageId]?.name"></app-name-editor>
-    </div>
-  </mat-list>
-  <!-- </ng-scrollbar> -->
+        <app-name-editor class="list-entry-editor" (changes)="renamePage(pages[pageId].id,$event)"
+          [name]="pages[pageId]?.name"></app-name-editor>
+      </div>
+    </mat-list>
+  </ng-scrollbar>
   <div class="page-wrapper">
     <app-page #pageContainer [cdkDropListData]="displayedBlocks" cdkDropList [cdkDropListSortPredicate]="enterPredicate"
-      (cdkDropListDropped)="drop($event)" cdkDropListclass="app-page" [editable]="true" *ngIf="currentPageId" [zoom]="1"
-      [page]="(pages$|async)![currentPageId]">
-      <!-- <ng-container *ngFor="let blockId of (pages$|async)![currentPageId]?.blockIds"> -->
-      <div *ngFor="let blockId of (pages$|async)![currentPageId]?.blockIds" >Hall</div>
-    <!-- </ng-container> -->
-      <!-- <ng-container *ngFor="let blockId of (pages$|async)![currentPageId]?.blockIds">
+      (cdkDropListDropped)="drop($event)" cdkDropListclass="app-page" [editable]="true" *ngIf="selectedPageId"
+      [zoom]="1" [page]="pages[selectedPageId]">
+      <ng-container *ngFor="let blockId of pages[selectedPageId]?.blockIds">
         <div #container (cdkDragStarted)="dragStart(container,blockId)" (cdkDragEnded)="dragEnd(container,blockId)"
-          [cdkDragLockAxis]="'y'" [cdkDragData]="blockId" cdkDrag []>
-          <app-block [class.activated]="blockId === selectedBlockId" (selected)="selectBlock(container,$event)"
-            [item]="(blocks$ | async)![blockId]">
+          [cdkDragLockAxis]="'y'" [cdkDragData]="blockId" cdkDrag>
+          <app-block (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef [height]="blockId === selectedBlockId ? curDragHeight:0"
+            [class.activated]="blockId === selectedBlockId" [item]="blocks[blockId]">
             <ng-template #widgetTemplate let-widgetId>
               <app-widget (cdkDragEnded)="dragExited($event,widgetId)" cdkDrag (cdkDragMoved)="dragMove($event)"
-                (click)="activateWidget($event,widgetId)" [slot]="widgetId"
-                [class.activated]="widgetId === selectedWidgetId" [widget]="(widgets$ | async)![widgetId]">
+                (click)="activateWidget($event,blockRef.elementRef,blockId,widgetId)" [slot]="widgetId"
+                [class.activated]="widgetId === selectedWidgetId" [widget]="widgets[widgetId]">
               </app-widget>
             </ng-template>
           </app-block>
@@ -46,7 +44,7 @@
           </div>
 
         </div>
-      </ng-container> -->
+      </ng-container>
     </app-page>
     <div class="actions">
       <button mat-button (click)="createBlock()">
@@ -58,6 +56,9 @@
   <button mat-fab (click)="createPage()" color="primary" class="fab"
     aria-label="Example icon button with a delete icon">
     <mat-icon>more_vert</mat-icon>
+  </button>
+  <button mat-button (click)="demo()" color="primary" class="fab" aria-label="Example icon button with a delete icon">
+    <mat-icon>more_vert</mat-icon>View
   </button>
 
 </div>

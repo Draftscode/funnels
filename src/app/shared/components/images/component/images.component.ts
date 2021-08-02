@@ -1,8 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { finalize, map, shareReplay } from 'rxjs/operators';
 import { ImageService } from 'src/app/services/image.service';
+import { ImageDialog } from './image.dialog';
 import { IImage } from './image.interface';
 
 @Component({
@@ -17,6 +18,7 @@ export class ImagesComponent implements OnInit {
   images: IImage[] = [];
   layoutLarge$ = this.breakpointObserver.observe([Breakpoints.Large, Breakpoints.XLarge]).pipe(map(result => result.matches), shareReplay());
   layoutSmall$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(map(result => result.matches), shareReplay());
+  @Output() imageSelected: EventEmitter<IImage> = new EventEmitter<IImage>();
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -24,6 +26,10 @@ export class ImagesComponent implements OnInit {
     this.formGroup = new FormGroup({
       term: new FormControl(''),
     });
+  }
+
+  selectImage(img: IImage): void {
+    this.imageSelected.emit(img);
   }
 
   ngOnInit(): void {

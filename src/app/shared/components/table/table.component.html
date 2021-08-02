@@ -1,6 +1,6 @@
 <ng-scrollbar cdkDropList [visibility]="'hover'" class="virtual-scroll table" thumbClass="white-scrollbars">
 
-    <table mat-table [dataSource]="(funnels$|async) || []" class="mat-elevation-z8">
+    <table mat-table [dataSource]="funnels" class="mat-elevation-z8">
       <!-- Position Column -->
       <ng-container matColumnDef="position">
         <th mat-header-cell *matHeaderCellDef> Name </th>

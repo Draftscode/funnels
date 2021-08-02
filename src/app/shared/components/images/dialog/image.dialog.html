@@ -1,0 +1,7 @@
+<div mat-dialog-content class="content">
+  <app-images (imageSelected)="selectImage($event)"></app-images>
+</div>
+<div mat-dialog-actions>
+  <button mat-button>{{'BUTTON.cancel'}}</button>
+  <button (click)="useImage()" [disabled]="!curImage" mat-button>{{'BUTTON.confirm'}}</button>
+</div>

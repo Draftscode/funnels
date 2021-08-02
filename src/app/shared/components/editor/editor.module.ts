@@ -5,8 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { SharedModule } from '../../shared.module';
+import { ImageDialogModule } from '../images/dialog/image-dialog.module';
 import { PageModule } from '../page/page.module';
 import { CreateDialogModule } from './create-dialog/create-dialog.module';
 import { CtxComponent } from './ctx/ctx.component';
@@ -24,6 +26,7 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     CommonModule,
     EditorRoutingModule,
     NameEditorModule,
+    TranslateModule,
     SharedModule,
     MatDialogModule,
     MatRippleModule,
@@ -33,6 +36,7 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     MatSidenavModule,
     CreateDialogModule,
     EditDialogModule,
+    ImageDialogModule,
   ]
 })
 export class EditorModule { }

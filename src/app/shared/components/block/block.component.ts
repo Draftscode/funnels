@@ -12,13 +12,18 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   @Input('item') item: IBlock | null = null;
   @Input() zoom: number = 1;
   @Output() selected: EventEmitter<IBlock> = new EventEmitter<IBlock>();
-
+  @Input() height: number = 0;
   @ContentChild('widgetTemplate') template: TemplateRef<WidgetComponent> | undefined;
 
-  height: number = 0;
-  constructor(private funnelApi: FunnelService, private el: ElementRef) {
+  constructor(private funnelApi: FunnelService, public elementRef: ElementRef) {
     // this.el.nativeElement.style.height = '300px';
-   }
+  }
+
+  get itemHeight(): string {
+    return `${(this.height || 0) + (this.item?.height || 0)}px`;
+  }
+
+  myHeight = 300;
 
   activateBlock(item: IBlock): void {
     if (!item) { return; }
@@ -30,7 +35,9 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    if (changes.height) {
+      this.myHeight = this.height + (this.item?.height || 0);
+    }
   }
 
 

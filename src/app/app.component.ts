@@ -1,13 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Store } from '@ngxs/store';
 import { takeWhile } from 'rxjs/operators';
 import { IMainNavLink } from './shared/components/main-nav/main-nav-links';
-import { GetAllBlocks } from './shared/state/block/block.actions';
-import { GetAllFunnels } from './shared/state/funnel/funnel.actions';
-import { GetAllPages } from './shared/state/page/page.actions';
-import { GetAllWidgets } from './shared/state/widget/widget.actions';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -45,7 +40,6 @@ export class AppComponent implements OnDestroy {
   constructor(
     private router: Router,
     private translate: TranslateService,
-    private store: Store,
   ) {
     this.translate.setDefaultLang('en');
     this.translate.use('en');
@@ -56,12 +50,7 @@ export class AppComponent implements OnDestroy {
       }
     });
 
-    this.store.dispatch([
-      new GetAllFunnels(),
-      new GetAllPages(),
-      new GetAllBlocks(),
-      new GetAllWidgets(),
-    ]);
+
   }
 
   ngOnDestroy(): void {

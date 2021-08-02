@@ -1,9 +1,8 @@
-
-<ng-container *ngIf="currentPage">
-  <app-page [page]="currentPage">
-    <app-block [item]="block.value" *ngFor="let block of currentPage.blocks | keyvalue">
-      <ng-template #widgetTemplate let-widget>
-        <app-widget (afterClicked)="afterClicked(widget)" [widget]="widget"></app-widget>
+<ng-container *ngIf="selectedPageId">
+  <app-page [page]="pages[selectedPageId]">
+    <app-block [item]="blocks[blockId]" *ngFor="let blockId of pages[selectedPageId].blockIds">
+      <ng-template #widgetTemplate let-widgetId>
+        <app-widget (afterClicked)="afterClicked(widgetId)" [widget]="widgets[widgetId]"></app-widget>
       </ng-template>
     </app-block>
   </app-page>

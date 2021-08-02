@@ -1,9 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { IWidget } from 'src/app/model/widget.interface';
+import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
+import { PageService } from 'src/app/services/page.service';
+import { WidgetService } from 'src/app/services/widget.service';
+import { IBlock } from '../editor/block.interface';
 import { IPage } from '../page/page.interface';
 
 @Component({
@@ -12,47 +16,50 @@ import { IPage } from '../page/page.interface';
   styleUrls: ['./viewer.component.scss']
 })
 export class ViewerComponent implements OnInit, OnDestroy {
-  funnels: IFunnel[] | undefined;
-  currentPage: IPage | undefined;
-  currentFunnel: IFunnel | undefined;
-  private funnelId: string | undefined;
+  funnels: Record<string, IFunnel> = {};
+  pages: Record<string, IPage> = {};
+  blocks: Record<string, IBlock> = {};
+  widgets: Record<string, IWidget> = {};
+
+  selectedPageId: string | undefined;
+  selectedFunnelId: string | undefined;
   private alive: boolean = true;
+
   constructor(
     private funnelApi: FunnelService,
+    private pageApi: PageService,
+    private blockApi: BlockService,
+    private widgetApi: WidgetService,
     private currentRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.currentRoute.params.pipe(takeWhile(() => this.alive)).subscribe(params => { this.selectedFunnelId = params.funnelId; this.init(); });
 
-    this.currentRoute.params.subscribe(params => {
-      this.funnelId = params.funnelId;
-      this.init();
-    });
-
-    this.funnelApi.getFunnels().pipe(takeWhile(() => this.alive)).subscribe((f: IFunnel[]) => {
-      if (!f || !Array.isArray(f)) { return; }
-      this.funnels = f;
-      this.init();
-    });
-  }
-
-  init(): void {
-    if (!this.funnels || !this.funnelId) { return; }
-    this.currentFunnel = this.funnels.find((f: IFunnel) => f.id === this.funnelId);
-    const pageId: string | undefined = Object.keys(this.currentFunnel?.pages || {}).find((pId: string) => this.currentFunnel?.pages[pId].index === 0);
-    if (!pageId) { return; }
-    this.currentPage = this.currentFunnel?.pages[pageId];
+    this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => { this.funnels = items; this.init(); });
+    this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => { this.pages = items; this.init(); });
+    this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => { this.blocks = items; this.init(); });
+    this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IWidget>) => { this.widgets = items; this.init(); });
   }
 
   ngOnDestroy(): void {
     this.alive = false;
   }
 
-  afterClicked(widget: IWidget): void {
+  private init(): void {
+    if (!this.selectedFunnelId || !this.funnels || !this.pages) { return; }
 
+    const pageIds: string[] = this.funnels[this.selectedFunnelId]?.pageIds || [];
+
+    this.selectedPageId = Object.keys(this.pages).filter((key: string) => pageIds.includes(this.pages[key].id))
+      .sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
+  }
+
+  afterClicked(widgetId: string): void {
+    const widget: IWidget = this.widgets[widgetId];
     if (widget.type === 'button') {
       if (!widget.linkedTo) { return; }
-      this.currentPage = this.currentFunnel?.pages[widget.linkedTo];
+      this.selectedPageId = widget.linkedTo;
     }
   }
 }

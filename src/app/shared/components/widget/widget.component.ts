@@ -1,16 +1,27 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { takeWhile } from 'rxjs/operators';
 import { IWidget } from 'src/app/model/widget.interface';
+import { PageService } from 'src/app/services/page.service';
+import { IPage } from '../page/page.interface';
 
 @Component({
   selector: 'app-widget',
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.scss']
 })
-export class WidgetComponent implements OnInit {
+export class WidgetComponent implements OnInit, OnDestroy {
   @Input() widget: IWidget | undefined;
   @Output() afterClicked: EventEmitter<void> = new EventEmitter<void>();
+  private alive: boolean = true;
+  pages: Record<string, IPage> = {};
 
-  constructor() { }
+  constructor(private pageApi: PageService) {
+    this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => this.pages = items);
+  }
+
+  ngOnDestroy(): void {
+    this.alive = false;
+  }
 
   ngOnInit(): void {
   }

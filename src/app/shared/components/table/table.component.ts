@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { concat } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
+import { BlockService } from 'src/app/services/block.service';
+import { FunnelService } from 'src/app/services/funnel.service';
+import { PageService } from 'src/app/services/page.service';
 import { GlobalUtils } from 'src/app/utils/global.utils';
-import { CreateFunnel } from '../../state/funnel/funnel.actions';
-import { FunnelState, IFunnelStateModel } from '../../state/funnel/funnel.state';
-import { CreatePage } from '../../state/page/page.actions';
+import { IBlock } from '../editor/block.interface';
 import { IPage } from '../page/page.interface';
 
 @Component({
@@ -14,17 +15,18 @@ import { IPage } from '../page/page.interface';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
-  displayedColumns: string[] = ['position','pages','actions'];
-
-  // @Select((state: any) => state.funnel) funnelState$!: Observable<IFunnelStateModel>;
-  funnels$: Observable<IFunnel[]>;
+export class TableComponent implements OnInit, OnDestroy {
+  displayedColumns: string[] = ['position', 'pages', 'actions'];
+  private alive: boolean = true;
+  funnels: IFunnel[] = [];
   constructor(
     private router: Router,
-    private store: Store,
+    private funnelApi: FunnelService,
+    private pageApi: PageService,
+    private blockApi: BlockService,
   ) {
-    this.funnels$ = this.store.select(state => {
-      return Object.keys(state.funnel.entities).map((key: string) => state.funnel.entities[key]) || [];
+    this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((f: Record<string, IFunnel>) => {
+      this.funnels = Object.keys(f || {}).map((key: string) => f[key]);
     });
   }
 
@@ -40,11 +42,19 @@ export class TableComponent implements OnInit {
   }
 
   createFunnel(): void {
+    const block: IBlock = {
+      id: GlobalUtils.uuidv4(),
+      height: 300,
+      index: 0,
+      widgets: {},
+    };
+
     const defaultPage: IPage = {
       id: GlobalUtils.uuidv4(),
       index: 0,
       name: 'Neue Seite',
       blocks: {},
+      blockIds: [block.id],
     };
 
     const f: IFunnel = {
@@ -57,9 +67,15 @@ export class TableComponent implements OnInit {
 
     f.pages[defaultPage.id] = defaultPage;
 
-    this.store.dispatch([
-      new CreateFunnel(f),
-      new CreatePage(defaultPage),
-    ]);
+    concat(
+      this.blockApi.create(block.id, block),
+      this.pageApi.create(defaultPage.id, defaultPage),
+      this.funnelApi.create(f.id, f),
+    ).subscribe(() => {
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.alive = false;
   }
 }

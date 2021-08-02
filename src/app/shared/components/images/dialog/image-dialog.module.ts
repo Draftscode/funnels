@@ -9,17 +9,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
-import { ImagesRoutingModule } from './images-routing.module';
-import { ImagesComponent } from './component/images.component';
+import { ImageDialog } from './image.dialog';
+import { ImagesRoutingModule } from '../images-routing.module';
+import { ImagesModule } from '../images.module';
 
 
 
 @NgModule({
   declarations: [
-    ImagesComponent,
+    ImageDialog,
   ],
-  exports: [ImagesComponent],
+  exports: [ImageDialog],
   imports: [
+    CommonModule,
     TranslateModule,
     CommonModule,
     ImagesRoutingModule,
@@ -32,6 +34,7 @@ import { ImagesComponent } from './component/images.component';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
+    ImagesModule,
   ]
 })
-export class ImagesModule { }
+export class ImageDialogModule { }
