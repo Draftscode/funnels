@@ -3,8 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { finalize, map, shareReplay } from 'rxjs/operators';
 import { ImageService } from 'src/app/services/image.service';
-import { ImageDialog } from './image.dialog';
-import { IImage } from './image.interface';
+import { IImage } from '../image.interface';
 
 @Component({
   selector: 'app-images',

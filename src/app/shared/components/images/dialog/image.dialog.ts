@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IImage } from "./image.interface";
+import { IImage } from "../image.interface";
 
 @Component({
   selector: 'app-image-dialog',
