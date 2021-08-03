@@ -1,13 +1,13 @@
 :host {
   width: 100%;
   height: 100%;
-  display: block;
-
+  display: flex;
 }
 
-.wrapper {
-  max-width: 600px;
+.page-viewer {
+  max-width: 580px;
+  display: inline-block;
   width: 100%;
+  height: calc(100% - 40px);
   margin: auto;
-  height: 100%;
 }

@@ -1,10 +1,36 @@
-<button mat-icon-button (click)="trigger('add')">
-  <mat-icon>add</mat-icon>
-</button>
-<button mat-icon-button (click)="trigger('delete')">
-  <mat-icon>delete</mat-icon>
-</button>
+<div>
+  <button mat-button (click)="trigger('add')">
+    <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value: 'LABEL.widget'|translate} }}
+  </button>
+</div>
 
-<button mat-icon-button (click)="trigger('image')">
-  <mat-icon>image</mat-icon>
-</button>
+<div>
+  <button mat-button (click)="trigger('delete')">
+    <mat-icon>delete</mat-icon>{{'BUTTON.delete_value'|translate:{value: 'LABEL.widget'|translate} }}
+  </button>
+</div>
+
+
+<div *ngIf="config.widget">
+  <button mat-button (click)="trigger('image')">
+    <mat-icon>image</mat-icon>{{'BUTTON.edit_value'|translate:{value: 'LABEL.image'|translate} }}
+  </button>
+</div>
+
+<div class="color" *ngIf="config.widget">
+  <button mat-button>
+    <span class="mat-elevation-z4 tag" [style.background-color]="color"></span>
+    <span>{{'BUTTON.edit_value'|translate:{value: 'LABEL.text_color'|translate} }}</span>
+    <input #inp (change)="trigger('text-color',{color:inp.value})" type="color" id="head" name="head"
+      [(ngModel)]="color">
+  </button>
+</div>
+
+<div class="color">
+  <button mat-button>
+    <span class="mat-elevation-z4 tag" [style.background-color]="gradient"></span>
+    <span>{{'BUTTON.edit_value'|translate:{value: 'LABEL.background'|translate} }}</span>
+    <input #inp (change)="trigger('gradient',{background:inp.value})" type="color" id="head" name="head"
+      [(ngModel)]="gradient">
+  </button>
+</div>

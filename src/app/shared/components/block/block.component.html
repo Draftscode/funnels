@@ -1,4 +1,4 @@
-<div *ngIf="item" (click)="activateBlock(item)" class="block" [style.height]="myHeight+'px'"  [style.background]="item.styles?.background">
+<div *ngIf="item" (click)="activateBlock(item)" class="block" [style.height]="myHeight+'px'"  [style.background]="item.background">
   <mat-grid-list class="grid-list" [cols]="(item?.widgetIds?.length ||0) > 1 ? 2:1" rowHeight="fit">
     <ng-container *ngFor="let widgetId of item?.widgetIds">
       <mat-grid-tile [colspan]="1" [rowspan]="1">

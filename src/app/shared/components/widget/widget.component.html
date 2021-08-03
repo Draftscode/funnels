@@ -16,6 +16,20 @@
       <p [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'"
         (dblclick)="onDoubleClick($event,widget)" class="text">{{widget.text}}</p>
     </ng-container>
+    <!-- subscription -->
+    <ng-container *ngSwitchCase="'subscription'">
+      <form class="formular">
+        <mat-form-field>
+          <input matInput placeholder="Name">
+        </mat-form-field>
+        <mat-form-field >
+          <input matInput placeholder="E-Mail" type="mail">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Telefonnummer" type="phone">
+        </mat-form-field>
+      </form>
+    </ng-container>
     <!-- calendar -->
     <ng-container *ngSwitchCase="'calendar'">
       <mat-calendar></mat-calendar>

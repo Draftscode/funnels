@@ -4,6 +4,7 @@
     "create_value": "create {{value}}",
     "edit_value": "edit {{value}}",
     "add_value": "add {{value}}",
+    "delete_value": "remove {{value}}",
     "confirm": "Confirm",
     "apply": "Apply"
   },
@@ -11,7 +12,10 @@
     "block": "area",
     "widget": "widget",
     "text": "text",
-    "funnel": "Funnel"
+    "funnel": "Funnel",
+    "image": "image",
+    "background": "background",
+    "text_color": "text color"
   },
   "STYLE": {
     "fontSize": "font-size",

@@ -29,6 +29,10 @@ export class CreateDialogComponent implements OnInit {
     type: EWidgetType.CALENDAR,
     icon: 'event',
     name: 'Kalender'
+  },{
+    type: EWidgetType.SUBSRIPTION_FORM,
+    icon: 'view_agenda',
+    name: 'Subscription Form'
   }];
 
   constructor(

@@ -26,15 +26,19 @@ export class ActionService {
     this.closeEditor();
     if (!block) { return; }
 
-    this.ctx = this.overlayApi.create(CtxComponent, ev, {}, {
+    this.ctx = this.overlayApi.create(CtxComponent, ev, {
+      widget: widgetId ? true : false,
+      block: block ? true : false,
+    }, {
       overlayOrigin: 'right',
       backdrop: false,
       postion: {
         right: 'end'
-      }
+      },
+
     }).componentRef.instance;
-    this.ctx.beforeAction.subscribe((action: TAction) => {
-      this.execute(action, block, widgetId);
+    this.ctx.beforeAction.subscribe((data: { action: TAction; data: Record<string, any> }) => {
+      this.execute(data, block, widgetId);
     });
   }
 
@@ -42,7 +46,8 @@ export class ActionService {
     this.ctx?.close();
   }
 
-  execute(action: TAction, block: IBlock, widgetId: string | undefined = undefined): void {
+  execute(data: { action: TAction; data: Record<string, any> }, block: IBlock, widgetId: string | undefined = undefined): void {
+    const action: TAction = data.action;
     switch (action) {
       case 'add':
         this.dialog.open(CreateDialogComponent, {
@@ -74,13 +79,20 @@ export class ActionService {
           maxHeight: '100vh',
           height: '90%',
           width: '90%',
-          panelClass: 'lightbox'
+          panelClass: 'lightbox',
+          data: {
+            image: this.widgetApi.getItemById(widgetId)?.image,
+          }
         }).afterClosed().subscribe((r) => {
           if (r?.type === 'confirm') {
             this.widgetApi.updateProperty(widgetId, { image: r.image }).subscribe();
           }
         });
-        break
+        break;
+      case 'gradient':
+        console.log('GRADIENT',data.data.background);
+        this.blockApi.updateProperty(block.id, { background: data.data.background }).subscribe();
+        break;
     }
   }
 

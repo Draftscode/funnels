@@ -32,3 +32,11 @@
     background: red;
   }
 }
+
+
+.formular {
+  .mat-form-field {
+    width: calc(100% - 20px);
+    margin: 0px 10px;
+  }
+}

@@ -9,9 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
-import { ImageDialog } from './image.dialog';
-import { ImagesRoutingModule } from '../images-routing.module';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { ImagesModule } from '../component/images.module';
+import { ImagesRoutingModule } from '../images-routing.module';
+import { ImgModule } from '../img/img.module';
+import { ImageDialog } from './image.dialog';
 
 
 
@@ -24,8 +27,11 @@ import { ImagesModule } from '../component/images.module';
     CommonModule,
     TranslateModule,
     CommonModule,
+    NgScrollbarModule,
     ImagesRoutingModule,
     MatGridListModule,
+    ImgModule,
+    SharedModule,
     MatToolbarModule,
     MatFormFieldModule,
     MatInputModule,

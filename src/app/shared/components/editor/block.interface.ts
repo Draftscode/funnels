@@ -9,4 +9,5 @@ export interface IBlock {
   widgets: Record<string, IWidget>;
   styles?: IStyles;
   widgetIds?: string[];
+  background?: string;
 }

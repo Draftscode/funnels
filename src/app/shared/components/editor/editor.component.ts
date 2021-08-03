@@ -57,6 +57,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
     this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => {
       this.blocks = items;
+      console.log(items);
     });
     this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IWidget>) => {
       this.widgets = items;

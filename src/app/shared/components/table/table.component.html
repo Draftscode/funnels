@@ -1,5 +1,4 @@
-<ng-scrollbar cdkDropList [visibility]="'hover'" class="virtual-scroll table" thumbClass="white-scrollbars">
-
+  <ng-scrollbar class="scrollbar">
     <table mat-table [dataSource]="funnels" class="mat-elevation-z8">
       <!-- Position Column -->
       <ng-container matColumnDef="position">
@@ -14,18 +13,20 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" style="display: flex;">
+          <span class="spacer"></span>
           <button mat-icon-button (click)="editFunnel(element)">
             <mat-icon>open_in_new</mat-icon>
           </button>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
-  <button mat-button (click)="createFunnel()">
-    <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value:'LABEL.funnel'|translate} }}
-  </button>
-</ng-scrollbar>
+  </ng-scrollbar>
+  <mat-toolbar>
+    <button mat-button (click)="createFunnel()">
+      <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value:'LABEL.funnel'|translate} }}
+    </button>
+  </mat-toolbar>

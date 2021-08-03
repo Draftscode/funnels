@@ -13,6 +13,11 @@ export class ModelService<T> {
     return of(items);
   }
 
+  public getItemById(id: string): T | undefined {
+    const items: Record<string, any> = this.items.getValue() || {};
+    return items[id];
+  }
+
   private store(items: Record<string, T>): Observable<Record<string, T>> {
     const saveString: string = JSON.stringify(items);
     localStorage.setItem(this.STORAGE_NAME, saveString);

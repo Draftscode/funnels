@@ -1,9 +1,7 @@
-<ng-container *ngIf="selectedPageId">
-  <app-page [page]="pages[selectedPageId]">
-    <app-block [item]="blocks[blockId]" *ngFor="let blockId of pages[selectedPageId].blockIds">
-      <ng-template #widgetTemplate let-widgetId>
-        <app-widget (afterClicked)="afterClicked(widgetId)" [widget]="widgets[widgetId]"></app-widget>
-      </ng-template>
-    </app-block>
-  </app-page>
-</ng-container>
+<app-page *ngIf="selectedPageId" [page]="pages[selectedPageId]" class="page-viewer">
+  <app-block [item]="blocks[blockId]" *ngFor="let blockId of pages[selectedPageId].blockIds">
+    <ng-template #widgetTemplate let-widgetId>
+      <app-widget (afterClicked)="afterClicked(widgetId)" [widget]="widgets[widgetId]"></app-widget>
+    </ng-template>
+  </app-block>
+</app-page>

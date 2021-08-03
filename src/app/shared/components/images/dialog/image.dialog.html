@@ -1,5 +1,36 @@
 <div mat-dialog-content class="content">
-  <app-images (imageSelected)="selectImage($event)"></app-images>
+  <ng-scrollbar>
+    <mat-toolbar>
+      <button *ngIf="curImage" (click)="back()" mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>Bilder</mat-toolbar>
+    <mat-toolbar class="fixed">
+      <form [formGroup]="formGroup" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="custom">
+          <input formControlName="term" [placeholder]="'Suche'" matInput>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <!-- <mat-slide-toggle (change)="roundCorners = $event.checked" [checked]="roundCorners">Runde Ecken</mat-slide-toggle> -->
+        <mat-form-field appearance="outline" class="custom">
+          <mat-label>Format</mat-label>
+          <mat-select formControlName="format" [(ngModel)]="selectedFormat"
+            (selectionChange)="selectFormat($event.value)">
+            <mat-option *ngFor="let format of formats" [value]="format.id">{{format.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </mat-toolbar>
+    <ng-container *ngIf="!curImage">
+      <app-images [format]="selectedFormat" [term]="term" (imageSelected)="selectImage($event)"></app-images>
+    </ng-container>
+    <ng-container *ngIf="curImage">
+
+      <div style="display: flex">
+        <app-img style="margin: auto" [image]="curImage" [format]="curImage.format"></app-img>
+      </div>
+
+    </ng-container>
+  </ng-scrollbar>
 </div>
 <div mat-dialog-actions>
   <button mat-button>{{'BUTTON.cancel'|translate}}</button>
