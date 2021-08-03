@@ -1,0 +1,2 @@
+<img intersectsAt (intersects)="inter($event,ima)" #ima class="app-img" (click)="click()"
+  [attr.data-src]="preview ? image?.webformatURL :image?.previewURL" [ngClass]="format || []">

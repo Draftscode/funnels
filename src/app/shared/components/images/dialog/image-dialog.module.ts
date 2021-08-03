@@ -11,7 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { ImageDialog } from './image.dialog';
 import { ImagesRoutingModule } from '../images-routing.module';
-import { ImagesModule } from '../images.module';
+import { ImagesModule } from '../component/images.module';
 
 
 

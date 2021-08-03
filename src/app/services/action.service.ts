@@ -14,6 +14,7 @@ import { WidgetService } from "./widget.service";
 })
 export class ActionService {
   private ctx: CtxComponent | undefined;
+
   constructor(
     private dialog: MatDialog,
     private overlayApi: OverlayService,
@@ -75,7 +76,9 @@ export class ActionService {
           width: '90%',
           panelClass: 'lightbox'
         }).afterClosed().subscribe((r) => {
-          console.log(r);
+          if (r?.type === 'confirm') {
+            this.widgetApi.updateProperty(widgetId, { image: r.image }).subscribe();
+          }
         });
         break
     }

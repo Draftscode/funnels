@@ -1,3 +1,4 @@
+import { IImage } from "../shared/components/images/image.interface";
 import { EWidgetType } from "./widget-type.enum";
 
 export interface IWidget {
@@ -10,4 +11,5 @@ export interface IWidget {
   linkedTo?: string;
   textColor?: string;
   fontSize?: string;
+  image?: IImage;
 }

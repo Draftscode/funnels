@@ -4,7 +4,8 @@
     "create_value": "create {{value}}",
     "edit_value": "edit {{value}}",
     "add_value": "add {{value}}",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "apply": "Apply"
   },
   "LABEL": {
     "block": "area",

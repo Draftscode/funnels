@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { MatDialogRef } from "@angular/material/dialog";
 import { IImage } from "../image.interface";
 
 @Component({
@@ -8,13 +9,15 @@ import { IImage } from "../image.interface";
 })
 export class ImageDialog {
   curImage: IImage | undefined;
-  constructor() { }
+  constructor(private dialog: MatDialogRef<ImageDialog>) {
+
+  }
 
   selectImage(img: IImage): void {
     this.curImage = img;
   }
 
   useImage(): void {
-
+    this.dialog.close({ type: 'confirm', image: this.curImage });
   }
 }

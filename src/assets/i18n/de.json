@@ -4,7 +4,8 @@
     "create_value": "{{value}} erstellen",
     "edit_value": "{{value}} bearbeiten",
     "add_value": "{{value}} hinzufügen",
-    "confirm": "Bestätigen"
+    "confirm": "Bestätigen",
+    "apply": "Übernehmen"
   },
   "LABEL": {
     "block": "Bereich",

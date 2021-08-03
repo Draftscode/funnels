@@ -5,6 +5,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
+import { ImgModule } from '../images/img/img.module';
 import { WidgetComponent } from './widget.component';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { WidgetComponent } from './widget.component';
     CommonModule,
     DragDropModule,
     MatIconModule,
+    ImgModule,
     MatButtonModule,
     MatBadgeModule,
     MatDatepickerModule,

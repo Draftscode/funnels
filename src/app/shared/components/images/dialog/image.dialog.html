@@ -2,6 +2,7 @@
   <app-images (imageSelected)="selectImage($event)"></app-images>
 </div>
 <div mat-dialog-actions>
-  <button mat-button>{{'BUTTON.cancel'}}</button>
-  <button (click)="useImage()" [disabled]="!curImage" mat-button>{{'BUTTON.confirm'}}</button>
+  <button mat-button>{{'BUTTON.cancel'|translate}}</button>
+  <span class="spacer"></span>
+  <button (click)="useImage()" [disabled]="!curImage" mat-button>{{'BUTTON.apply'|translate}}</button>
 </div>

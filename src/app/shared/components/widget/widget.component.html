@@ -5,7 +5,10 @@
       <button [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'"
         [matBadge]="widget.linkedTo ? pages[widget.linkedTo].index +1 : null" mat-button class="generic-btn"
         (click)="onClick($event)">
-        <mat-icon>home</mat-icon> <span class="text">{{widget.text}}</span>
+        <!-- <mat-icon>home</mat-icon>  -->
+        <app-img *ngIf="widget?.image" [format]="widget.image?.format" [image]="widget.image"></app-img>
+        <!-- <img [src]="widget?.image" [style.width]="'48px'" [style.height]="'48px'"> -->
+        <span class="text">{{widget.text}}</span>
       </button>
     </ng-container>
     <!-- text -->

@@ -8,13 +8,12 @@ import { IWidget } from 'src/app/model/widget.interface';
 import { ActionService } from 'src/app/services/action.service';
 import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
-import { PageActionService } from 'src/app/services/page-action.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
 import { GlobalUtils } from 'src/app/utils/global.utils';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
-import { CtxComponent } from './ctx/ctx.component';
+
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -54,7 +53,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.funnels = items;
     });
     this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => {
-      this.pages = items;
+      this.pages = items; this.init();
     });
     this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => {
       this.blocks = items;
@@ -62,6 +61,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IWidget>) => {
       this.widgets = items;
     });
+  }
+
+  private init(): void {
+    if (!this.pages || !this.selectedFunnelId) {
+      const keys: string[] = Object.keys(this.pages || {});
+      if (!this.selectedPageId && keys.length > 0) {
+        this.selectedPageId = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
+      }
+    }
   }
 
   renameFunnel(funnelId: string, name: string): void { this.funnelApi.updateProperty(funnelId, { name }).subscribe(); }
@@ -115,7 +123,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentRoute.params.pipe(takeWhile(() => this.alive)).subscribe(params => {
-      this.selectedFunnelId = params.funnelId;
+      this.selectedFunnelId = params.funnelId; this.init();
     });
   }
 
