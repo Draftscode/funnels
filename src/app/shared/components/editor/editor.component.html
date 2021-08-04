@@ -21,14 +21,16 @@
     </mat-list>
   </ng-scrollbar>
   <div class="page-wrapper">
-    <app-page #pageContainer [cdkDropListData]="displayedBlocks" cdkDropList [cdkDropListSortPredicate]="enterPredicate"
+    <app-page #pageContainer
+      [cdkDropListData]="displayedBlocks" cdkDropList [cdkDropListSortPredicate]="enterPredicate"
       (cdkDropListDropped)="drop($event)" cdkDropListclass="app-page" [editable]="true" *ngIf="selectedPageId"
       [zoom]="1" [page]="pages[selectedPageId]">
       <ng-container *ngFor="let blockId of pages[selectedPageId]?.blockIds">
         <div #container (cdkDragStarted)="dragStart(container,blockId)" (cdkDragEnded)="dragEnd(container,blockId)"
           [cdkDragLockAxis]="'y'" [cdkDragData]="blockId" cdkDrag>
-          <app-block (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef [height]="blockId === selectedBlockId ? curDragHeight:0"
-            [class.activated]="blockId === selectedBlockId" [item]="blocks[blockId]">
+          <app-block (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef
+            [height]="blockId === selectedBlockId ? curDragHeight:0"
+            [class.activated]="blockId === selectedBlockId && blockIsActive" [item]="blocks[blockId]">
             <ng-template #widgetTemplate let-widgetId>
               <app-widget (cdkDragEnded)="dragExited($event,widgetId)" cdkDrag (cdkDragMoved)="dragMove($event)"
                 (click)="activateWidget($event,blockRef.elementRef,blockId,widgetId)" [slot]="widgetId"

@@ -12,4 +12,5 @@ export interface IWidget {
   textColor?: string;
   fontSize?: string;
   image?: IImage;
+  background?: string;
 }

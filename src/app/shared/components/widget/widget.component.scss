@@ -10,33 +10,3 @@
   color: white;
 }
 
-.generic-btn {
-  background: #2e60ea;
-  color: white;
-  width: calc(100% - 10px);
-  margin: 5px;
-  height: calc(100% - 10px);
-  min-height: 75px;
-  background-repeat: no-repeat;
-  background-size: 100%;
-
-  .text {
-    display: block;
-  }
-}
-
-:host ::ng-deep {
-  .mat-badge-content {
-    top: 0px !important;
-    right: 0px !important;
-    background: red;
-  }
-}
-
-
-.formular {
-  .mat-form-field {
-    width: calc(100% - 20px);
-    margin: 0px 10px;
-  }
-}

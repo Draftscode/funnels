@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { IWidget } from 'src/app/model/widget.interface';
 import { DefaultOverlayContainer } from 'src/app/services/default-overlay';
 import { CONTAINER_DATA } from 'src/app/services/overlay.service';
 
-export type TAction = 'add' | 'delete' | 'image' | 'gradient' | 'text-color';
+export type TAction = 'add' | 'delete' | 'image' | 'gradient' | 'text-color' | 'text';
 
 @Component({
   selector: 'app-ctx',
@@ -16,8 +17,12 @@ export class CtxComponent extends DefaultOverlayContainer<any> implements OnDest
   color: string | undefined = 'black';
   gradient: string | undefined = 'black';
 
-  constructor(@Inject(CONTAINER_DATA) public config: { widget: boolean; block: boolean; }) {
+  constructor(@Inject(CONTAINER_DATA) public config: { widget: IWidget; block: boolean; }) {
     super();
+    if (this.config.widget) {
+      if (this.config.widget.background) { this.gradient = this.config.widget.background; }
+      if (this.config.widget.textColor) { this.color = this.config.widget.textColor; }
+    }
   }
 
   get beforeAction(): Observable<{ action: TAction; data: Record<string, any> }> {
@@ -25,7 +30,6 @@ export class CtxComponent extends DefaultOverlayContainer<any> implements OnDest
   }
 
   trigger(action: TAction, data: Record<string, any> = {}): void {
-    console.log(data);
     this.beforeAction$.next({ action, data });
   }
 

@@ -15,6 +15,10 @@ export class PageComponent implements OnChanges, OnInit {
   height: number = 288;
   fontSize: number = 14;
 
+  get blockIds(): number[] {
+    return [1, 2, 3, 4, 5, 6, 7];
+  }
+
   @ViewChild('textEditor') set editor(textEditor: ElementRef) {
     if (!textEditor) { return; }
     textEditor.nativeElement.focus();

@@ -57,11 +57,17 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
     this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => {
       this.blocks = items;
-      console.log(items);
     });
     this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IWidget>) => {
       this.widgets = items;
     });
+  }
+
+  get blockIsActive(): boolean {
+    if (this.selectedBlockId && this.blocks[this.selectedBlockId].widgetIds?.length === 0) {
+      return true;
+    }
+    return false;
   }
 
   private init(): void {
@@ -134,10 +140,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   activateWidget(ev: MouseEvent | undefined, el: ElementRef, blockId: string, widgetId: string | undefined = undefined): void {
+    if (!this.selectedPageId) { return; }
     if (ev) { ev.stopPropagation(); }
     this.selectedBlockId = blockId;
     this.selectedWidgetId = widgetId;
-    this.actionApi.selectBlock(el.nativeElement, this.blocks[blockId], widgetId);
+
+    this.actionApi.selectBlock(el.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId);
   }
 
   isPointerOverContainer(container: HTMLElement): boolean {

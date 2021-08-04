@@ -20,7 +20,6 @@ export class WidgetComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
   }
 
   ngOnDestroy(): void {

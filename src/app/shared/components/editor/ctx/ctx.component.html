@@ -11,7 +11,7 @@
 </div>
 
 
-<div *ngIf="config.widget">
+<div *ngIf="config.widget && config.widget.type !== 'subscription'">
   <button mat-button (click)="trigger('image')">
     <mat-icon>image</mat-icon>{{'BUTTON.edit_value'|translate:{value: 'LABEL.image'|translate} }}
   </button>
@@ -25,12 +25,18 @@
       [(ngModel)]="color">
   </button>
 </div>
-
 <div class="color">
   <button mat-button>
     <span class="mat-elevation-z4 tag" [style.background-color]="gradient"></span>
-    <span>{{'BUTTON.edit_value'|translate:{value: 'LABEL.background'|translate} }}</span>
-    <input #inp (change)="trigger('gradient',{background:inp.value})" type="color" id="head" name="head"
-      [(ngModel)]="gradient">
+    <span>{{('BUTTON.edit_value'|translate:{value: 'LABEL.background'|translate}) }}</span>
+    <input #inp (change)="trigger('gradient',{background:inp.value})" type="color"
+      id="head" name="head" [(ngModel)]="gradient">
   </button>
+</div>
+
+<div *ngIf="config.widget && config.widget.type !== 'calendar' && config.widget.type !== 'subscription'">
+  <mat-form-field>
+    <input #inp matInput [placeholder]="'LABEL.text'|translate" [value]="config.widget?.text"
+      (change)="trigger('text',{text: inp.value})">
+  </mat-form-field>
 </div>

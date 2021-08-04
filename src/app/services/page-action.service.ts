@@ -1,10 +1,6 @@
 import { ComponentRef, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { IWidget } from "../model/widget.interface";
-import { IBlock } from "../shared/components/editor/block.interface";
-import { CreateDialogComponent } from "../shared/components/editor/create-dialog/create-dialog.component";
 import { CtxComponent } from "../shared/components/editor/ctx/ctx.component";
-import { EditDialogComponent } from "../shared/components/editor/edit-dialog/edit-dialog.component";
 import { FunnelService } from "./funnel.service";
 import { OverlayService } from "./overlay.service";
 

@@ -13,7 +13,8 @@ export class ModelService<T> {
     return of(items);
   }
 
-  public getItemById(id: string): T | undefined {
+  public getItemById(id: string | undefined): T | undefined {
+    if (!id) { return undefined; }
     const items: Record<string, any> = this.items.getValue() || {};
     return items[id];
   }

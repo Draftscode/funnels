@@ -2,14 +2,8 @@
   <ng-container [ngSwitch]="widget.type">
     <!-- button -->
     <ng-container *ngSwitchCase="'button'">
-      <button [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'"
-        [matBadge]="widget.linkedTo ? pages[widget.linkedTo].index +1 : null" mat-button class="generic-btn"
-        (click)="onClick($event)">
-        <!-- <mat-icon>home</mat-icon>  -->
-        <app-img *ngIf="widget?.image" [format]="widget.image?.format" [image]="widget.image"></app-img>
-        <!-- <img [src]="widget?.image" [style.width]="'48px'" [style.height]="'48px'"> -->
-        <span class="text">{{widget.text}}</span>
-      </button>
+      <app-button [badge]="widget.linkedTo ? (pages[widget.linkedTo].index +1).toString() : undefined"
+        (afterClicked)="onClick($event)" [widget]="widget"></app-button>
     </ng-container>
     <!-- text -->
     <ng-container *ngSwitchCase="'text'">
@@ -18,21 +12,11 @@
     </ng-container>
     <!-- subscription -->
     <ng-container *ngSwitchCase="'subscription'">
-      <form class="formular">
-        <mat-form-field>
-          <input matInput placeholder="Name">
-        </mat-form-field>
-        <mat-form-field >
-          <input matInput placeholder="E-Mail" type="mail">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Telefonnummer" type="phone">
-        </mat-form-field>
-      </form>
+      <app-subscription [widget]="widget"></app-subscription>
     </ng-container>
     <!-- calendar -->
     <ng-container *ngSwitchCase="'calendar'">
-      <mat-calendar></mat-calendar>
+      <app-calendar></app-calendar>
     </ng-container>
   </ng-container>
 </ng-container>

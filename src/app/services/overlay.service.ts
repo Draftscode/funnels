@@ -16,7 +16,7 @@ export interface IOverlayOptions {
   positionStrategy?: GlobalPositionStrategy | FlexibleConnectedPositionStrategy | PositionStrategy;
   disableCloseByBackdrop?: boolean;
   overlayOrigin?: 'bottom' | 'top' | 'right';
-  postion?: {
+  position?: {
     top?: string;
     bottom?: string;
     left?: string;
@@ -45,8 +45,8 @@ export class OverlayService {
 
   private getPosition(pos: ElementRef | PointerEvent | MouseEvent | IOverlayPosition | HTMLElement, option: IOverlayOptions) {
     if (!pos) {
-      if (option.postion) {
-        return this.overlay.position().global().bottom(option.postion.bottom).right(option.postion.right);
+      if (option.position) {
+        return this.overlay.position().global().top('1000px').right('end');
       } else {
         return this.overlay.position().global();
       }
@@ -92,9 +92,9 @@ export class OverlayService {
     } else if (overlayOrigin === 'right') {
       return [{
         originX: 'end',
-        originY: 'center',
+        originY: 'top',
         overlayX: 'start',
-        overlayY: 'center',
+        overlayY: 'top',
       }];
     }
     else {

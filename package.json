@@ -26,7 +26,7 @@
     "@swimlane/ngx-charts": "^18.0.1",
     "angular-split": "^5.0.0",
     "moment": "^2.29.1",
-    "ngx-scrollbar": "^7.5.6",
+    "ngx-scrollbar": "^7.6.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"

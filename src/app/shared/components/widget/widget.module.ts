@@ -7,7 +7,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { ButtonModule } from '../button/button.module';
+import { CalendarModule } from '../calendar/calendar.module';
 import { ImgModule } from '../images/img/img.module';
+import { SubscriptionModule } from '../subscription/subscription.module';
 import { WidgetComponent } from './widget.component';
 
 @NgModule({
@@ -27,6 +30,9 @@ import { WidgetComponent } from './widget.component';
     MatInputModule,
     MatBadgeModule,
     MatDatepickerModule,
+    CalendarModule,
+    ButtonModule,
+    SubscriptionModule,
   ],
   providers: [
 
