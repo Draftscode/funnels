@@ -145,7 +145,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.selectedBlockId = blockId;
     this.selectedWidgetId = widgetId;
 
-    this.actionApi.selectBlock(el.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId);
+    this.actionApi.selectBlock(el.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId ? this.widgets[widgetId] : undefined);
   }
 
   isPointerOverContainer(container: HTMLElement): boolean {
@@ -206,5 +206,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   demo(): void {
     this.router.navigate(['/', 'viewer', this.selectedFunnelId]);
+  }
+  home(): void {
+    this.router.navigate(['/', 'statistics']);
   }
 }

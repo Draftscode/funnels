@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { Observable, Subject } from 'rxjs';
 import { IWidget } from 'src/app/model/widget.interface';
 import { DefaultOverlayContainer } from 'src/app/services/default-overlay';
 import { CONTAINER_DATA } from 'src/app/services/overlay.service';
 
-export type TAction = 'add' | 'delete' | 'image' | 'gradient' | 'text-color' | 'text';
+export type TAction = 'add' | 'delete' | 'image' | 'gradient' | 'text-color' | 'text' | 'opacity' | 'anchor';
 
 @Component({
   selector: 'app-ctx',
@@ -30,8 +31,10 @@ export class CtxComponent extends DefaultOverlayContainer<any> implements OnDest
   }
 
   trigger(action: TAction, data: Record<string, any> = {}): void {
+    console.log(action,data)
     this.beforeAction$.next({ action, data });
   }
+
 
   ngOnDestroy(): void {
     this.beforeAction$.complete();

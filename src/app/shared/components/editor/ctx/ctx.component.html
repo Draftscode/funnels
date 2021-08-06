@@ -1,42 +1,56 @@
-<div>
-  <button mat-button (click)="trigger('add')">
-    <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value: 'LABEL.widget'|translate} }}
-  </button>
-</div>
-
-<div>
-  <button mat-button (click)="trigger('delete')">
-    <mat-icon>delete</mat-icon>{{'BUTTON.delete_value'|translate:{value: 'LABEL.widget'|translate} }}
-  </button>
-</div>
-
-
-<div *ngIf="config.widget && config.widget.type !== 'subscription'">
-  <button mat-button (click)="trigger('image')">
-    <mat-icon>image</mat-icon>{{'BUTTON.edit_value'|translate:{value: 'LABEL.image'|translate} }}
-  </button>
-</div>
-
-<div class="color" *ngIf="config.widget">
-  <button mat-button>
-    <span class="mat-elevation-z4 tag" [style.background-color]="color"></span>
-    <span>{{'BUTTON.edit_value'|translate:{value: 'LABEL.text_color'|translate} }}</span>
-    <input #inp (change)="trigger('text-color',{color:inp.value})" type="color" id="head" name="head"
+<mat-toolbar>Bearbeitung</mat-toolbar>
+<mat-button-toggle-group [value]="config.widget?.image?.anchor" multiple name="fontStyle" aria-label="Font Style"
+  (change)="trigger('anchor',{image:{anchor: $event.value}})">
+  <mat-button-toggle value="horiz">
+    <mat-icon>compare_arrows</mat-icon>
+  </mat-button-toggle>
+  <mat-button-toggle value="vert">
+    <mat-icon>height</mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
+<!-- text color -->
+<mat-button-toggle-group>
+  <mat-button-toggle>
+    <mat-icon [style.color]="color">format_color_text</mat-icon>
+    <input class="color-input" #colorRef (change)="trigger('text-color',{color:colorRef.value})" type="color"
       [(ngModel)]="color">
-  </button>
-</div>
-<div class="color">
-  <button mat-button>
-    <span class="mat-elevation-z4 tag" [style.background-color]="gradient"></span>
-    <span>{{('BUTTON.edit_value'|translate:{value: 'LABEL.background'|translate}) }}</span>
-    <input #inp (change)="trigger('gradient',{background:inp.value})" type="color"
-      id="head" name="head" [(ngModel)]="gradient">
-  </button>
-</div>
+  </mat-button-toggle>
+  <mat-button-toggle>
+    <mat-icon [style.color]="gradient">gradient</mat-icon>
+    <input class="color-input" #gradientRef (change)="trigger('gradient',{background:gradientRef.value})" type="color"
+      [(ngModel)]="gradient">
+  </mat-button-toggle>
+  <mat-button-toggle (click)="trigger('image')">
+    <mat-icon>image</mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
 
-<div *ngIf="config.widget && config.widget.type !== 'calendar' && config.widget.type !== 'subscription'">
-  <mat-form-field>
-    <input #inp matInput [placeholder]="'LABEL.text'|translate" [value]="config.widget?.text"
-      (change)="trigger('text',{text: inp.value})">
-  </mat-form-field>
-</div>
+
+  <h3>Allgemein</h3>
+  <div>
+    <button mat-button (click)="trigger('add')">
+      <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value: 'LABEL.widget'|translate} }}
+    </button>
+  </div>
+
+  <div>
+    <button mat-button (click)="trigger('delete')">
+      <mat-icon>delete</mat-icon>{{'BUTTON.delete_value'|translate:{value: 'LABEL.widget'|translate} }}
+    </button>
+  </div>
+
+  <div *ngIf="config.widget && config.widget.type !== 'calendar' && config.widget.type !== 'subscription'">
+    <mat-form-field>
+      <input #inp matInput [placeholder]="'LABEL.text'|translate" [value]="config.widget?.text"
+        (change)="trigger('text',{text: inp.value})">
+    </mat-form-field>
+  </div>
+
+  <h3>Hintergrund</h3>
+  <div *ngIf="config.widget &&( config.widget.type === 'subscription' || config.widget.type === 'button')">
+    <mat-slider (change)="trigger('opacity',{image: {opacity: $event.value} })" [max]="1" [min]="0" [step]=".05"
+      [thumbLabel]="true" [tickInterval]=".1" [value]="config.widget.image?.opacity">
+      Opacity
+    </mat-slider>
+  </div>
+

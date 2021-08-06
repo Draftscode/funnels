@@ -14,6 +14,7 @@ export class ImageDialog {
   term: string | undefined;
   formats = [{ name: 'Icon', id: 'icon' }, { name: 'Original', id: 'original' }];
   selectedFormat: string = 'original';
+  opacity: number = 1;
 
   constructor(private dialog: MatDialogRef<ImageDialog>, @Inject(MAT_DIALOG_DATA) public data: { image: IImage },) {
     this.curImage = this.data?.image;

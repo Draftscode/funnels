@@ -3,6 +3,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,15 +20,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { DirectivesModule } from './directives/directive.module';
 import { PipeModule } from './pipes/pipe.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
     MatSlideToggleModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatToolbarModule,
     MatSelectModule,
     MatIconModule,
     MatSidenavModule,
+    MatTabsModule,
     MatRippleModule,
     MatListModule,
     ScrollingModule,
@@ -49,7 +53,9 @@ import { PipeModule } from './pipes/pipe.module';
     PipeModule,
     MatSlideToggleModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatToolbarModule,
+    MatTabsModule,
     MatRippleModule,
     MatIconModule,
     MatSidenavModule,

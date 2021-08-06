@@ -20,16 +20,16 @@
         </mat-form-field>
       </form>
     </mat-toolbar>
-    <ng-container *ngIf="!curImage">
+    <ng-container>
       <app-images [format]="selectedFormat" [term]="term" (imageSelected)="selectImage($event)"></app-images>
     </ng-container>
-    <ng-container *ngIf="curImage">
+    <!-- <ng-container *ngIf="curImage">
 
       <div style="display: flex">
         <app-img style="margin: auto" [image]="curImage" [format]="curImage.format"></app-img>
       </div>
 
-    </ng-container>
+    </ng-container> -->
   </ng-scrollbar>
 </div>
 <div mat-dialog-actions>

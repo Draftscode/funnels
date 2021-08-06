@@ -22,4 +22,6 @@ export interface IImage {
   webformatURL: string;
   webformatWidth: number;
   format?: string;
+  opacity?: number;
+  anchor?: string[];
 }

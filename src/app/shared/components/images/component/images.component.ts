@@ -45,6 +45,7 @@ export class ImagesComponent implements OnInit, OnChanges {
       .subscribe((r) => {
         this.slices = Math.ceil(r.total / 3);
         this.images = r.hits;
+        console.log(this.images);
       });
   }
 }

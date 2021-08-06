@@ -37,11 +37,13 @@ $offset: 108px;
 }
 
 .pages-wrapper {
-  height: calc(100% - 128px);
-  width: 200px;
-  position: absolute;
-  left: 0;
-  top: 128px;
+  width: 100%;
+  height: calc(100% - 37px);
+}
+
+.add-btn {
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  width: 100%;
 }
 
 .page-wrapper {
@@ -261,5 +263,29 @@ app-widget.activated {
   .num {
     background-color: white;
     color: black;
+  }
+}
+
+.sidenav-container {
+  width: 100%;
+  height: calc(100% - 64px);
+
+  .sidenav {
+    width: 300px;
+  }
+}
+
+:host ::ng-deep {
+  mat-tab-group.mat-tab-group {
+    height: 100%;
+
+    .mat-tab-body-wrapper {
+      height: 100%;
+    }
+  }
+
+  .mat-tab-label {
+    min-width: 0;
+    width: 50%;
   }
 }
