@@ -11,6 +11,9 @@ export interface IWidget {
   linkedTo?: string;
   textColor?: string;
   fontSize?: string;
+  fontFamily?: string;
   image?: IImage;
   background?: string;
+  fontWeight?: string;
+  fontStyle?: string;
 }

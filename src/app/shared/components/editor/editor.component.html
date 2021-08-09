@@ -46,7 +46,8 @@
             Design
           </ng-template>
           <ng-template matTabContent>
-            <app-ctx></app-ctx>
+            <app-design [block]="selectedBlockId ? blocks[selectedBlockId] : undefined"
+              [widget]="selectedWidgetId ? widgets[selectedWidgetId] : undefined"></app-design>
           </ng-template>
         </mat-tab>
       </mat-tab-group>

@@ -15,7 +15,9 @@
     "funnel": "Funnel",
     "image": "Bild",
     "background": "Hintergrund",
-    "text_color": "Textfarbe"
+    "font_color": "Textfarbe",
+    "font_style": "Schriftart",
+    "font_size": "Schriftgröße"
   },
   "STYLE": {
     "fontSize": "Shiftgröße",

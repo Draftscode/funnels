@@ -15,7 +15,9 @@
     "funnel": "Funnel",
     "image": "image",
     "background": "background",
-    "text_color": "text color"
+    "font_color": "text color",
+    "font_style": "font style",
+    "font_size": "font-size"
   },
   "STYLE": {
     "fontSize": "font-size",

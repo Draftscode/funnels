@@ -145,7 +145,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.selectedBlockId = blockId;
     this.selectedWidgetId = widgetId;
 
-    this.actionApi.selectBlock(el.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId ? this.widgets[widgetId] : undefined);
+    // this.actionApi.selectBlock(el.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId ? this.widgets[widgetId] : undefined);
   }
 
   isPointerOverContainer(container: HTMLElement): boolean {
