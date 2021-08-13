@@ -1,24 +1,25 @@
 <ng-container *ngIf="widget">
   <div class="bg" *ngIf="widget.image">
-    <app-img [image]="widget.image"></app-img>
+    <app-img [style.opacity]="widget.opacity" [image]="widget.image"></app-img>
   </div>
-  <form class="formular" [style.background]="widget?.background" [style.color]="widget?.textColor">
+  <form class="formular" [style.background]="widget?.background | alpha:widget?.backgroundOpacity"
+    [style.color]="widget?.textColor">
     <mat-form-field class="subscription-form-element" appearance="outline">
-      <mat-label [style.color]="addAlpha(widget?.textColor,.5)">Vor- und Nachname</mat-label>
+      <mat-label [style.color]="widget?.textColor| alpha:.5">Vor- und Nachname</mat-label>
       <input matInput>
       <button mat-icon-button matPrefix>
         <mat-icon>account_circle</mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label [style.color]="addAlpha(widget?.textColor,.5)">E-Mail</mat-label>
+      <mat-label [style.color]="widget?.textColor| alpha:.5">E-Mail</mat-label>
       <input matInput>
       <button mat-icon-button matPrefix>
         <mat-icon>email</mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label [style.color]="addAlpha(widget?.textColor,.5)">Telefonnummer</mat-label>
+      <mat-label [style.color]="widget?.textColor| alpha:.5">Telefonnummer</mat-label>
       <input matInput type="phone">
       <button mat-icon-button matPrefix>
         <mat-icon>phone</mat-icon>

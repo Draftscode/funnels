@@ -5,7 +5,6 @@ export interface IFunnel {
   id: string;
   name: string;
   template?: string;
-  pages: Record<string, IPage>;
   websites: Record<string, IWebsite>;
   pageIds?: string[];
 }

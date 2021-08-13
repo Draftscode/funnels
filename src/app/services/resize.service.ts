@@ -23,24 +23,22 @@ export class ResizeService {
     types: [EResizeType.WIDTH, EResizeType.HEIGHT],
   }, debug = false): string {
     const id: string = GlobalUtils.uuidv4();
-    this._zone.runOutsideAngular(() => {
-      const event: ResizeEvent = new ResizeEvent(element.clientWidth, element.clientHeight);
-      // const subject: Subject<ResizeObserverEntry> = new Subject<ResizeObserverEntry>();
-      const observer: ResizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-        entries.forEach((entry: ResizeObserverEntry) => {
-          if (!this.$hasChanged(options.types, element, event, entry, debug)) { return; }
-          event.setOldWidth(event.getNewWidth());
-          event.setOldHeight(event.getNewHeight());
-          event.setNewWidth(entry.contentRect.width);
-          event.setNewHeight(entry.contentRect.height);
-          cb(event);
-        });
+    const event: ResizeEvent = new ResizeEvent(element.clientWidth, element.clientHeight);
+    // const subject: Subject<ResizeObserverEntry> = new Subject<ResizeObserverEntry>();
+    const observer: ResizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      entries.forEach((entry: ResizeObserverEntry) => {
+        if (!this.$hasChanged(options.types, element, event, entry, debug)) { return; }
+        event.setOldWidth(event.getNewWidth());
+        event.setOldHeight(event.getNewHeight());
+        event.setNewWidth(entry.contentRect.width);
+        event.setNewHeight(entry.contentRect.height);
+        cb(event);
       });
-
-      observer.observe(element);
-      cb(event);
-      this._observers[id] = observer;
     });
+
+    observer.observe(element);
+    cb(event);
+    this._observers[id] = observer;
     return id;
   }
 

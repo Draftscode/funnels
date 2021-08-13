@@ -1,6 +1,7 @@
 import { Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { IBlock } from 'src/app/shared/components/editor/block.interface';
+import { GlobalUtils } from 'src/app/utils/global.utils';
 import { WidgetComponent } from '../widget/widget.component';
 
 @Component({
@@ -39,7 +40,6 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
       this.myHeight = this.height + (this.item?.height || 0);
     }
   }
-
 
   ngOnDestroy(): void {
     // this.funnelApi.activateWidget(this.widget.id)

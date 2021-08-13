@@ -56,6 +56,10 @@ export class ImageDialog {
     this.curImage = undefined;
   }
 
+  close(data:Record<string,any>):void {
+    this.dialog.close(data);
+  }
+
   useImage(): void {
     this.dialog.close({ type: 'confirm', image: this.curImage });
   }

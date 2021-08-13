@@ -1,7 +1,7 @@
 <mat-grid-list [cols]="(layoutSmall$ | async) ? 1 : (layoutLarge$ | async) ? 6 : 3"
   [rowHeight]="(layoutSmall$ | async) ? '200px': (layoutLarge$ | async) ? '108px' : '150px'">
   <mat-grid-tile *ngFor="let img of images" [colspan]="1" [rowspan]="1">
-    <app-img (imageSelected)="selectImage($event)"
-      [format]="format" [image]="img" [preview]="true"></app-img>
+    <app-img (imageSelected)="selectImage($event)" [class.selected]="selected === img.id" [format]="format"
+      [image]="img" [preview]="true"></app-img>
   </mat-grid-tile>
 </mat-grid-list>

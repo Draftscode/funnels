@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
-import { IWidget } from 'src/app/model/widget.interface';
+import { TWidgetType } from 'src/app/model/widget.interface';
 import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
@@ -19,7 +19,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
   funnels: Record<string, IFunnel> = {};
   pages: Record<string, IPage> = {};
   blocks: Record<string, IBlock> = {};
-  widgets: Record<string, IWidget> = {};
+  widgets: Record<string, TWidgetType> = {};
 
   selectedPageId: string | undefined;
   selectedFunnelId: string | undefined;
@@ -39,7 +39,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => { this.funnels = items; this.init(); });
     this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => { this.pages = items; this.init(); });
     this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => { this.blocks = items; this.init(); });
-    this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IWidget>) => { this.widgets = items; this.init(); });
+    this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => { this.widgets = items; this.init(); });
   }
 
   ngOnDestroy(): void {
@@ -56,7 +56,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
   }
 
   afterClicked(widgetId: string): void {
-    const widget: IWidget = this.widgets[widgetId];
+    const widget: TWidgetType = this.widgets[widgetId];
     if (widget.type === 'button') {
       if (!widget.linkedTo) { return; }
       this.selectedPageId = widget.linkedTo;

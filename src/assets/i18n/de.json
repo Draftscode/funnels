@@ -17,7 +17,14 @@
     "background": "Hintergrund",
     "font_color": "Textfarbe",
     "font_style": "Schriftart",
-    "font_size": "Schriftgröße"
+    "font_size": "Schriftgröße",
+    "font_weight": "Fetter Text",
+    "WIDGET": {
+      "button": "Button",
+      "subscription": "Formular",
+      "calendar": "Kalender",
+      "text": "Text"
+    }
   },
   "STYLE": {
     "fontSize": "Shiftgröße",

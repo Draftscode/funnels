@@ -1,11 +1,24 @@
 <h1 mat-dialog-title>Widget hinzufügen
 </h1>
 <div mat-dialog-content>
-  <div *ngFor="let btn of buttons">
-    <button mat-button (click)="close(btn)">
-      <mat-icon>{{btn.icon}}</mat-icon> {{btn.name}}
+  <div>
+    <button mat-button (click)="close('text')">
+      <mat-icon>font_download</mat-icon> {{'Text'}}
     </button>
   </div>
+  <div>
+    <button mat-button (click)="close('button')">
+      <mat-icon>smart_button</mat-icon> {{'Button'}}
+    </button>
+  </div>
+  <div>
+    <button mat-button (click)="close('calendar')">
+      <mat-icon>event</mat-icon> {{'Kalender'}}
+    </button>
+  </div>
+  <button mat-button (click)="close('subscription')">
+    <mat-icon>view_agenda</mat-icon> {{'Subscription Form'}}
+  </button>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">

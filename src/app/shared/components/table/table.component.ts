@@ -53,19 +53,16 @@ export class TableComponent implements OnInit, OnDestroy {
       id: GlobalUtils.uuidv4(),
       index: 0,
       name: 'Neue Seite',
-      blocks: {},
       blockIds: [block.id],
     };
 
     const f: IFunnel = {
       id: GlobalUtils.uuidv4(),
       name: 'Neuer Funnel',
-      pages: {},
       websites: {},
       pageIds: [defaultPage.id]
     };
 
-    f.pages[defaultPage.id] = defaultPage;
 
     concat(
       this.blockApi.create(block.id, block),

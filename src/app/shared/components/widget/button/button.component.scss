@@ -37,16 +37,15 @@
   button.original {
     padding: 0;
 
-    img {
-      // width: 100%;
-      position: absolute;
-      top: 0;
-    }
-
     span.text {
       position: absolute;
       bottom: 0;
       width: 100%;
     }
   }
+}
+
+
+.activated {
+  border: 1px solid red;
 }

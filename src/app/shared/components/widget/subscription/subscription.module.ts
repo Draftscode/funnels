@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { PipeModule } from 'src/app/shared/pipes/pipe.module';
 import { ImgModule } from '../../images/img/img.module';
 import { SubscriptionComponent } from './subscription.component';
 
@@ -18,6 +19,7 @@ import { SubscriptionComponent } from './subscription.component';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    PipeModule,
     MatButtonModule,
     ImgModule,
     MatIconModule,

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IWidget } from 'src/app/model/widget.interface';
+import { TWidgetType } from 'src/app/model/widget.interface';
 
 
 
@@ -10,10 +10,10 @@ import { IWidget } from 'src/app/model/widget.interface';
   styleUrls: ['./edit-dialog.component.scss']
 })
 export class EditDialogComponent implements OnInit {
-  widget: IWidget;
+  widget: TWidgetType;
 
   constructor(private dialogRef: MatDialogRef<EditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { widget: IWidget },
+    @Inject(MAT_DIALOG_DATA) public data: { widget: TWidgetType },
   ) {
     this.widget = this.data.widget;
   }
@@ -21,7 +21,7 @@ export class EditDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  close(widget: IWidget | undefined = undefined): void {
+  close(widget: TWidgetType | undefined = undefined): void {
     if (!widget) {
       this.dialogRef.close();
       return;

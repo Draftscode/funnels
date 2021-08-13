@@ -21,19 +21,13 @@
       </form>
     </mat-toolbar>
     <ng-container>
-      <app-images [format]="selectedFormat" [term]="term" (imageSelected)="selectImage($event)"></app-images>
+      <app-images [format]="selectedFormat" [term]="term" [selected]="curImage?.id"
+        (imageSelected)="selectImage($event)"></app-images>
     </ng-container>
-    <!-- <ng-container *ngIf="curImage">
-
-      <div style="display: flex">
-        <app-img style="margin: auto" [image]="curImage" [format]="curImage.format"></app-img>
-      </div>
-
-    </ng-container> -->
   </ng-scrollbar>
 </div>
 <div mat-dialog-actions>
-  <button mat-button>{{'BUTTON.cancel'|translate}}</button>
+  <button mat-button (click)="close({ type: 'cancel'})">{{'BUTTON.cancel'|translate}}</button>
   <span class="spacer"></span>
-  <button (click)="useImage()" [disabled]="!curImage" mat-button>{{'BUTTON.apply'|translate}}</button>
+  <button (click)="useImage()" mat-button>{{'BUTTON.apply'|translate}}</button>
 </div>

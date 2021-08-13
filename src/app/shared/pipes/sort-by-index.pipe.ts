@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IWidget } from 'src/app/model/widget.interface';
+import { TWidgetType } from 'src/app/model/widget.interface';
 
 // Tell Angular2 we're creating a Pipe with TypeScript decorators
 @Pipe({
@@ -8,12 +8,12 @@ import { IWidget } from 'src/app/model/widget.interface';
 })
 export class SortByIndexPipe implements PipeTransform {
 
-  transform(value: Record<string, IWidget> | undefined): IWidget[] {
+  transform(value: Record<string, TWidgetType> | undefined): TWidgetType[] {
     if (!value) { return []; }
 
-    const results: IWidget[] = Object.keys(value)
+    const results: TWidgetType[] = Object.keys(value)
       .map((wKey: string) => value[wKey])
-      .sort((w1: IWidget, w2: IWidget) => {
+      .sort((w1: TWidgetType, w2: TWidgetType) => {
         return w1.index < w2.index ? -1 : 1;
       });
 

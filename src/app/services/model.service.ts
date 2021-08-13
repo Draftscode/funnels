@@ -46,9 +46,10 @@ export class ModelService<T> {
   public updateProperty(id: string, changes: Record<string, any>): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     const item: T = items[id];
-
+    console.warn(`[update property]`,changes,item);
     const newItem: T = Object.assign(item, changes);
     items[id] = newItem;
+
     return this.updateItems(items);
   }
 

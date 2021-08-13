@@ -1,13 +1,18 @@
 import { IStyles } from "../../../model/styles";
-import { IWidget } from "../../../model/widget.interface";
+import { TWidgetType } from "../../../model/widget.interface";
+import { IImage } from "../images/image.interface";
 
 export interface IBlock {
   id: string;
   height: number;
   activated?: boolean;
   index: number;
-  widgets: Record<string, IWidget>;
+  widgets: Record<string, TWidgetType>;
   styles?: IStyles;
   widgetIds?: string[];
   background?: string;
+  image?: IImage;
+  opacity?: number;
+  backgroundOpacity?: number;
+  imageOpacity?: number;
 }

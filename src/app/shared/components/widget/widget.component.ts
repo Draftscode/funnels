@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
-import { IWidget } from 'src/app/model/widget.interface';
+import { TWidgetType } from 'src/app/model/widget.interface';
 import { PageService } from 'src/app/services/page.service';
 import { IPage } from '../page/page.interface';
 
@@ -9,9 +9,10 @@ import { IPage } from '../page/page.interface';
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.scss']
 })
-export class WidgetComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() widget: IWidget | undefined;
+export class WidgetComponent implements OnDestroy {
+  @Input() widget: TWidgetType | undefined;
   @Output() afterClicked: EventEmitter<void> = new EventEmitter<void>();
+  @Input() activated: boolean = false;
   private alive: boolean = true;
   pages: Record<string, IPage> = {};
 
@@ -19,26 +20,12 @@ export class WidgetComponent implements OnInit, OnDestroy, OnChanges {
     this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => this.pages = items);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-  }
-
   ngOnDestroy(): void {
     this.alive = false;
   }
 
-  ngOnInit(): void {
-  }
-
-  onDoubleClick(event: MouseEvent, widget: IWidget): void {
-    widget.editable = true;
-  }
-
-  storeIt(widget: IWidget, value: any): void {
+  storeIt(widget: TWidgetType, value: any): void {
     widget.text = value;
-    widget.editable = false;
-  }
-
-  dragEnter(event: any): void {
   }
 
   onClick(event: MouseEvent): void {

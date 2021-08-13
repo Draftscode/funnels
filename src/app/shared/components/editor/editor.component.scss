@@ -42,12 +42,12 @@ $offset: 108px;
 }
 
 .add-btn {
-  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(235, 226, 226, 0.2);
   width: 100%;
+  border-radius: 0;
 }
 
 .page-wrapper {
-  padding-top: 20px;
   padding-bottom: 20px;
   height: 592px;
   width: 288px;
@@ -168,20 +168,28 @@ span.grippy::after {
 .drag-border {
   display: block;
   position: relative;
+  height: 10px;
+  background: rgb(var(--main-highlight-color));
+  background: repeating-linear-gradient(45deg,
+      rgb(var(--main-highlight-color)),
+      rgb(var(--main-highlight-color)) 10px,
+      #465298 10px,
+      #465298 20px);
+  cursor: grab;
+}
 
-  .handle-circle {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 90px;
-    margin-left: -12px;
-    left: 50%;
-    top: 50%;
-    margin-top: -12px;
-    background-color: white;
-    cursor: ns-resize;
-    z-index: 99;
-  }
+.handle-circle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 90px;
+  margin-left: -12px;
+  left: 50%;
+  top: 50%;
+  margin-top: -12px;
+  background-color: white;
+  cursor: ns-resize;
+  z-index: 99;
 }
 
 span.grippy {
@@ -228,9 +236,24 @@ app-widget.activated {
 
 
 .list-entry {
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   padding: 0px;
   cursor: pointer;
+  padding: 4px 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.more {
+  display: none;
+}
+
+.list-entry:hover {
+  .more {
+    display: unset;
+  }
 }
 
 .num {
@@ -288,4 +311,24 @@ app-widget.activated {
     min-width: 0;
     width: 50%;
   }
+}
+
+.has-drag-over:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(var(--main-highlight-color), 0.4);
+  border: 2px dashed rgb(var(--main-highlight-color));
+
+}
+
+.block-placeholder {
+  height: 100px;
+  background-color: rgba(var(--main-highlight-color), .4);
+  border: 2px dashed rgb(var(--main-highlight-color));
+  width: calc(100% - 4px);
+  color: white;
 }

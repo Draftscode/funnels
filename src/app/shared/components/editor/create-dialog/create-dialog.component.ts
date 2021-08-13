@@ -1,15 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EWidgetType } from 'src/app/model/widget-type.enum';
-import { IWidget } from 'src/app/model/widget.interface';
+import { IButton, ICalendar, ISubscriptionForm, IText, IWidget, TWidgetType } from 'src/app/model/widget.interface';
 import { GlobalUtils } from 'src/app/utils/global.utils';
 import { IBlock } from '../block.interface';
-
-interface IButton {
-  name: string;
-  icon: string;
-  type: EWidgetType;
-}
 
 @Component({
   selector: 'app-create-dialog',
@@ -17,24 +11,6 @@ interface IButton {
   styleUrls: ['./create-dialog.component.scss']
 })
 export class CreateDialogComponent implements OnInit {
-  buttons: IButton[] = [{
-    name: 'Text',
-    icon: 'font_download',
-    type: EWidgetType.TEXT,
-  }, {
-    icon: 'smart_button',
-    type: EWidgetType.BUTTON,
-    name: 'Button'
-  }, {
-    type: EWidgetType.CALENDAR,
-    icon: 'event',
-    name: 'Kalender'
-  },{
-    type: EWidgetType.SUBSRIPTION_FORM,
-    icon: 'view_agenda',
-    name: 'Subscription Form'
-  }];
-
   constructor(
     private dialogRef: MatDialogRef<CreateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { block: IBlock },
@@ -43,24 +19,61 @@ export class CreateDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  close(btn: IButton | undefined = undefined): void {
-    if (!btn) { this.dialogRef.close(); return; }
+  close(type: string | undefined = undefined): void {
+    if (!type) { this.dialogRef.close(); return; }
 
     const index: number = Object.keys(this.data?.block?.widgets || {}).length;
+    const w: IWidget = this.createtWidget(type, this.getDefaultText(type), index);
 
-    const widget: IWidget = {
-      id: GlobalUtils.uuidv4(),
-      type: btn.type,
-      text: this.getDefaultText(btn.type),
-      index,
-    };
-
-    this.dialogRef.close({
-      widget,
-    });
+    this.dialogRef.close({ widget: w });
   }
 
-  private getDefaultText(type: EWidgetType): string {
+  private createtWidget(type: string, text: string, index: number): TWidgetType | IWidget {
+    const w: IWidget = {
+      id: GlobalUtils.uuidv4(),
+      type: EWidgetType.SUBSRIPTION_FORM,
+      text: text,
+      index: index,
+      backgroundOpacity: 1,
+      imageOpacity: 1,
+    };
+
+    switch (type) {
+      case EWidgetType.SUBSRIPTION_FORM:
+        const s: ISubscriptionForm = {
+          ...w,
+          kind: 'subscription',
+          mail: true,
+          phone: true,
+          name: true,
+        };
+        return s;
+      case EWidgetType.CALENDAR:
+        const c: ICalendar = {
+          ...w,
+          kind: 'calendar',
+        };
+        return c;
+
+      case EWidgetType.BUTTON:
+        const b: IButton = {
+          ...w,
+          kind: 'button',
+        };
+        return b;
+
+      case EWidgetType.TEXT:
+        const t: IText = {
+          ...w,
+          kind: 'text',
+        };
+        return t;
+    }
+
+    return w;
+  }
+
+  private getDefaultText(type: string): string {
     switch (type) {
       case EWidgetType.TEXT:
         return 'Neuer Text';

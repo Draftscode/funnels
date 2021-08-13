@@ -1,4 +1,4 @@
 <ng-scrollbar [style.font-size]="fontSize+'px'" [visibility]="'hover'" class="virtual-scroll widget"
-  thumbClass="white-scrollbars" [track]="'vertical'">
+  thumbClass="white-scrollbars" [style.background]="page?.background|alpha:page?.opacity" [track]="'vertical'">
   <ng-content></ng-content>
 </ng-scrollbar>

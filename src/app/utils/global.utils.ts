@@ -10,4 +10,10 @@ export class GlobalUtils {
       return v.toString(16);
     });
   }
+
+  public static addAlpha(color: string | undefined, opacity: number): string | undefined {
+    if (!color) { return color; }
+    const _opacity = Math.round(Math.min(Math.max(opacity, 0), 1) * 255);
+    return color + _opacity.toString(16).toUpperCase();
+  }
 }

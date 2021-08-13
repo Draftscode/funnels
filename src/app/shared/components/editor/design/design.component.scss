@@ -1,7 +1,14 @@
 $font-color:#777777;
 
+h1 {
+  margin-top: 20px;
+  color: $font-color;
+}
+
 h3 {
-  margin-top: 40px;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
 }
 
 h3,
@@ -9,13 +16,17 @@ mat-icon {
   color: $font-color;
 }
 
+mat-form-field {
+  width: calc(100% - 32px);
+  margin: 0 16px;
+}
+
 .color-picker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  top: 0;
-  left: 0;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
 }
 
 .mat-button-toggle.default {
@@ -24,4 +35,18 @@ mat-icon {
 
 .mat-button-toggle.selected {
   background-color: rgb(218, 218, 218);
+}
+
+.toggle-group {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep {
+  .slide-form-field {
+    .mat-form-field-infix {
+      height: 43px;
+      padding: 0;
+    }
+  }
 }

@@ -18,6 +18,7 @@ export class ImagesComponent implements OnInit, OnChanges {
   @Output() imageSelected: EventEmitter<IImage> = new EventEmitter<IImage>();
   @Input() term: string | undefined;
   @Input() format: string | undefined;
+  @Input() selected: number | undefined;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -45,7 +46,6 @@ export class ImagesComponent implements OnInit, OnChanges {
       .subscribe((r) => {
         this.slices = Math.ceil(r.total / 3);
         this.images = r.hits;
-        console.log(this.images);
       });
   }
 }

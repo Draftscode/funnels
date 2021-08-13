@@ -17,7 +17,14 @@
     "background": "background",
     "font_color": "text color",
     "font_style": "font style",
-    "font_size": "font-size"
+    "font_size": "font-size",
+    "font_weight": "font weight",
+    "WIDGET": {
+      "button": "button",
+      "subscription": "subscription form",
+      "calendar": "calendar",
+      "text": "text"
+    }
   },
   "STYLE": {
     "fontSize": "font-size",

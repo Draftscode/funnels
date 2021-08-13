@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { IWidget } from 'src/app/model/widget.interface';
+import { ISubscriptionForm } from 'src/app/model/widget.interface';
+import { GlobalUtils } from 'src/app/utils/global.utils';
 
 @Component({
   selector: 'app-subscription',
@@ -7,7 +8,7 @@ import { IWidget } from 'src/app/model/widget.interface';
   styleUrls: ['./subscription.component.scss']
 })
 export class SubscriptionComponent implements OnInit, OnChanges {
-  @Input() widget: IWidget | undefined;
+  @Input() widget: ISubscriptionForm | undefined;
 
   constructor(private elementRef: ElementRef) { }
 
@@ -15,11 +16,6 @@ export class SubscriptionComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void { }
-
-  addAlpha(color: string | undefined, opacity: number): string | undefined {
-    if (!color) { return color; }
-    const _opacity = Math.round(Math.min(Math.max(opacity || 1, 0), 1) * 255);
-    return color + _opacity.toString(16).toUpperCase();
+  ngOnChanges(changes: SimpleChanges): void {
   }
 }
