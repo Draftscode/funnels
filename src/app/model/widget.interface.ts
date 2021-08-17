@@ -30,14 +30,17 @@ export interface ISubscriptionForm extends IWidget {
 
 export interface IButton extends IWidget {
   kind: 'button';
+  final: boolean;
 }
 
 export interface ICalendar extends IWidget {
   kind: 'calendar';
+  selected?: number;
 }
 
 export interface IText extends IWidget {
   kind: 'text';
+  textAlign: 'center' | 'left' | 'right';
 }
 
 export type TWidgetType = IText | IButton | ICalendar | ISubscriptionForm;

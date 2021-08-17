@@ -1,13 +1,13 @@
 <ng-container *ngIf="widget">
-  <button [class.activated]="activated" [style.background]="widget?.background | alpha:widget.backgroundOpacity" [style.margin]="'auto'" [ngClass]="type" [style.color]="widget.textColor"
-    [style.font-size]="widget.fontSize+'px'"  [matBadge]="badge" mat-button class="generic-btn"
-    (click)="onClick($event)">
+  <button [class.activated]="activated" [style.background]="widget?.background | alpha:widget.backgroundOpacity"
+    [style.margin]="'auto'" [ngClass]="type" [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'"
+    [matBadge]="enableBadges? badge: null" mat-button class="generic-btn" (click)="onClick($event)">
     <!-- <mat-icon>home</mat-icon>  -->
     <app-img [style.opacity]="widget.imageOpacity" *ngIf="widget?.image" [format]="widget.image?.format"
       [image]="widget.image"></app-img>
     <!-- <img [src]="widget?.image" [style.width]="'48px'" [style.height]="'48px'"> -->
-    <span [style.line-height]="widget.fontSize+'px'" [style.fontStyle]="widget.fontStyle" class="text" [ngClass]="widget.fontFamily ? widget.fontFamily : []"
-      [style.fontWeight]="widget.fontWeight"
+    <span [style.line-height]="widget.fontSize+'px'" [style.fontStyle]="widget.fontStyle" class="text"
+      [ngClass]="widget.fontFamily ? widget.fontFamily : []" [style.fontWeight]="widget.fontWeight"
       [style.background]="widget?.background | alpha:widget.backgroundOpacity">{{widget.text}}</span>
   </button>
 </ng-container>

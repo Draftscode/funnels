@@ -15,6 +15,7 @@ export class WidgetComponent implements OnDestroy {
   @Input() activated: boolean = false;
   private alive: boolean = true;
   pages: Record<string, IPage> = {};
+  @Input() mode: 'viewer' | 'editor' = 'editor';
 
   constructor(private pageApi: PageService) {
     this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => this.pages = items);
@@ -29,7 +30,6 @@ export class WidgetComponent implements OnDestroy {
   }
 
   onClick(event: MouseEvent): void {
-    if (!this.widget?.linkedTo) { return; }
     this.afterClicked.emit();
   }
 }

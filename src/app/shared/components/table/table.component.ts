@@ -16,7 +16,7 @@ import { IPage } from '../page/page.interface';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['position', 'pages', 'actions'];
+  displayedColumns: string[] = ['position', 'pages', 'responses', 'actions'];
   private alive: boolean = true;
   funnels: IFunnel[] = [];
   constructor(
@@ -42,27 +42,9 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   createFunnel(): void {
-    const block: IBlock = {
-      id: GlobalUtils.uuidv4(),
-      height: 300,
-      index: 0,
-      widgets: {},
-    };
-
-    const defaultPage: IPage = {
-      id: GlobalUtils.uuidv4(),
-      index: 0,
-      name: 'Neue Seite',
-      blockIds: [block.id],
-    };
-
-    const f: IFunnel = {
-      id: GlobalUtils.uuidv4(),
-      name: 'Neuer Funnel',
-      websites: {},
-      pageIds: [defaultPage.id]
-    };
-
+    const block: IBlock = this.blockApi.createBlock();
+    const defaultPage: IPage = this.pageApi.createPage([block.id]);
+    const f: IFunnel = this.funnelApi.createFunnel([defaultPage.id]);
 
     concat(
       this.blockApi.create(block.id, block),

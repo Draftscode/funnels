@@ -161,10 +161,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (!this.selectedFunnelId) { return; }
     const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).filter((id: string) => id !== pageId);
     const page: IPage = this.pages[pageId];
-    concat([
+    concat(
       this.funnelApi.updateProperty(this.selectedFunnelId, { pageIds }),
-      ...(page.blockIds?.map((blockId: string) => this.deleteBlock(blockId, pageId)) || []),
-    ]).subscribe();
+      ...(page.blockIds || []).map((blockId: string) => this.deleteBlock(blockId, pageId)),
+      this.pageApi.deleteItem(pageId),
+    ).subscribe(() => {
+      this.selectedPageId = undefined;
+    });
   }
 
   deleteBlock(blockId: string, pageId: string): Observable<any> {
@@ -175,17 +178,20 @@ export class EditorComponent implements OnInit, OnDestroy {
     console.log('HERE');
     const blockIds: string[] = this.pages[pageId].blockIds?.filter((bId: string) => bId !== blockId) || [];
 
+    console.log('Block ids');
     return this.pageApi.updateProperty(pageId, { blockIds }).pipe(switchMap(() => {
       console.log('UPDATED PROPERTY');
       const widgetIds: string[] = this.blocks[blockId].widgetIds || [];
+      console.log(widgetIds);
       if (widgetIds.length <= 0) { return of(null); }
       console.log('DELETE BLOCK', blockId);
       return forkJoin(widgetIds.map((widgetId: string) => {
         return this.widgetApi.deleteItem(widgetId);
-      })).pipe(switchMap(() => {
-        return this.blockApi.deleteItem(blockId);
       }));
-    }));
+    })).pipe(switchMap(() => {
+      console.log('UPDATED PROPERTY');
+      return this.blockApi.deleteItem(blockId);
+    }));;
   }
 
   zoomIn(): void { this.zoom += 10; }
@@ -232,18 +238,20 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   blockDropped(event: any, blockId: string, pageId: string): void {
-    this.previewId = undefined;
-    const { pos, el } = this.getBlockPosition();
-
+    const { el } = this.getBlockPosition();
     if (el) {
+      const pos: 'start' | 'end' | undefined = this.previewPosition;
       const index: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === el.nativeElement.id);
       const curIndex: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === blockId);
       const finalIndex: number = index + (curIndex > index ? (pos === 'end' ? 1 : 0) : (pos === 'start' ? -1 : 0));
       const blockIds: string[] = this.pages[pageId].blockIds || [];
+      console.log(curIndex, finalIndex, pos);
       blockIds[curIndex] = blockIds[finalIndex];
       blockIds[finalIndex] = blockId;
       this.pageApi.updateProperty(pageId, { blockIds }).subscribe();
     }
+
+    this.previewId = undefined;
   }
 
 
@@ -262,6 +270,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         el,
       };
     }
+
+
     return { el: undefined, pos: undefined };
   }
 
@@ -320,12 +330,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   createBlock(): void {
     if (!this.selectedPageId) { return; }
-    const b: IBlock = {
-      id: GlobalUtils.uuidv4(),
-      height: 250,
-      index: 0,
-      widgets: {},
-    };
+    const b: IBlock = this.blockApi.createBlock();
 
     const blockIds: string[] = (this.pages[this.selectedPageId].blockIds || []).concat(b.id);
 

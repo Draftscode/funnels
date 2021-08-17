@@ -4,21 +4,21 @@
   </div>
   <form class="formular" [style.background]="widget?.background | alpha:widget?.backgroundOpacity"
     [style.color]="widget?.textColor">
-    <mat-form-field class="subscription-form-element" appearance="outline">
+    <mat-form-field class="subscription-form-element" appearance="outline" *ngIf="widget.name">
       <mat-label [style.color]="widget?.textColor| alpha:.5">Vor- und Nachname</mat-label>
       <input matInput>
       <button mat-icon-button matPrefix>
         <mat-icon>account_circle</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" *ngIf="widget.mail">
       <mat-label [style.color]="widget?.textColor| alpha:.5">E-Mail</mat-label>
       <input matInput>
       <button mat-icon-button matPrefix>
         <mat-icon>email</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" *ngIf="widget.phone">
       <mat-label [style.color]="widget?.textColor| alpha:.5">Telefonnummer</mat-label>
       <input matInput type="phone">
       <button mat-icon-button matPrefix>

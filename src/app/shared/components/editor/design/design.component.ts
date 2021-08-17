@@ -5,6 +5,7 @@ import { BlockService } from 'src/app/services/block.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
 import { ImageDialog } from '../../images/dialog/image.dialog';
+import { IImage } from '../../images/image.interface';
 import { IPage } from '../../page/page.interface';
 import { IBlock } from '../block.interface';
 
@@ -32,14 +33,14 @@ export class DesignComponent implements OnInit, OnChanges {
   }
 
   updateImage(type: 'widget' | 'block'): void {
-    if (!this.widget) { return; }
+    const image: IImage | undefined = type === 'widget' ? this.widget?.image : this.block?.image;
     this.dialog.open(ImageDialog, {
       maxWidth: '100vw',
       maxHeight: '100vh',
       height: '90%',
       width: '90%',
       panelClass: 'lightbox',
-      data: { image: this.widget?.image },
+      data: { image },
     }).afterClosed().subscribe((r) => {
       if (r?.type !== 'confirm') { return; }
 

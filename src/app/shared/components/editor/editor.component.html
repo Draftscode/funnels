@@ -1,5 +1,5 @@
 <ng-container *ngIf="selectedFunnelId">
-  <mat-toolbar>
+  <mat-toolbar class="main">
     <mat-toolbar-row>
       <button mat-icon-button (click)="home()">
         <mat-icon>home</mat-icon>
@@ -7,13 +7,13 @@
       <app-name-editor (changes)="renameFunnel(selectedFunnelId,$event)" [name]="funnels[selectedFunnelId]?.name">
       </app-name-editor>
       <span class="spacer"></span>
-      <button mat-icon-button (click)="zoomIn()" [disabled]="zoom >= 200">
+      <!-- <button mat-icon-button (click)="zoomIn()" [disabled]="zoom >= 200">
         <mat-icon>zoom_in</mat-icon>
       </button>
 
       <button mat-icon-button (click)="zoomOut()" [disabled]="zoom <= 50">
         <mat-icon>zoom_out</mat-icon>
-      </button>
+      </button> -->
       <button mat-stroked-button (click)="demo()" appearance="outline">
         <mat-icon>visibility</mat-icon> publish
       </button>
@@ -60,7 +60,7 @@
             </button>
           </ng-template>
         </mat-tab>
-        <mat-tab>
+        <mat-tab [disabled]="!selectedPageId || !selectedBlockId">
           <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">palette</mat-icon>
             Design
@@ -74,19 +74,20 @@
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content class="bg">
-      <div class="page-wrapper" [style.zoom]="zoom+'%'">
+      <div class="page-wrapper mat-elevation-z8" [style.zoom]="zoom+'%'">
         <app-page #pageContainer cdkDropList [cdkDropListSortPredicate]="enterPredicate" cdkDropListclass="app-page"
           [editable]="true" *ngIf="selectedPageId" [zoom]="1" [page]="pages[selectedPageId]">
 
           <ng-container *ngFor="let blockId of pages[selectedPageId]?.blockIds">
             <div [id]="blockId" (cdkDragStarted)="startBlockDrag($event,blockId)"
               (cdkDragMoved)="blockMoved($event,blockId)" (cdkDragDropped)="blockDropped($event,blockId,selectedPageId)"
-              #container cdkDrag [cdkDragLockAxis]="'y'">
+              #container cdkDrag [cdkDragLockAxis]="'y'" class="drag-container">
 
-
-              <div class="block-placeholder" *ngIf="previewId === blockId && previewPosition === 'start'">
-                ICH BIN EIN PLATZ
-              </div>
+              <!-- <div *cdkDragPreview >DAS IST MEIN PREVIEW</div> -->
+              <div *cdkDragPlaceholder class="default-placeholder"></div>
+              <ng-container *ngIf="previewId === blockId && previewPosition === 'start'">
+                <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
+              </ng-container>
 
               <app-block (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef
                 [height]="blockId === selectedBlockId ? curDragHeight:0"
@@ -102,8 +103,9 @@
                 </ng-template>
               </app-block>
 
-              <div class="block-placeholder" *ngIf="previewId === blockId && previewPosition === 'end'">
-              </div>
+              <ng-container *ngIf="previewId === blockId && previewPosition === 'end'">
+                <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
+              </ng-container>
 
               <div *ngIf="blockId === selectedBlockId" [style.position]="'relative'">
                 <span (cdkDragMoved)="startResize($event,blockId)" (cdkDragEnded)="endResize($event,blockId)"
@@ -115,29 +117,35 @@
             </div>
           </ng-container>
         </app-page>
-        <div class="actions">
-          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle [disabled]="!selectedBlockId" value="bold" (click)="createWidget()"
-              [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedPageId" value="bold" (click)="createBlock()"
-              [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
-              <mat-icon>add_box</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedWidgetId" [matTooltip]="'Widget löschen'" value="italic"
-              (click)="deleteWidget()">
-              <mat-icon>delete</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedBlockId" [matTooltip]="'Bereich löschen'" value="italic"
-              (click)="deleteBlock(selectedBlockId!,selectedPageId!)">
-              <mat-icon>layers_clear</mat-icon>
-            </mat-button-toggle>
-            <!-- <mat-button-toggle value="underline"><mat-icon>add</mat-icon></mat-button-toggle> -->
-          </mat-button-toggle-group>
-        </div>
-      </div>
 
+      </div>
+      <div class="actions" *ngIf="selectedPageId">
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+          <mat-button-toggle [disabled]="!selectedBlockId" value="bold" (click)="createWidget()"
+            [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
+            <mat-icon>add</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [disabled]="!selectedPageId" value="bold" (click)="createBlock()"
+            [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
+            <mat-icon>add_box</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [disabled]="!selectedWidgetId" [matTooltip]="'Widget löschen'" value="italic"
+            (click)="deleteWidget()">
+            <mat-icon>delete</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [disabled]="!selectedBlockId" [matTooltip]="'Bereich löschen'" value="italic"
+            (click)="deleteBlock(selectedBlockId!,selectedPageId!).subscribe()">
+            <mat-icon>layers_clear</mat-icon>
+          </mat-button-toggle>
+          <!-- <mat-button-toggle value="underline"><mat-icon>add</mat-icon></mat-button-toggle> -->
+        </mat-button-toggle-group>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </ng-container>
+
+
+<ng-template #dragPlaceholder>
+  <div class="block-placeholder">
+  </div>
+</ng-template>

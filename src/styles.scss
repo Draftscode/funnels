@@ -29,7 +29,7 @@ ng-scrollbar.virtual-scroll {
 }
 
 
-mat-toolbar.mat-toolbar {
+mat-toolbar.mat-toolbar.main {
   color: rgb(245, 245, 245);
   background: var(--main-color-primary);
   background: linear-gradient(90deg, var(--main-color-primary) 0%, var(--main-color-secondary) 89%);

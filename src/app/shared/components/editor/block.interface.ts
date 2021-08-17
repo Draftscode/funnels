@@ -10,9 +10,9 @@ export interface IBlock {
   widgets: Record<string, TWidgetType>;
   styles?: IStyles;
   widgetIds?: string[];
-  background?: string;
+  background: string;
   image?: IImage;
   opacity?: number;
-  backgroundOpacity?: number;
-  imageOpacity?: number;
+  backgroundOpacity: number;
+  imageOpacity: number;
 }

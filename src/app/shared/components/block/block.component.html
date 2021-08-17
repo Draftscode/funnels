@@ -1,6 +1,6 @@
 <div *ngIf="item" (click)="activateBlock(item)" class="block" [style.height]="myHeight+'px'"
   [style.background]="item.background|alpha:item.backgroundOpacity">
-  <app-img *ngIf="item?.image" [style.opacity]="item?.opacity" [image]="item.image"></app-img>
+  <app-img *ngIf="item?.image" [style.opacity]="item?.imageOpacity" [image]="item.image"></app-img>
   <mat-grid-list class="grid-list" [cols]="(item?.widgetIds?.length ||0) > 1 ? 2:1" rowHeight="fit">
     <ng-container *ngFor="let widgetId of item?.widgetIds">
       <mat-grid-tile [colspan]="1" [rowspan]="1">

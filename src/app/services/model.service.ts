@@ -56,6 +56,7 @@ export class ModelService<T> {
   public deleteItem(itemId: string): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     delete items[itemId];
+    console.error('DEKLETE',itemId,items);
     return this.updateItems(items);
   }
 }
