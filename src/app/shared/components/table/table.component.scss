@@ -10,5 +10,13 @@ table {
 }
 
 .scrollbar {
-  height:calc(100% - 64px);
+  height: calc(100% - 64px);
+}
+
+.flexbox {
+  display: flex;
+
+  .mat-icon {
+    font-size: 18px;
+  }
 }

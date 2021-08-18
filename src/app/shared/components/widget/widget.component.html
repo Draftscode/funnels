@@ -15,6 +15,6 @@
     <app-calendar [widget]="widget"></app-calendar>
   </ng-container>
   <ng-container *ngIf="widget.kind === 'subscription'">
-    <app-subscription [widget]="widget"></app-subscription>
+    <app-subscription (afterChanges)="afterChanged($event)" [widget]="widget"></app-subscription>
   </ng-container>
 </ng-container>

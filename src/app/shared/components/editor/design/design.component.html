@@ -11,7 +11,7 @@
 
       <mat-button-toggle [ngClass]="widget.fontStyle ? 'selected':'default'"
         (click)="changeWidget({fontStyle: widget.fontStyle ? undefined:'italic'})"
-        [matTooltip]="'LABEL.font_style'|translate" value="bold">
+        [matTooltip]="'LABEL.italics'|translate" value="bold">
         <mat-icon>format_italic</mat-icon>
       </mat-button-toggle>
       <!-- font-color-->
@@ -25,20 +25,21 @@
   <div class="toggle-group">
     <mat-button-toggle-group *ngIf="widget.kind === 'text'" [value]="widget.textAlign"
       (change)="changeWidget({textAlign: $event.value})" name="fontStyle" aria-label="Font Style">
-      <mat-button-toggle [matTooltip]="'LABEL.image'|translate" value="left">
+      <mat-button-toggle [matTooltip]="'LABEL.FONT.left'|translate" value="left">
         <mat-icon>format_align_left</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle [matTooltip]="'LABEL.image'|translate" value="center">
+      <mat-button-toggle [matTooltip]="'LABEL.FONT.center'|translate" value="center">
         <mat-icon>format_align_center</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle [matTooltip]="'LABEL.image'|translate" value="right">
+      <mat-button-toggle [matTooltip]="'LABEL.FONT.right'|translate" value="right">
         <mat-icon>format_align_right</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
-  <mat-form-field appearance="outline"
+  <!-- font family -->
+  <mat-form-field appearance="outline" [matTooltip]="'LABEL.font_style'|translate"
     *ngIf="widget.kind === 'button' || widget.kind === 'text' || widget.kind === 'subscription'">
-    <mat-label>Schriftart</mat-label>
+    <mat-label>{{'LABEL.font_style'|translate}}</mat-label>
     <mat-select (selectionChange)="changeWidget({fontFamily: $event.value})" [value]="widget.fontFamily">
       <mat-option class="times" value="times">Times new Roman</mat-option>
       <mat-option class="georgia" value="georgia">Georgia</mat-option>
@@ -50,18 +51,19 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Text</mat-label>
-    <input #widgetInp matInput [value]="widget.text" (change)="changeWidget({text: widgetInp.value})">
-    <input [matTooltip]="'Textfarbe'" matSuffix matInput class="color-picker" #colorInp matInput
+    <input [matTooltip]="'LABEL.text'|translate" #widgetInp matInput [value]="widget.text"
+      (change)="changeWidget({text: widgetInp.value})">
+    <input [matTooltip]="'LABEL.font_color'|translate" matSuffix matInput class="color-picker" #colorInp matInput
       [value]="widget.textColor" type="color" (change)="changeWidget({textColor: colorInp.value})">
   </mat-form-field>
 
   <!-- image -->
   <mat-form-field floatLabel="always" class="slide-form-field" appearance="outline"
     *ngIf="widget.kind === 'button' || widget.kind === 'text'">
-    <mat-label>Bild</mat-label>
+    <mat-label>{{'LABEL.image'|translate}}</mat-label>
     <mat-slider [value]="parseValue(widget.imageOpacity) * 100" #widgetImageOpacitiySlider
       (change)="changeWidget({imageOpacity:widgetImageOpacitiySlider.value / 100})"
-      [matTooltip]="'LABEL.font_size'|translate" [max]="100" [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5"
+      [matTooltip]="'LABEL.opacity'|translate" [max]="100" [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5"
       aria-labelledby="example-name-label">
     </mat-slider>
     <button matSuffix mat-icon-button (click)="updateImage('widget')" class="default"
@@ -77,15 +79,15 @@
 
   <!-- background -->
   <mat-form-field class="slide-form-field" appearance="outline" *ngIf="widget.kind === 'button'">
-    <mat-label>Hintergrundfarbe</mat-label>
-    <mat-slider [value]="parseValue(widget.backgroundOpacity) * 100" #widgetBackgroundOpacitiySlider
-      (change)="changeWidget({backgroundOpacity: widgetBackgroundOpacitiySlider.value / 100})"
-      [matTooltip]="'LABEL.font_size'|translate" [max]="100" [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5"
-      aria-labelledby="example-name-label">
+    <mat-label>{{'LABEL.background'|translate}}<</mat-label>
+    <mat-slider [matTooltip]="'LABEL.opacity'|translate" [value]="parseValue(widget.backgroundOpacity) * 100"
+      #widgetBackgroundOpacitiySlider
+      (change)="changeWidget({backgroundOpacity: widgetBackgroundOpacitiySlider.value / 100})" [max]="100" [min]="0"
+      [step]="1" [thumbLabel]="true" [tickInterval]="5" aria-labelledby="example-name-label">
     </mat-slider>
     <span matSuffix>{{widgetBackgroundOpacitiySlider.value.toFixed(0)+'%'}}</span>
-    <input [matTooltip]="'Hintergrundfarbe'" matSuffix matInput class="color-picker" #widgetBGColorInp matInput
-      [value]="widget.background" type="color" (change)="changeWidget({background: widgetBGColorInp.value})">
+    <input [matTooltip]="'LABEL.background'|translate" matSuffix matInput class="color-picker" #widgetBGColorInp
+      matInput [value]="widget.background" type="color" (change)="changeWidget({background: widgetBGColorInp.value})">
     <button matSuffix *ngIf="widget.background" mat-icon-button (click)="changeWidget({background:undefined})"
       [matTooltip]="'BUTTON.cancel'|translate">
       <mat-icon>cancel</mat-icon>
@@ -96,7 +98,7 @@
   <!-- text size -->
   <mat-form-field class="slide-form-field" floatLabel="always" appearance="outline"
     *ngIf="widget.kind === 'button' || widget.kind === 'text'">
-    <mat-label>Textgröße</mat-label>
+    <mat-label>{{'LABEL.font_size'|translate}}<</mat-label>
     <mat-slider [value]="widget.fontSize" #slider (change)="changeWidget({fontSize: slider.value})"
       [matTooltip]="'LABEL.font_size'|translate" [max]="50" [min]="8" [step]="1" [thumbLabel]="true" [tickInterval]="5"
       aria-labelledby="example-name-label">
@@ -106,32 +108,31 @@
   </mat-form-field>
 
 
+  <!-- final -->
   <div class="toggle-group" *ngIf="widget.kind==='button'">
     <mat-slide-toggle #finalSlider [checked]="widget.final" (change)="changeWidget({final:finalSlider.checked})">
-      Beendet Funnel
+      {{'LABEL.finish'|translate}}
     </mat-slide-toggle>
   </div>
 
   <div class="slider-group" *ngIf="widget.kind === 'subscription'">
-    <mat-slide-toggle #subName [checked]="widget.name" (change)="changeWidget({name:subName.checked})">Vor- /
-      Nachname</mat-slide-toggle>
+    <mat-slide-toggle #subName [checked]="widget.name" (change)="changeWidget({name:subName.checked})">  {{'LABEL.fullname'|translate}}</mat-slide-toggle>
 
-    <mat-slide-toggle #subMail [checked]="widget.mail" (change)="changeWidget({mail:subMail.checked})">E-Mail
+    <mat-slide-toggle #subMail [checked]="widget.mail" (change)="changeWidget({mail:subMail.checked})">{{'LABEL.mail'|translate}}
     </mat-slide-toggle>
 
     <mat-slide-toggle #subPhone [checked]="widget.phone" (change)="changeWidget({phone:subPhone.checked})">
-      Telefonnummer</mat-slide-toggle>
+      {{'LABEL.phone'|translate}}</mat-slide-toggle>
 
   </div>
 </ng-container>
 <ng-container *ngIf="block">
-  <h1>Bereich</h1>
+  <h1>{{'LABEL.block'|translate}}</h1>
   <mat-form-field floatLabel="always" class="slide-form-field" appearance="outline">
     <mat-label>Bild</mat-label>
-    <mat-slider [value]="parseValue(block.imageOpacity) * 100" #blockImageOpacitiySlider
-      (change)="changeBlock({imageOpacity:blockImageOpacitiySlider.value / 100})"
-      [matTooltip]="'LABEL.font_size'|translate" [max]="100" [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5"
-      aria-labelledby="example-name-label">
+    <mat-slider [matTooltip]="'LABEL.opacity'|translate" [value]="parseValue(block.imageOpacity) * 100"
+      #blockImageOpacitiySlider (change)="changeBlock({imageOpacity:blockImageOpacitiySlider.value / 100})" [max]="100"
+      [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5" aria-labelledby="example-name-label">
     </mat-slider>
     <button matSuffix mat-icon-button (click)="updateImage('block')" class="default"
       [matTooltip]="'LABEL.image'|translate" value="underline">
@@ -146,10 +147,10 @@
 
   <mat-form-field class="slide-form-field" appearance="outline">
     <mat-label>Hintergrundfarbe</mat-label>
-    <mat-slider [value]="parseValue(block.backgroundOpacity) * 100" #blockBackgroundOpacitiySlider
-      (change)="changeBlock({backgroundOpacity: blockBackgroundOpacitiySlider.value / 100})"
-      [matTooltip]="'LABEL.font_size'|translate" [max]="100" [min]="0" [step]="1" [thumbLabel]="true" [tickInterval]="5"
-      aria-labelledby="example-name-label">
+    <mat-slider [matTooltip]="'LABEL.opacity'|translate" [value]="parseValue(block.backgroundOpacity) * 100"
+      #blockBackgroundOpacitiySlider
+      (change)="changeBlock({backgroundOpacity: blockBackgroundOpacitiySlider.value / 100})" [max]="100" [min]="0"
+      [step]="1" [thumbLabel]="true" [tickInterval]="5" aria-labelledby="example-name-label">
     </mat-slider>
     <span matSuffix>{{blockBackgroundOpacitiySlider.value.toFixed(0)+'%'}}</span>
     <input [matTooltip]="'Hintergrundfarbe'" matSuffix matInput class="color-picker" #blockBGColorInp matInput

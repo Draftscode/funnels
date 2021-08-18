@@ -1,7 +1,6 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { ISubscriptionForm } from 'src/app/model/widget.interface';
-import { GlobalUtils } from 'src/app/utils/global.utils';
 
 @Component({
   selector: 'app-subscription',
@@ -14,8 +13,8 @@ export class SubscriptionComponent implements OnInit, OnChanges {
   @ViewChildren(MatFormField, { read: ElementRef }) set children(list: QueryList<ElementRef>) {
     this.itemList = list;
     this.update();
-
   }
+  @Output('afterChanges') afterChanges: EventEmitter<Record<string, any>> = new EventEmitter<Record<string, any>>();
 
   update(): void {
     this.itemList?.toArray().forEach((el: ElementRef) => {
@@ -28,6 +27,10 @@ export class SubscriptionComponent implements OnInit, OnChanges {
         }
       }
     });
+  }
+
+  afterChanged(event: Record<string, any>): void {
+    this.afterChanges.emit(event);
   }
 
   constructor(private elementRef: ElementRef) { }

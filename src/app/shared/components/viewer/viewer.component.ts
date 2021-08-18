@@ -7,8 +7,10 @@ import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
+import { GlobalUtils } from 'src/app/utils/global.utils';
 import { IBlock } from '../editor/block.interface';
 import { IPage } from '../page/page.interface';
+import { ViewerService } from './viewer.service';
 
 @Component({
   selector: 'app-viewer',
@@ -20,6 +22,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
   pages: Record<string, IPage> = {};
   blocks: Record<string, IBlock> = {};
   widgets: Record<string, TWidgetType> = {};
+  private componentId: string = GlobalUtils.uuidv4();
 
   selectedPageId: string | undefined;
   selectedFunnelId: string | undefined;
@@ -31,11 +34,11 @@ export class ViewerComponent implements OnInit, OnDestroy {
     private blockApi: BlockService,
     private widgetApi: WidgetService,
     private currentRoute: ActivatedRoute,
+    private viewerApi: ViewerService,
   ) { }
 
   ngOnInit(): void {
     this.currentRoute.params.pipe(takeWhile(() => this.alive)).subscribe(params => { this.selectedFunnelId = params.funnelId; this.init(); });
-
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => { this.funnels = items; this.init(); });
     this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => { this.pages = items; this.init(); });
     this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => { this.blocks = items; this.init(); });
@@ -55,15 +58,20 @@ export class ViewerComponent implements OnInit, OnDestroy {
       .sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
   }
 
+  record: Record<string, any> = {};
   afterClicked(widgetId: string): void {
     if (!this.selectedFunnelId) { return; }
     const widget: TWidgetType = this.widgets[widgetId];
     if (widget.kind === 'button') {
       if (widget.final) {
-        console.error('FINAL BUTON', this.funnels[this.selectedFunnelId]);
+        this.viewerApi.save(this.selectedFunnelId, this.record).subscribe(() => this.record = {});
         return;
       }
       if (widget.linkedTo) { this.selectedPageId = widget.linkedTo; }
     }
+  }
+
+  afterChanged(event: Record<string, any>, widgetId: string): void {
+    this.record = Object.assign(this.record, event);
   }
 }

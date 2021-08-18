@@ -66,19 +66,17 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  // get blockIsActive(): boolean {
-  //   if (this && !this.blocks[this.selectedBlockId].widgetIds) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
+  /**
+   * loads related details like the pages connected to the funnel
+   * @returns void
+   */
   private init(): void {
-    if (!this.pages || !this.selectedFunnelId) {
-      const keys: string[] = Object.keys(this.pages || {});
-      if (!this.selectedPageId && keys.length > 0) {
-        this.selectedPageId = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
-      }
+    if (!this.pages || !this.selectedFunnelId) { return; }
+    const fId: string = this.selectedFunnelId;
+    const keys: string[] = Object.keys(this.pages || {}).filter((k: string) => this.funnels[fId].pageIds.includes(k));
+
+    if (!this.selectedPageId && keys.length > 0) {
+      this.selectedPageId = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
     }
   }
 
@@ -175,21 +173,16 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (!blockId) { return of(null); }
     this.selectedBlockId = undefined;
 
-    console.log('HERE');
+
     const blockIds: string[] = this.pages[pageId].blockIds?.filter((bId: string) => bId !== blockId) || [];
 
-    console.log('Block ids');
     return this.pageApi.updateProperty(pageId, { blockIds }).pipe(switchMap(() => {
-      console.log('UPDATED PROPERTY');
       const widgetIds: string[] = this.blocks[blockId].widgetIds || [];
-      console.log(widgetIds);
       if (widgetIds.length <= 0) { return of(null); }
-      console.log('DELETE BLOCK', blockId);
       return forkJoin(widgetIds.map((widgetId: string) => {
         return this.widgetApi.deleteItem(widgetId);
       }));
     })).pipe(switchMap(() => {
-      console.log('UPDATED PROPERTY');
       return this.blockApi.deleteItem(blockId);
     }));;
   }
@@ -245,7 +238,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       const curIndex: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === blockId);
       const finalIndex: number = index + (curIndex > index ? (pos === 'end' ? 1 : 0) : (pos === 'start' ? -1 : 0));
       const blockIds: string[] = this.pages[pageId].blockIds || [];
-      console.log(curIndex, finalIndex, pos);
       blockIds[curIndex] = blockIds[finalIndex];
       blockIds[finalIndex] = blockId;
       this.pageApi.updateProperty(pageId, { blockIds }).subscribe();
@@ -289,7 +281,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     const targetedWidgetId: string = this.widgetChildren.toArray().find((item: ElementRef) => this.isPointerOverContainer(item.nativeElement))?.nativeElement?.id;
 
     this.dragMove({ pointerPosition: { x: 0, y: 0 } }, curBlockId);
-    // console.log('DRAG EXITED', widgetId, this.blocks[curBlockId].widgetIds, this.blocks[curBlockId].widgetIds?.indexOf(widgetId));
     if (pageId) { this.widgetApi.updateProperty(widgetId, { linkedTo: this.pages[pageId].id }).subscribe(); }
     // swap widget inside the same block
     else if (this.blocks[curBlockId].widgetIds?.includes(targetedWidgetId) && targetedWidgetId) {

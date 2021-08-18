@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { concat } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -6,9 +7,9 @@ import { IFunnel } from 'src/app/model/funnel.interface';
 import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
-import { GlobalUtils } from 'src/app/utils/global.utils';
 import { IBlock } from '../editor/block.interface';
 import { IPage } from '../page/page.interface';
+import { ResponseDialogComponent } from '../response/response.component';
 
 @Component({
   selector: 'app-table',
@@ -16,7 +17,7 @@ import { IPage } from '../page/page.interface';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['position', 'pages', 'responses', 'actions'];
+  displayedColumns: string[] = ['position', 'pages', 'totalResponses', 'uncheckedResponses', 'actions'];
   private alive: boolean = true;
   funnels: IFunnel[] = [];
   constructor(
@@ -24,6 +25,7 @@ export class TableComponent implements OnInit, OnDestroy {
     private funnelApi: FunnelService,
     private pageApi: PageService,
     private blockApi: BlockService,
+    private dialog: MatDialog,
   ) {
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((f: Record<string, IFunnel>) => {
       this.funnels = Object.keys(f || {}).map((key: string) => f[key]);
@@ -31,6 +33,17 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  openResponses(element: IFunnel): void {
+    this.dialog.open(ResponseDialogComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '90%',
+      width: '90%',
+      panelClass: 'lightbox',
+      data: element
+    });
   }
 
   editFunnel(funnel: IFunnel): void {

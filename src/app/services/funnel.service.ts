@@ -23,7 +23,8 @@ export class FunnelService extends ModelService<IFunnel>{
     const funnel: IFunnel = {
       id: GlobalUtils.uuidv4(),
       name: 'Neuer Funnel',
-      websites: {},
+      totalResponses: 0,
+      uncheckedResponses: 0,
       pageIds,
     };
     return funnel;

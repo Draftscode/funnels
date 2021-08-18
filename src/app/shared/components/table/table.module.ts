@@ -1,11 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { SharedModule } from "../../shared.module";
+import { ResponseModule } from "../response/response.module";
 import { TableComponent } from "./table.component";
 
 @NgModule({
@@ -16,7 +18,9 @@ import { TableComponent } from "./table.component";
     SharedModule,
     NgScrollbarModule,
     MatIconModule,
+    MatDialogModule,
     MatButtonModule,
+    ResponseModule,
   ],
   exports: [TableComponent],
   declarations: [TableComponent],
