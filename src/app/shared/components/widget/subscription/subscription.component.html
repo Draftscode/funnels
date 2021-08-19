@@ -2,7 +2,7 @@
   <div class="bg" *ngIf="widget.image">
     <app-img [style.opacity]="widget.opacity" [image]="widget.image"></app-img>
   </div>
-  <form class="formular" [style.background]="widget?.background | alpha:widget?.backgroundOpacity"
+  <form [class.activated]="activated" class="formular" [style.background]="widget?.background | alpha:widget?.backgroundOpacity"
     [style.color]="widget?.textColor">
     <mat-form-field class="subscription-form-element" appearance="outline" *ngIf="widget.name">
       <mat-label [style.color]="widget?.textColor| alpha:.5">Vor- und Nachname</mat-label>

@@ -7,9 +7,12 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ConfirmDialogModule } from '../../dialog/confirm-dialog/confirm-dialog.module';
+import { UrlShortenerModule } from '../../dialog/url-shortener/url-shortener.module';
 import { SharedModule } from '../../shared.module';
 import { ImageDialogModule } from '../images/dialog/image-dialog.module';
 import { PageModule } from '../page/page.module';
@@ -30,6 +33,7 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     DragDropModule,
     CommonModule,
     MatMenuModule,
+    MatSnackBarModule,
     EditorRoutingModule,
     NameEditorModule,
     TranslateModule,
@@ -39,6 +43,7 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     MatTooltipModule,
     MatRippleModule,
     FormsModule,
+    ConfirmDialogModule,
     NgScrollbarModule,
     PageModule,
     MatSidenavModule,
@@ -46,6 +51,7 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     EditDialogModule,
     ImageDialogModule,
     DesignModule,
+    UrlShortenerModule,
   ]
 })
 export class EditorModule { }

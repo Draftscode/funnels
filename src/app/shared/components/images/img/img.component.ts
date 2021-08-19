@@ -20,10 +20,10 @@ export class ImgComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
-  inter(visibility: boolean, el: HTMLImageElement): void {
+  inter(visibility: boolean): void {
     if (this.loaded) { return; }
     if (visibility) {
-      el.src = this.preview ? this.image?.previewURL || '' : this.image?.webformatURL || '';
+      this.src = this.preview ? this.image?.previewURL || '' : this.image?.webformatURL || '';
       this.loaded = true;
     }
 

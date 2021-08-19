@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{data.title|translate}}</h1>
+<div mat-dialog-content>
+  {{data.text.value|translate:{value: data.text.params.value|translate} }}
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">{{'BUTTON.cancel'|translate}}</button>
+  <span class="spacer"></span>
+  <button mat-button (click)="confirm()">{{'BUTTON.confirm'|translate}}</button>
+</div>

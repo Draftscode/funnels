@@ -7,14 +7,15 @@
   </ng-container>
   <!-- text -->
   <ng-container *ngIf="widget.kind === 'text'">
-    <app-text [widget]="widget"></app-text>
+    <app-text [activated]="activated" [widget]="widget"></app-text>
   </ng-container>
   <!-- subscription -->
   <!-- calendar -->
   <ng-container *ngIf="widget.kind === 'calendar'">
-    <app-calendar [widget]="widget"></app-calendar>
+    <app-calendar (afterChanges)="afterChanged($event)" [widget]="widget"></app-calendar>
   </ng-container>
   <ng-container *ngIf="widget.kind === 'subscription'">
-    <app-subscription (afterChanges)="afterChanged($event)" [widget]="widget"></app-subscription>
+    <app-subscription [activated]="activated" (afterChanges)="afterChanged($event)" [widget]="widget">
+    </app-subscription>
   </ng-container>
 </ng-container>

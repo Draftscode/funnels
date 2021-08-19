@@ -14,6 +14,7 @@ export class SubscriptionComponent implements OnInit, OnChanges {
     this.itemList = list;
     this.update();
   }
+  @Input() activated: boolean = false;
   @Output('afterChanges') afterChanges: EventEmitter<Record<string, any>> = new EventEmitter<Record<string, any>>();
 
   update(): void {

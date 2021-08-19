@@ -23,7 +23,7 @@ export class CreateDialogComponent implements OnInit {
   close(type: string | undefined = undefined): void {
     if (!type) { this.dialogRef.close(); return; }
 
-    const index: number = Object.keys(this.data?.block?.widgets || {}).length;
+    const index: number = this.data?.block?.widgetIds?.length || 0;
     const w: IWidget = this.createtWidget(type, this.getDefaultText(type), index);
 
     this.dialogRef.close({ widget: w });

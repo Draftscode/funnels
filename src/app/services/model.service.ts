@@ -26,11 +26,11 @@ export class ModelService<T> {
     return of(items);
   }
 
-  public create(id: string, item: T): Observable<void> {
+  public create(id: string, item: T): Observable<T> {
     const list: Record<string, T> = this.items.getValue();
     list[id] = item;
     this.updateItems(list);
-    return of(void 0);
+    return of(item);
   }
 
 
@@ -46,9 +46,10 @@ export class ModelService<T> {
   public updateProperty(id: string, changes: Record<string, any>): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     const item: T = items[id];
-    console.warn(`[update property]`,changes,item);
+    console.warn(`[update property]`, changes, item);
     const newItem: T = Object.assign(item, changes);
     items[id] = newItem;
+
 
     return this.updateItems(items);
   }
@@ -56,7 +57,6 @@ export class ModelService<T> {
   public deleteItem(itemId: string): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     delete items[itemId];
-    console.error('DEKLETE',itemId,items);
     return this.updateItems(items);
   }
 }

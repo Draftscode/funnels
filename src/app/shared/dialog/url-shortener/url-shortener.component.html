@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{'LABEL.create_short_url'|translate}}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="formGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>{{'LABEL.adjust_value'|translate:{value:'LABEL.url'|translate} }}</mat-label>
+      <input matInput formControlName="url">
+      <button mat-icon-button matSuffix>
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <span class="spacer"></span>
+  <button mat-button (click)="confirm()">
+    {{'BUTTON.confirm'|translate}}
+  </button>
+</div>

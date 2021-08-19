@@ -4,7 +4,7 @@
       <ng-container matColumnDef="position">
         <th mat-header-cell *matHeaderCellDef>
           <div class="flexbox">
-            <mat-icon>drive_file_rename_outline</mat-icon> Name
+            <mat-icon>drive_file_rename_outline</mat-icon> {{'LABEL.name'|translate}}
           </div>
         </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
@@ -13,16 +13,25 @@
       <ng-container matColumnDef="pages">
         <th mat-header-cell *matHeaderCellDef>
           <div class="flexbox">
-            <mat-icon>layers</mat-icon> Seiten
+            <mat-icon>layers</mat-icon> {{'LABEL.pages'|translate}}
           </div>
         </th>
         <td mat-cell *matCellDef="let element"> {{element.pageIds?.length}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="published">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="flexbox">
+            <mat-icon>publish</mat-icon> {{'LABEL.published'|translate}}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{('LABEL.'+element.published)|translate}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="uncheckedResponses">
         <th mat-header-cell *matHeaderCellDef>
           <div class="flexbox">
-            <mat-icon>priority_high</mat-icon>Neu
+            <mat-icon>priority_high</mat-icon>{{'LABEL.new'|translate}}
           </div>
         </th>
         <td mat-cell *matCellDef="let element">
@@ -35,7 +44,7 @@
       <ng-container matColumnDef="totalResponses">
         <th mat-header-cell *matHeaderCellDef>
           <div class="flexbox">
-            <mat-icon>edit_note</mat-icon> Auswertungen
+            <mat-icon>edit_note</mat-icon> {{'LABEL.respones'|translate}}
           </div>
         </th>
         <td mat-cell *matCellDef="let element"> {{element.totalResponses}} </td>
@@ -48,6 +57,9 @@
         <td mat-cell *matCellDef="let element">
           <div class="flexbox">
             <span class="spacer"></span>
+            <button mat-icon-button (click)="deleteFunnel(element)">
+              <mat-icon>delete</mat-icon>
+            </button>
             <button mat-icon-button (click)="editFunnel(element)">
               <mat-icon>open_in_new</mat-icon>
             </button>

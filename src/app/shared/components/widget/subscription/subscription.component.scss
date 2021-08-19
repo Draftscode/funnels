@@ -31,3 +31,9 @@
     z-index: 0;
   }
 }
+
+.activated {
+  border: 1px solid red;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+}

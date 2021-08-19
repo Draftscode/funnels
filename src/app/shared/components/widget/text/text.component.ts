@@ -7,7 +7,8 @@ import { IText } from 'src/app/model/widget.interface';
   styleUrls: ['./text.component.scss']
 })
 export class TextComponent implements OnInit {
-  @Input() widget: IText | undefined;;
+  @Input() widget: IText | undefined;
+  @Input() activated: boolean = false;
 
   constructor() { }
 

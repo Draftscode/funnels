@@ -5,4 +5,5 @@ export interface IFunnel {
   pageIds: string[];
   totalResponses: number;
   uncheckedResponses: number;
+  published: boolean;
 }

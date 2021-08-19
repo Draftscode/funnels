@@ -11,9 +11,18 @@
     "publish": "Veröffentlichen"
   },
   "LABEL": {
+    "new": "Neu",
+    "name": "Name",
+    "responses": "Auswertungen",
+    "confirm": "Bestätigen",
+    "created": "Erstellt",
+    "published": "Veröffentlicht",
     "rowNumber": "#",
+    "selectedDate": "ausgewähltes Datum",
     "unchecked": "Neu",
+    "loading": "Lädt",
     "true": "ja",
+    "empty_value": "{{value}} ist leer",
     "false": "nein",
     "pages": "Seiten",
     "page": "Seite",
@@ -32,6 +41,7 @@
     "font_color": "Textfarbe",
     "font_style": "Schriftart",
     "opacity": "Deckkraft",
+    "publish_value": "{{value}} wurde veröffentlicht",
     "font_size": "Schriftgröße",
     "font_weight": "Fetter Text",
     "FONT": {
@@ -49,5 +59,14 @@
   "STYLE": {
     "fontSize": "Shiftgröße",
     "textColor": "Schriftfarbe"
+  },
+  "DATE": {
+    "datetime": "dd.MM.YYYY HH:mm",
+    "date": "dd.MM.YYYY",
+    "time": "HH:mm"
+  },
+  "QUESTION": {
+    "delete_value": "Wollen Sie diesen {{value}} wirklich löschen?",
+    "publish_value": "Soll dieser {{value}} wirklich veröffentlicht werden?"
   }
 }

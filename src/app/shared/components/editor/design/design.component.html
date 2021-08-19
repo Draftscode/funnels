@@ -79,7 +79,7 @@
 
   <!-- background -->
   <mat-form-field class="slide-form-field" appearance="outline" *ngIf="widget.kind === 'button'">
-    <mat-label>{{'LABEL.background'|translate}}<</mat-label>
+    <mat-label>{{'LABEL.background'|translate}}</mat-label>
     <mat-slider [matTooltip]="'LABEL.opacity'|translate" [value]="parseValue(widget.backgroundOpacity) * 100"
       #widgetBackgroundOpacitiySlider
       (change)="changeWidget({backgroundOpacity: widgetBackgroundOpacitiySlider.value / 100})" [max]="100" [min]="0"
@@ -98,7 +98,7 @@
   <!-- text size -->
   <mat-form-field class="slide-form-field" floatLabel="always" appearance="outline"
     *ngIf="widget.kind === 'button' || widget.kind === 'text'">
-    <mat-label>{{'LABEL.font_size'|translate}}<</mat-label>
+    <mat-label>{{'LABEL.font_size'|translate}}</mat-label>
     <mat-slider [value]="widget.fontSize" #slider (change)="changeWidget({fontSize: slider.value})"
       [matTooltip]="'LABEL.font_size'|translate" [max]="50" [min]="8" [step]="1" [thumbLabel]="true" [tickInterval]="5"
       aria-labelledby="example-name-label">

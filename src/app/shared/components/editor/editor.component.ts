@@ -1,8 +1,12 @@
 import { CdkDrag } from '@angular/cdk/drag-drop';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { concat, forkJoin, Observable, of } from 'rxjs';
-import { switchMap, takeWhile } from 'rxjs/operators';
+import { map, shareReplay, switchMap, takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { IWidget, TWidgetType } from 'src/app/model/widget.interface';
 import { ActionService } from 'src/app/services/action.service';
@@ -10,7 +14,9 @@ import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
-import { GlobalUtils } from 'src/app/utils/global.utils';
+import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
+import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
+import { UrlShortenerComponent } from '../../dialog/url-shortener/url-shortener.component';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
 
@@ -43,6 +49,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   selectedWidgetId: string | undefined;
   selectedPageId: string | undefined;
 
+  layoutLarge$ = this.breakpointObserver.observe([Breakpoints.Large, Breakpoints.XLarge]).pipe(map(result => result.matches), shareReplay());
+  layoutSmall$ = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).pipe(map(result => result.matches), shareReplay());
+
+  previewId: string | undefined = undefined;
+  previewPosition: 'start' | 'end' | undefined = undefined;
   constructor(
     private funnelApi: FunnelService,
     private pageApi: PageService,
@@ -51,6 +62,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     private actionApi: ActionService,
     private router: Router,
     private currentRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver,
+    private snackbar: MatSnackBar,
+    private translate: TranslateService,
   ) {
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => {
       this.funnels = items;
@@ -76,7 +91,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     const keys: string[] = Object.keys(this.pages || {}).filter((k: string) => this.funnels[fId].pageIds.includes(k));
 
     if (!this.selectedPageId && keys.length > 0) {
-      this.selectedPageId = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
+      this.selectPage(keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0]);
     }
   }
 
@@ -100,22 +115,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   createPage(): void {
-    if (!this.selectedFunnelId) { return; }
-
-    const p: IPage = {
-      id: GlobalUtils.uuidv4(),
-      index: 0,
-      name: 'Neue Seite 001',
-      funnelId: this.selectedFunnelId,
-    };
-
-    const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).concat(p.id);
-    p.index = pageIds.length - 1;
-
-    concat(
-      this.funnelApi.updateProperty(this.selectedFunnelId, { pageIds }),
-      this.pageApi.create(p.id, p),
-    ).subscribe();
+    const funnelId: string | undefined = this.selectedFunnelId;
+    if (!funnelId) { return; }
+    const pageIds: string[] = this.funnels[funnelId].pageIds || [];
+    this.pageApi.createPage({ index: pageIds.length }).pipe(switchMap((page: IPage) => {
+      this.selectPage(page.id);
+      return this.funnelApi.updateProperty(funnelId, { pageIds: pageIds.concat(page.id) });
+    })).subscribe();
   }
 
   ngOnInit(): void {
@@ -125,7 +131,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.actionApi.closeEditor();
     this.alive = false;
   }
 
@@ -134,44 +139,89 @@ export class EditorComponent implements OnInit, OnDestroy {
   activateWidget(ev: MouseEvent | undefined, el: ElementRef, blockId: string, widgetId: string | undefined = undefined): void {
     if (!this.selectedPageId) { return; }
     if (ev) { ev.stopPropagation(); }
-    this.selectedBlockId = blockId;
-    this.selectedWidgetId = widgetId;
+    this.selectBlock(blockId);
+    this.selectWidget(widgetId);
 
     // this.actionApi.selectBlock(this.pageContainer?.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId ? this.widgets[widgetId] : undefined);
   }
 
   createWidget(): void {
     if (!this.selectedBlockId) { return; }
-    this.actionApi.createWidget(this.blocks[this.selectedBlockId]).subscribe();
+    this.actionApi.createWidget(this.blocks[this.selectedBlockId]).subscribe((w: IWidget | null) => {
+      if (!w) { return; }
+      this.selectWidget(w.id);
+    });
   }
 
   deleteWidget(): void {
-    const id: string | undefined = this.selectedWidgetId;
-    if (!id || !this.selectedBlockId) { return; }
-    this.selectedWidgetId = undefined;
-    const widgetIds: string[] = this.blocks[this.selectedBlockId].widgetIds?.filter((widgetId: string) => widgetId !== id) || [];
-    this.blockApi.updateProperty(this.selectedBlockId, { widgetIds }).subscribe(() => {
-      this.widgetApi.deleteItem(id).subscribe();
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.delete_value',
+          params: { value: 'LABEL.widget' }
+        }
+      }
+    }).afterClosed().subscribe((r: DialogResult) => {
+      if (r?.type !== DialogResultType.CONFIRM) { return; }
+      const id: string | undefined = this.selectedWidgetId;
+      if (!id || !this.selectedBlockId) { return; }
+      this.selectWidget(undefined);
+      const widgetIds: string[] = this.blocks[this.selectedBlockId].widgetIds?.filter((widgetId: string) => widgetId !== id) || [];
+      this.blockApi.updateProperty(this.selectedBlockId, { widgetIds }).subscribe(() => {
+        this.widgetApi.deleteItem(id).subscribe();
+      });
     });
   }
 
   deletePage(pageId: string): void {
-    if (!this.selectedFunnelId) { return; }
-    const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).filter((id: string) => id !== pageId);
-    const page: IPage = this.pages[pageId];
-    concat(
-      this.funnelApi.updateProperty(this.selectedFunnelId, { pageIds }),
-      ...(page.blockIds || []).map((blockId: string) => this.deleteBlock(blockId, pageId)),
-      this.pageApi.deleteItem(pageId),
-    ).subscribe(() => {
-      this.selectedPageId = undefined;
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.delete_value',
+          params: { value: 'LABEL.page' }
+        }
+      }
+    }).afterClosed().subscribe((r: DialogResult) => {
+      if (!this.selectedFunnelId || r?.type !== DialogResultType.CONFIRM) { return; }
+      const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).filter((id: string) => id !== pageId);
+      const page: IPage = this.pages[pageId];
+      concat(
+        this.funnelApi.updateProperty(this.selectedFunnelId, { pageIds }),
+        ...(page.blockIds || []).map((blockId: string) => this.deleteBlock(blockId, pageId)),
+        this.pageApi.deleteItem(pageId),
+      ).subscribe(() => {
+        this.selectPage(undefined);
+      });
     });
   }
 
-  deleteBlock(blockId: string, pageId: string): Observable<any> {
+  get highlightedPageId(): string | undefined {
+    if (!this.selectedWidgetId) { return undefined; }
+    const w: TWidgetType = this.widgets[this.selectedWidgetId];
+    return w && w.kind === 'button' && w.linkedTo ? w.linkedTo : undefined;
+  }
+
+  removeBlock(blockId: string, pageId: string): void {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.delete_value',
+          params: { value: 'LABEL.block' }
+        }
+      }
+    }).afterClosed().subscribe((r: DialogResult) => {
+      if (r?.type !== DialogResultType.CONFIRM) { return; }
+      this.deleteBlock(blockId, pageId).subscribe();
+    });
+  }
+
+  private deleteBlock(blockId: string, pageId: string): Observable<any> {
 
     if (!blockId) { return of(null); }
-    this.selectedBlockId = undefined;
+    this.selectBlock(undefined);
 
 
     const blockIds: string[] = this.pages[pageId].blockIds?.filter((bId: string) => bId !== blockId) || [];
@@ -202,9 +252,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  private checkIntersection(list: QueryList<ElementRef>, clazz?: string, options?: { listOfIds?: string[]; skip: boolean }): ElementRef | undefined {
+  private checkIntersection(list: QueryList<ElementRef>, clazz?: string, options?: { listOfIds?: string[]; skip?: boolean, excludes?: string[] }): ElementRef | undefined {
+    const elements: ElementRef[] = this.blockChildren.toArray().filter((e: ElementRef) => !options?.excludes?.includes(e.nativeElement.id));
+
     let match: ElementRef | undefined = undefined;
-    list.toArray().forEach((item: ElementRef) => {
+    elements.forEach((item: ElementRef) => {
       if (clazz) { item.nativeElement.classList.remove(clazz); }
       if (options?.skip ||
         ((!options?.listOfIds || options.listOfIds.length === 0 || options.listOfIds.includes(item.nativeElement.id)) &&
@@ -224,36 +276,55 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
 
-  selectPage(pageId: string): void {
-    setTimeout(() => {
-      this.selectedPageId = pageId;
-    });
+  selectPage(pageId: string | undefined): void {
+    this.selectedPageId = pageId;
+    this.selectWidget(undefined);
+    if (pageId) {
+      const page: IPage = this.pages[pageId];
+      if (page.blockIds && page.blockIds?.length > 0) {
+        this.selectBlock(page.blockIds[0]);
+      }
+    }
+  }
+
+  selectWidget(widgetId: string | undefined): void {
+    this.selectedWidgetId = widgetId;
+  }
+
+  selectBlock(blockId: string | undefined): void {
+    this.selectedBlockId = blockId;
+  }
+
+  blockMoved(event: { pointerPosition: { x: number; y: number } }, blockId: string): void {
+    this.pos = event.pointerPosition;
+    const { pos, el } = this.getBlockPosition([blockId]);
+    this.previewPosition = pos;
+    this.previewId = el ? el.nativeElement.id : undefined;
   }
 
   blockDropped(event: any, blockId: string, pageId: string): void {
-    const { el } = this.getBlockPosition();
-    if (el) {
-      const pos: 'start' | 'end' | undefined = this.previewPosition;
-      const index: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === el.nativeElement.id);
+    const pos = this.previewPosition;
+    if (this.previewId) {
+      const index: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === this.previewId);
       const curIndex: number = this.blockChildren.toArray().findIndex((e: ElementRef) => e.nativeElement.id === blockId);
       const finalIndex: number = index + (curIndex > index ? (pos === 'end' ? 1 : 0) : (pos === 'start' ? -1 : 0));
       const blockIds: string[] = this.pages[pageId].blockIds || [];
-      blockIds[curIndex] = blockIds[finalIndex];
-      blockIds[finalIndex] = blockId;
+      blockIds.splice(curIndex, 1);
+      blockIds.splice(finalIndex, 0, blockId);
+      // blockIds[curIndex] = blockIds[finalIndex];
+      // blockIds[finalIndex] = blockId;
+      console.log(curIndex, finalIndex);
       this.pageApi.updateProperty(pageId, { blockIds }).subscribe();
     }
 
     this.previewId = undefined;
   }
 
-
-  previewId: string | undefined = undefined;
-  previewPosition: 'start' | 'end' | undefined = undefined;
   startBlockDrag(event: any, blockId: string): void {
   }
 
-  getBlockPosition(): { pos: 'start' | 'end' | undefined; el: ElementRef | undefined } {
-    const el: ElementRef | undefined = this.checkIntersection(this.blockChildren);
+  private getBlockPosition(excludes: string[] = []): { pos: 'start' | 'end' | undefined; el: ElementRef | undefined } {
+    const el: ElementRef | undefined = this.checkIntersection(this.blockChildren, undefined, { excludes });
     if (el && this.pos) {
       const domRect: DOMRect = el.nativeElement.getBoundingClientRect();
       const middle: number = domRect.y + domRect.height / 2;
@@ -268,12 +339,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
 
-  blockMoved(event: { pointerPosition: { x: number; y: number } }, blockId: string): void {
-    this.pos = event.pointerPosition;
-    const { pos, el } = this.getBlockPosition();
-    this.previewPosition = pos;
-    this.previewId = el ? el.nativeElement.id : undefined;
-  }
 
   dragExited(event: { dropPoint: { x: number; y: number } }, widgetId: string, curBlockId: string): void {
     const pageId: number = this.viewChildren.toArray().find((item: ElementRef) => this.isPointerOverContainer(item.nativeElement))?.nativeElement?.id;
@@ -320,20 +385,39 @@ export class EditorComponent implements OnInit, OnDestroy {
 
 
   createBlock(): void {
-    if (!this.selectedPageId) { return; }
-    const b: IBlock = this.blockApi.createBlock();
-
-    const blockIds: string[] = (this.pages[this.selectedPageId].blockIds || []).concat(b.id);
-
-    concat(
-      this.pageApi.updateProperty(this.selectedPageId, { blockIds }),
-      this.blockApi.create(b.id, b),
-    ).subscribe();
+    const pageId: string | undefined = this.selectedPageId;
+    if (!pageId) { return; }
+    this.blockApi.createBlock().pipe(switchMap((block: IBlock) => {
+      const blockIds: string[] = (this.pages[pageId].blockIds || []).concat(block.id);
+      return this.pageApi.updateProperty(pageId, { blockIds });
+    })).subscribe();
   }
 
   demo(): void {
-    this.router.navigate(['/', 'viewer', this.selectedFunnelId]);
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.publish_value',
+          params: { value: 'LABEL.funnel' }
+        }
+      }
+    }).afterClosed().subscribe((r: DialogResult) => {
+      if (r?.type !== DialogResultType.CONFIRM) { return; }
+
+      this.dialog.open(UrlShortenerComponent).afterClosed().subscribe((t) => {
+
+        if (!this.selectedFunnelId) { return; }
+        this.funnelApi.updateProperty(this.selectedFunnelId, { published: true }).subscribe(() => {
+          this.snackbar.open(this.translate.instant('LABEL.publish_value', { value: this.translate.instant('LABEL.funnel') }), undefined, {
+            duration: 7500,
+          });
+          this.router.navigate(['/', 'viewer', this.selectedFunnelId]);
+        });
+      });
+    });
   }
+
   home(): void {
     this.router.navigate(['/', 'statistics']);
   }

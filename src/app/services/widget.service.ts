@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
 import { EWidgetType } from "../model/widget-type.enum";
 import { IWidget, TWidgetType } from "../model/widget.interface";
 import { GlobalUtils } from "../utils/global.utils";
@@ -26,5 +27,20 @@ export class WidgetService extends ModelService<TWidgetType> {
     };
 
     return w;
+  }
+
+
+  /**
+   * deletes a single widget
+   * @param {string} widgetId id of the widget
+   * @returns Observable<Record<string, any> | undefined>
+   */
+  public deleteWidget(widgetId: string): Observable<Record<string, any> | undefined> {
+    const widget: IWidget = this.items.getValue()[widgetId];
+    if (!widget) { return of(undefined); }
+
+    console.log('DELETE WIDGET',widgetId);
+
+    return this.deleteItem(widgetId);
   }
 }

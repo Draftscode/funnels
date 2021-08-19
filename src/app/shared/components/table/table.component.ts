@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { concat } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
-import { IBlock } from '../editor/block.interface';
-import { IPage } from '../page/page.interface';
+import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
+import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
 import { ResponseDialogComponent } from '../response/response.component';
 
 @Component({
@@ -17,7 +16,7 @@ import { ResponseDialogComponent } from '../response/response.component';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['position', 'pages', 'totalResponses', 'uncheckedResponses', 'actions'];
+  displayedColumns: string[] = ['position', 'published', 'pages', 'totalResponses', 'uncheckedResponses', 'actions'];
   private alive: boolean = true;
   funnels: IFunnel[] = [];
   constructor(
@@ -51,20 +50,24 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   deleteFunnel(funnel: IFunnel): void {
-
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.delete_value',
+          params: 'LABEL.funnel'
+        }
+      }
+    })
+      .afterClosed().subscribe((r: DialogResult) => {
+        if (r?.type === DialogResultType.CONFIRM) {
+          this.funnelApi.deleteFunnel(funnel.id).subscribe();
+        }
+      });
   }
 
   createFunnel(): void {
-    const block: IBlock = this.blockApi.createBlock();
-    const defaultPage: IPage = this.pageApi.createPage([block.id]);
-    const f: IFunnel = this.funnelApi.createFunnel([defaultPage.id]);
-
-    concat(
-      this.blockApi.create(block.id, block),
-      this.pageApi.create(defaultPage.id, defaultPage),
-      this.funnelApi.create(f.id, f),
-    ).subscribe(() => {
-    });
+    this.funnelApi.createFunnel().subscribe();
   }
 
   ngOnDestroy(): void {

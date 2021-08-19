@@ -4,7 +4,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { IFunnel } from 'src/app/model/funnel.interface';
-import { ViewerService } from '../viewer/viewer.service';
+import { FunnelService } from 'src/app/services/funnel.service';
+import { DataStorage, ViewerService } from '../viewer/viewer.service';
 
 @Component({
   selector: 'app-response',
@@ -13,29 +14,34 @@ import { ViewerService } from '../viewer/viewer.service';
   providers: [DatePipe],
 })
 export class ResponseDialogComponent implements OnInit {
-  responses: Observable<Record<string, any>[]>;
+  responses: Observable<DataStorage[]>;
   datasource: Record<string, any>[] = [];
   displayedColumns: string[] = [];
+
   constructor(
     private viewApi: ViewerService,
     private translate: TranslateService,
     private datePipe: DatePipe,
+    private funnelApi: FunnelService,
     @Inject(MAT_DIALOG_DATA) public data: IFunnel,
   ) {
     this.responses = this.viewApi.loadResponseForFunnel(data.id);
-    this.responses.subscribe((r: Record<string, any>[]) => {
-      this.datasource = r;
+
+    this.responses.subscribe((r: DataStorage[]) => {
       const keys: string[] = [];
-      this.datasource.forEach((record: Record<string, any>, index: number) => {
+      this.datasource = r.map((item: DataStorage, index: number) => {
+        const record: Record<string, any> = item.record;
         Object.keys(record).forEach((k: string) => {
           if (keys.indexOf(k) === -1) { keys.push(k); }
-          record[k] = this.parseEntry(record, k);
-
+          // record[k] = this.parseEntry(record, k);
         });
+        record.created = this.datePipe.transform(item.created, this.translate.instant('DATE.datetime'));
         record.rowNumber = index + 1;
+        record.unchecked = item.unchecked;
+        return record;
       });
 
-      this.displayedColumns = ['rowNumber'].concat(keys);
+      this.displayedColumns = ['rowNumber', 'created', 'unchecked'].concat(keys);
     });
   }
 

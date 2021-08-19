@@ -7,7 +7,6 @@ export interface IBlock {
   height: number;
   activated?: boolean;
   index: number;
-  widgets: Record<string, TWidgetType>;
   styles?: IStyles;
   widgetIds?: string[];
   background: string;

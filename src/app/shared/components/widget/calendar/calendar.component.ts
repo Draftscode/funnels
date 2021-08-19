@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatCalendar } from '@angular/material/datepicker';
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -16,6 +16,7 @@ export class CalendarComponent implements OnInit {
     this.calendarRef = calendarRef;
     this.update();
   }
+  @Output('afterChanges') afterChanges: EventEmitter<Record<string, any>> = new EventEmitter<Record<string, any>>();
 
   update(): void {
     if (!this.calendarRef || !this.widget) { return; }
@@ -49,6 +50,7 @@ export class CalendarComponent implements OnInit {
   onChange(ev: Moment) {
     if (!this.widget) { return; }
     this.widget.selected = ev.toDate().getTime();
+    this.afterChanges.emit({ selectedDate: new Date(this.widget.selected) });
   }
 
   get selected(): Moment | undefined {
