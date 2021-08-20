@@ -5,10 +5,10 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTableModule } from "@angular/material/table";
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { ConfirmDialogModule } from "../../dialog/confirm-dialog/confirm-dialog.module";
-import { SharedModule } from "../../shared.module";
 import { ResponseModule } from "../response/response.module";
 import { CreateFunnelDialogModule } from "./create-funnel-dialog/create-funnel-dialog.module";
 import { TableComponent } from "./table.component";
@@ -18,8 +18,8 @@ import { TableComponent } from "./table.component";
     TranslateModule,
     CommonModule,
     MatTableModule,
-    SharedModule,
     MatSlideToggleModule,
+    MatToolbarModule,
     NgScrollbarModule,
     MatIconModule,
     MatDialogModule,

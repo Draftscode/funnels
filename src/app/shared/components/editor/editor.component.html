@@ -40,7 +40,7 @@
                   <app-name-editor style="width: calc(100% - 30px)" (changes)="renamePage(pages[pageId].id,$event)"
                     [name]="pages[pageId]?.name"></app-name-editor>
                   <span class="spacer"></span>
-                  <button mat-icon-button style="display:none" [matMenuTriggerFor]="settingsMenu">
+                  <button mat-icon-button class="more" [matMenuTriggerFor]="settingsMenu">
                     <mat-icon>more_vert</mat-icon>
                   </button>
 

@@ -9,7 +9,6 @@ import { concat, forkJoin, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap, takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { IWidget, TWidgetType } from 'src/app/model/widget.interface';
-import { ActionService } from 'src/app/services/action.service';
 import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
@@ -19,6 +18,7 @@ import { DialogResult, DialogResultType } from '../../dialog/dialog-result.inter
 import { UrlShortenerComponent } from '../../dialog/url-shortener/url-shortener.component';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
+import { CreateDialogComponent } from './create-dialog/create-dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -59,7 +59,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     private pageApi: PageService,
     private blockApi: BlockService,
     private widgetApi: WidgetService,
-    private actionApi: ActionService,
     private router: Router,
     private currentRoute: ActivatedRoute,
     private dialog: MatDialog,
@@ -146,10 +145,25 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   createWidget(): void {
     if (!this.selectedBlockId) { return; }
-    this.actionApi.createWidget(this.blocks[this.selectedBlockId]).subscribe((w: IWidget | null) => {
+    this._createWidget(this.blocks[this.selectedBlockId]).subscribe((w: IWidget | null) => {
       if (!w) { return; }
       this.selectWidget(w.id);
     });
+  }
+
+  private _createWidget(block: IBlock): Observable<IWidget | null> {
+    return this.dialog.open(CreateDialogComponent, {
+      data: { block, }, panelClass: 'lightbox'
+    }).afterClosed().pipe(switchMap((r) => {
+      if (!r) { return of(null); }
+      const widgetIds: string[] = (block.widgetIds || []).concat(r.widget.id);
+
+
+      return this.blockApi.updateProperty(block.id, { widgetIds }).pipe(switchMap(() => {
+        return this.widgetApi.create(r.widget.id, r.widget);
+      }));
+
+    }));
   }
 
   deleteWidget(): void {

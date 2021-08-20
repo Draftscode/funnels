@@ -5,7 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { MatSliderModule } from '@angular/material/slider';
+import { TranslateModule } from '@ngx-translate/core';
 import { EditDialogComponent } from './edit-dialog.component';
 
 @NgModule({
@@ -14,11 +15,12 @@ import { EditDialogComponent } from './edit-dialog.component';
   ],
   exports: [EditDialogComponent],
   imports: [
-    SharedModule,
     CommonModule,
+    MatSliderModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    TranslateModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,

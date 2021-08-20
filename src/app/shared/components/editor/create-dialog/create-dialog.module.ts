@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 import { CreateDialogComponent } from './create-dialog.component';
 
 
@@ -9,8 +11,10 @@ import { CreateDialogComponent } from './create-dialog.component';
   declarations: [CreateDialogComponent],
   exports: [CreateDialogComponent],
   imports: [
-    SharedModule,
     CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslateModule,
   ]
 })
 export class CreateDialogModule { }

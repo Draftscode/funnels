@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { ImagesRoutingModule } from '../images-routing.module';
 import { ImgModule } from '../img/img.module';
 import { ImagesComponent } from './images.component';
@@ -23,7 +22,6 @@ import { ImagesComponent } from './images.component';
   ],
   exports: [ImagesComponent],
   imports: [
-    SharedModule,
     TranslateModule,
     FormsModule,
     CommonModule,

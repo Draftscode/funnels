@@ -62,7 +62,7 @@ export class FunnelService extends ModelService<IFunnel>{
       const copy: IFunnel = Object.assign({}, f);
       copy.id = GlobalUtils.uuidv4();
       copy.isTemplate = false;
-      copy.name = `${copy.name}-${GlobalUtils.uuidv4()}`;
+      copy.name = `${copy.name}-${this.translate.instant('LABEL.copy')}`;
       copy.pageIds = pages.map((p: IPage) => p.id);
       return copy;
     }

@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { NameEditorComponent } from './name-editor.component';
 
 
@@ -9,8 +12,11 @@ import { NameEditorComponent } from './name-editor.component';
   declarations: [NameEditorComponent],
   exports: [NameEditorComponent],
   imports: [
-    SharedModule,
     CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
   ]
 })
 export class NameEditorModule { }

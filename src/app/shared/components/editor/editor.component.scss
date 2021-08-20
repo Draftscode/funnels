@@ -97,6 +97,10 @@ $offset: 108px;
   border: 1px solid red;
 }
 
+.more {
+  display: none;
+}
+
 .list-entry:hover {
   .more {
     display: unset;
