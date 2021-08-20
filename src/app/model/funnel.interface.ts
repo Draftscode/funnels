@@ -6,4 +6,5 @@ export interface IFunnel {
   totalResponses: number;
   uncheckedResponses: number;
   published: boolean;
+  isTemplate: boolean;
 }

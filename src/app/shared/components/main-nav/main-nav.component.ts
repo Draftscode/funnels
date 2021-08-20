@@ -25,5 +25,4 @@ export class MainNavComponent {
   public toggle(): void {
     this.drawer?.toggle();
   }
-
 }

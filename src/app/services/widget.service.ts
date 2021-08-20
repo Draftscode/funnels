@@ -39,8 +39,13 @@ export class WidgetService extends ModelService<TWidgetType> {
     const widget: IWidget = this.items.getValue()[widgetId];
     if (!widget) { return of(undefined); }
 
-    console.log('DELETE WIDGET',widgetId);
-
     return this.deleteItem(widgetId);
+  }
+
+  public copy(widgetId: string): Observable<TWidgetType> {
+    const widget: TWidgetType = this.items.getValue()[widgetId];
+    const copy: TWidgetType = Object.assign({}, widget);
+    copy.id = GlobalUtils.uuidv4();
+    return this.create(copy.id, copy);
   }
 }

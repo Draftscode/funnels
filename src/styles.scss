@@ -28,6 +28,13 @@ ng-scrollbar.virtual-scroll {
   --scrollbar-border-radius: 10px;
 }
 
+.bg {
+  background-color: #f9f5ff;
+  background-image: url("./assets/images/background.svg");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 
 mat-toolbar.mat-toolbar.main {
   color: rgb(245, 245, 245);

@@ -7,9 +7,11 @@
       <button mat-icon-button (click)="home()">
         <mat-icon>home</mat-icon>
       </button>
-      <app-name-editor (changes)="renameFunnel(selectedFunnelId,$event)" [name]="funnels[selectedFunnelId]?.name">
+      <app-name-editor (changes)="updateFunnel({name:$event})" [name]="funnels[selectedFunnelId]?.name">
       </app-name-editor>
       <span class="spacer"></span>
+      <mat-slide-toggle style="margin-right:20px" (change)="updateFunnel({isTemplate:$event.checked})"
+        *ngIf="selectedFunnelId" [checked]="funnels[selectedFunnelId]?.isTemplate">Use as template</mat-slide-toggle>
       <button mat-stroked-button (click)="demo()" appearance="outline">
         <mat-icon>visibility</mat-icon> {{'BUTTON.publish'|translate}}
       </button>
@@ -17,9 +19,9 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav [disableClose]="!(layoutSmall$|async)" #drawer class="sidenav" [opened]="!(layoutSmall$|async)"
-      [mode]="(layoutSmall$|async)?'over':'side'">
+  <mat-sidenav-container style="width: 100%;height: calc(100% - 64px)">
+    <mat-sidenav [disableClose]="!(layoutSmall$|async)" #drawer class="sidenav" style="width: 300px; background: white"
+      [opened]="!(layoutSmall$|async)" [mode]="(layoutSmall$|async)?'over':'side'">
       <mat-tab-group>
         <mat-tab>
           <ng-template mat-tab-label>
@@ -35,10 +37,10 @@
                   *ngFor="let pageId of funnels[selectedFunnelId]?.pageIds; let pageIdx = index">
                   <span class="num">{{pageIdx+1}}</span>
 
-                  <app-name-editor class="list-entry-editor" (changes)="renamePage(pages[pageId].id,$event)"
+                  <app-name-editor style="width: calc(100% - 30px)" (changes)="renamePage(pages[pageId].id,$event)"
                     [name]="pages[pageId]?.name"></app-name-editor>
                   <span class="spacer"></span>
-                  <button mat-icon-button class="more" [matMenuTriggerFor]="settingsMenu">
+                  <button mat-icon-button style="display:none" [matMenuTriggerFor]="settingsMenu">
                     <mat-icon>more_vert</mat-icon>
                   </button>
 
@@ -88,7 +90,7 @@
               #container cdkDrag [cdkDragLockAxis]="'y'" class="drag-container">
 
               <!-- <div *cdkDragPreview >DAS IST MEIN PREVIEW</div> -->
-              <div *cdkDragPlaceholder class="default-placeholder"></div>
+              <div *cdkDragPlaceholder style="display: none"></div>
               <ng-container *ngIf="previewId === blockId && previewPosition === 'start'">
                 <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
               </ng-container>

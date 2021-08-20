@@ -11,6 +11,7 @@
     "publish": "publish"
   },
   "LABEL": {
+    "copy": "copy",
     "new": "new",
     "name": "name",
     "responses": "responses",

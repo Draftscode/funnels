@@ -8,7 +8,7 @@ export interface IBlock {
   activated?: boolean;
   index: number;
   styles?: IStyles;
-  widgetIds?: string[];
+  widgetIds: string[];
   background: string;
   image?: IImage;
   opacity?: number;

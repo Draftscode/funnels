@@ -9,6 +9,7 @@ import { PageService } from 'src/app/services/page.service';
 import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
 import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
 import { ResponseDialogComponent } from '../response/response.component';
+import { CreateFunnelDialogComponent } from './create-funnel-dialog/create-funnel-dialog.component';
 
 @Component({
   selector: 'app-table',
@@ -55,7 +56,7 @@ export class TableComponent implements OnInit, OnDestroy {
         title: 'LABEL.confirm',
         text: {
           value: 'QUESTION.delete_value',
-          params: 'LABEL.funnel'
+          params: { value: 'LABEL.funnel' }
         }
       }
     })
@@ -67,10 +68,21 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   createFunnel(): void {
-    this.funnelApi.createFunnel().subscribe();
+    this.dialog.open(CreateFunnelDialogComponent, { panelClass: 'lightbox' }).afterClosed().subscribe((r: DialogResult) => {
+      if (r?.type !== DialogResultType.CONFIRM) { return; }
+      if (r.data?.selected === 'blank') {
+        this.funnelApi.createFunnel().subscribe();
+      } else if (r.data?.funnelId) {
+        this.funnelApi.copy(r.data.funnelId).subscribe();
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.alive = false;
+  }
+
+  copyFunnel(funnel: IFunnel): void {
+    this.funnelApi.copy(funnel.id).subscribe((f: IFunnel) => { });
   }
 }

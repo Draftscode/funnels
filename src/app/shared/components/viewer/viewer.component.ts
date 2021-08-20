@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
@@ -18,6 +18,7 @@ import { ViewerService } from './viewer.service';
   styleUrls: ['./viewer.component.scss']
 })
 export class ViewerComponent implements OnInit, OnDestroy {
+  @HostBinding('class') classes = 'bg';
   funnels: Record<string, IFunnel> = {};
   pages: Record<string, IPage> = {};
   blocks: Record<string, IBlock> = {};

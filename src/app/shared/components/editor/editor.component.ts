@@ -95,7 +95,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  renameFunnel(funnelId: string, name: string): void { this.funnelApi.updateProperty(funnelId, { name }).subscribe(); }
   renamePage(pageId: string, name: string): void { this.pageApi.updateProperty(pageId, { name }).subscribe(); }
 
 
@@ -243,6 +242,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   isPointerOverContainer(container: HTMLElement): boolean {
     if (!this.pos) { return false; }
+
     const rect: DOMRect = container.getBoundingClientRect();
     if (this.pos.x >= rect.x && this.pos.x <= rect.x + rect.width
       && this.pos.y >= rect.y && this.pos.y <= rect.y + rect.height) {
@@ -253,7 +253,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private checkIntersection(list: QueryList<ElementRef>, clazz?: string, options?: { listOfIds?: string[]; skip?: boolean, excludes?: string[] }): ElementRef | undefined {
-    const elements: ElementRef[] = this.blockChildren.toArray().filter((e: ElementRef) => !options?.excludes?.includes(e.nativeElement.id));
+    const elements: ElementRef[] = list.toArray().filter((e: ElementRef) => !options?.excludes?.includes(e.nativeElement.id));
 
     let match: ElementRef | undefined = undefined;
     elements.forEach((item: ElementRef) => {
@@ -265,6 +265,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         match = item;
       }
     });
+
     return match;
   }
 
@@ -313,7 +314,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       blockIds.splice(finalIndex, 0, blockId);
       // blockIds[curIndex] = blockIds[finalIndex];
       // blockIds[finalIndex] = blockId;
-      console.log(curIndex, finalIndex);
       this.pageApi.updateProperty(pageId, { blockIds }).subscribe();
     }
 
@@ -416,6 +416,11 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
+
+  updateFunnel(property: Record<string, any>): void {
+    if (!this.selectedFunnelId) { return; }
+    this.funnelApi.updateProperty(this.selectedFunnelId, property).subscribe();
   }
 
   home(): void {

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
+import { IWidget } from "../model/widget.interface";
 import { IBlock } from "../shared/components/editor/block.interface";
 import { GlobalUtils } from "../utils/global.utils";
 import { ModelService } from "./model.service";
@@ -28,6 +29,7 @@ export class BlockService extends ModelService<IBlock>{
       backgroundOpacity: 1,
       background: 'white',
       imageOpacity: 1,
+      widgetIds: [],
     };
 
     return this.create(block.id, block);
@@ -42,11 +44,30 @@ export class BlockService extends ModelService<IBlock>{
     const block: IBlock = this.items.getValue()[blockId];
     if (!block) { return of(undefined); }
 
-    console.log('BLOCK', block);
     if ((block.widgetIds?.length || 0) > 0) {
       return forkJoin((block.widgetIds || []).map((widgetId: string) =>
         this.widgetApi.deleteWidget(widgetId))).pipe(switchMap(() => this.deleteItem(blockId)));
     }
     return this.deleteItem(blockId);
+  }
+
+  public copy(blockId: string): Observable<IBlock> {
+    const block: IBlock = this.items.getValue()[blockId];
+
+    if (block.widgetIds.length > 0) {
+
+      return forkJoin(block.widgetIds.map((widgetId: string) => this.widgetApi.copy(widgetId)))
+        .pipe(switchMap((widgets: IWidget[]) => {
+          const copy: IBlock = Object.assign({}, block);
+          copy.id = GlobalUtils.uuidv4();
+          copy.widgetIds = widgets.map((p: IWidget) => p.id);
+          return this.create(copy.id, copy);
+        }));
+    }
+
+    const copy: IBlock = Object.assign({}, block);
+    copy.id = GlobalUtils.uuidv4();
+    copy.widgetIds = [];
+    return this.create(copy.id, copy);
   }
 }

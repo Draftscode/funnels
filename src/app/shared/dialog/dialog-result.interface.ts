@@ -5,4 +5,5 @@ export enum DialogResultType {
 
 export interface DialogResult {
   type: DialogResultType;
+  data?: Record<string, any>;
 }

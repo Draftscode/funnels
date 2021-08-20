@@ -50,11 +50,30 @@ export class PageService extends ModelService<IPage>{
     const page: IPage = this.items.getValue()[pageId];
     if (!page) { return of(undefined); }
 
-    console.log('delete page', page);
     if ((page.blockIds?.length || 0) > 0) {
       return forkJoin((page.blockIds || []).map((blockId: string) =>
         this.blockApi.deleteBlock(blockId))).pipe(switchMap(() => this.deleteItem(pageId)));
     }
     return this.deleteItem(pageId);
+  }
+
+  public copy(pageId: string): Observable<IPage> {
+    const page: IPage = this.items.getValue()[pageId];
+
+    if (page.blockIds.length > 0) {
+
+      return forkJoin(page.blockIds.map((pageId: string) => this.blockApi.copy(pageId)))
+        .pipe(switchMap((blocks: IBlock[]) => {
+          const copy: IPage = Object.assign({}, page);
+          copy.id = GlobalUtils.uuidv4();
+          copy.blockIds = blocks.map((p: IBlock) => p.id);
+          return this.create(copy.id, copy);
+        }));
+    }
+
+    const copy: IPage = Object.assign({}, page);
+    copy.id = GlobalUtils.uuidv4();
+    copy.blockIds = [];
+    return this.create(copy.id, copy);
   }
 }

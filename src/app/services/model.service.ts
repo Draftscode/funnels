@@ -1,7 +1,8 @@
 import { BehaviorSubject, Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
 
 export class ModelService<T> {
-  public items: BehaviorSubject<Record<string, T>> = new BehaviorSubject<Record<string, T>>({});
+  protected items: BehaviorSubject<Record<string, T>> = new BehaviorSubject<Record<string, T>>({});
   protected STORAGE_NAME = '';
 
   protected load(): Observable<Record<string, T>> {
@@ -33,9 +34,12 @@ export class ModelService<T> {
     return of(item);
   }
 
-
+  /**
+   * gets a copy of the current items
+   * @returns Observable<Record<string, T>>
+   */
   public itemsChanged(): Observable<Record<string, T>> {
-    return this.items.asObservable();
+    return this.items.asObservable().pipe(map((d: Record<string, T>) => Object.assign({}, d)));
   }
 
   public updateItems(items: Record<string, T>): Observable<Record<string, T>> {
