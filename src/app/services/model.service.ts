@@ -1,9 +1,15 @@
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, Subject } from "rxjs";
+import { map, switchMap, tap } from "rxjs/operators";
 
 export class ModelService<T> {
   protected items: BehaviorSubject<Record<string, T>> = new BehaviorSubject<Record<string, T>>({});
   protected STORAGE_NAME = '';
+  protected updated: Subject<T> = new Subject<T>();
+
+  public afterItemUpdated(): Observable<T> {
+    return this.updated.asObservable().pipe(map((r: T) =>
+      JSON.parse(JSON.stringify(r))));
+  }
 
   protected load(): Observable<Record<string, T>> {
 
@@ -14,10 +20,26 @@ export class ModelService<T> {
     return of(items);
   }
 
-  public getItemById(id: string | undefined): T | undefined {
-    if (!id) { return undefined; }
+  public getItemById(id: string | undefined): Observable<T | undefined> {
+    if (!id) { return of(undefined); }
     const items: Record<string, any> = this.items.getValue() || {};
-    return items[id];
+    return of(items[id]);
+  }
+
+  /**
+   * get items by ids
+   * @param {string[]} ids list of ids
+   * @returns Observable<Record<string, T>>
+   */
+  public getItemsById(ids: string[] | undefined): Observable<Record<string, T>> {
+    if (!ids || ids.length === 0) { return of({}); }
+    const items: Record<string, T> = JSON.parse(JSON.stringify(this.items.getValue()));
+    Object.keys(items || []).forEach((key: string) => {
+      if (ids.includes(key)) { return; }
+      delete items[key];
+    });
+    return of(items);
+
   }
 
   private store(items: Record<string, T>): Observable<Record<string, T>> {
@@ -38,8 +60,12 @@ export class ModelService<T> {
    * gets a copy of the current items
    * @returns Observable<Record<string, T>>
    */
-  public itemsChanged(): Observable<Record<string, T>> {
-    return this.items.asObservable().pipe(map((d: Record<string, T>) => Object.assign({}, d)));
+  public itemsChanged(ids: string[] | undefined = undefined): Observable<Record<string, T>> {
+    return this.items.asObservable().pipe(map((d: Record<string, T>) => {
+      const r: Record<string, T> = Object.assign({}, d);
+      (ids || []).forEach((id: string) => delete r[id]);
+      return r;
+    }));
   }
 
   public updateItems(items: Record<string, T>): Observable<Record<string, T>> {
@@ -53,9 +79,9 @@ export class ModelService<T> {
     console.warn(`[update property]`, changes, item);
     const newItem: T = Object.assign(item, changes);
     items[id] = newItem;
-
-
-    return this.updateItems(items);
+    return this.updateItems(items).pipe(tap(() => {
+      this.updated.next(items[id]);
+    }));
   }
 
   public deleteItem(itemId: string): Observable<Record<string, T>> {

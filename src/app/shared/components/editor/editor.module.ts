@@ -25,6 +25,7 @@ import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
 import { NameEditorModule } from './name-editor/name-editor.module';
 import { NumberModule } from './number/number.module';
+import { SidebarModule } from './sidebar/sidebar.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { NumberModule } from './number/number.module';
     EditDialogModule,
     DesignModule,
     NumberModule,
+    SidebarModule,
   ]
 })
 export class EditorModule { }

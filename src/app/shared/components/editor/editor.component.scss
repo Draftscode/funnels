@@ -7,16 +7,7 @@ $offset: 108px;
   height: 100%;
 }
 
-.pages-wrapper {
-  width: 100%;
-  height: calc(100% - 37px);
-}
 
-.add-btn {
-  border-top: 1px solid rgb(235, 226, 226);
-  width: 100%;
-  border-radius: 0;
-}
 
 .page-wrapper {
   margin: auto;
@@ -78,40 +69,12 @@ mat-sidenav.sidenav {
   height: calc(100% - 4px);
 }
 
-.list-entry {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  padding: 0px;
-  cursor: pointer;
-  padding: 4px 12px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.more {
-  display: none;
-}
-
-.list-entry:hover {
-  .more {
-    display: unset;
-  }
-}
 
 .actions {
   display: flex;
   justify-content: center;
 }
 
-.list-entry.selected {
-  background: #d5dde6;
-}
-
-.list-entry.activated {
-  background: #386cff;
-  color: white;
-}
 
 :host ::ng-deep {
   mat-tab-group.mat-tab-group {

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { concat, forkJoin, Observable, of } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap, takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { IWidget, TWidgetType } from 'src/app/model/widget.interface';
@@ -19,6 +19,7 @@ import { UrlShortenerDialogService } from '../../dialog/url-shortener/url-shorte
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
 import { CreateDialogComponent } from './create-dialog/create-dialog.component';
+import { EditorService } from './editor.service';
 
 @Component({
   selector: 'app-editor',
@@ -40,11 +41,10 @@ export class EditorComponent implements OnInit, OnDestroy {
   pos: { x: number; y: number } | undefined;
 
   pages: Record<string, IPage> = {};
-  funnels: Record<string, IFunnel> = {};
   blocks: Record<string, IBlock> = {};
   widgets: Record<string, TWidgetType> = {};
+  funnel: IFunnel | undefined;
 
-  selectedFunnelId: string | undefined;
   selectedBlockId: string | undefined;
   selectedWidgetId: string | undefined;
   selectedPageId: string | undefined;
@@ -67,19 +67,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private confirmDialogService: ConfirmDialogService,
     private urlShortenerDialogService: UrlShortenerDialogService,
+    public editorApi: EditorService,
   ) {
-    this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => {
-      this.funnels = items;
-    });
-    this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => {
-      this.pages = items; this.init();
-    });
-    this.blockApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => {
-      this.blocks = items;
-    });
-    this.widgetApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => {
-      this.widgets = items;
-    });
+    this.editorApi.selectedPageIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedPageId = id);
+    this.editorApi.selectedBlockIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedBlockId = id);
+    this.editorApi.selectedWidgetIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedWidgetId = id);
+
+    this.editorApi.blocksChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => this.blocks = items);
+
+    this.editorApi.widgetsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => this.widgets = items);
   }
 
   /**
@@ -87,12 +83,12 @@ export class EditorComponent implements OnInit, OnDestroy {
    * @returns void
    */
   private init(): void {
-    if (!this.pages || !this.selectedFunnelId) { return; }
-    const fId: string = this.selectedFunnelId;
-    const keys: string[] = Object.keys(this.pages || {}).filter((k: string) => this.funnels[fId].pageIds.includes(k));
+    if (!this.pages || !this.funnel) { return; }
+    const keys: string[] = Object.keys(this.pages || {}).filter((k: string) => this.funnel?.pageIds.includes(k));
 
     if (!this.selectedPageId && keys.length > 0) {
-      this.selectPage(keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0]);
+      const pageId: string = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
+      this.editorApi.selectPage(pageId, this.pages[pageId].blockIds);
     }
   }
 
@@ -114,19 +110,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.blockApi.updateProperty(blockId, { height }).subscribe();
   }
 
-  createPage(): void {
-    const funnelId: string | undefined = this.selectedFunnelId;
-    if (!funnelId) { return; }
-    const pageIds: string[] = this.funnels[funnelId].pageIds || [];
-    this.pageApi.createPage({ index: pageIds.length }).pipe(switchMap((page: IPage) => {
-      this.selectPage(page.id);
-      return this.funnelApi.updateProperty(funnelId, { pageIds: pageIds.concat(page.id) });
-    })).subscribe();
-  }
-
   ngOnInit(): void {
     this.currentRoute.params.pipe(takeWhile(() => this.alive)).subscribe(params => {
-      this.selectedFunnelId = params.funnelId; this.init();
+      this.funnelApi.getItemById(params.funnelId).subscribe((funnel: IFunnel | undefined) => {
+        this.funnel = funnel;
+        if (this.funnel?.pageIds) {
+          this.pageApi.getItemsById(this.funnel.pageIds).subscribe((pages: Record<string, IPage>) => {
+            this.pages = pages;
+            this.init();
+          });
+        }
+        this.init();
+      });
     });
   }
 
@@ -139,17 +134,15 @@ export class EditorComponent implements OnInit, OnDestroy {
   activateWidget(ev: MouseEvent | undefined, el: ElementRef, blockId: string, widgetId: string | undefined = undefined): void {
     if (!this.selectedPageId) { return; }
     if (ev) { ev.stopPropagation(); }
-    this.selectBlock(blockId);
-    this.selectWidget(widgetId);
-
-    // this.actionApi.selectBlock(this.pageContainer?.nativeElement, this.pages[this.selectedPageId], this.blocks[blockId], widgetId ? this.widgets[widgetId] : undefined);
+    this.editorApi.selectBlock(blockId);
+    this.editorApi.selectWidget(widgetId);
   }
 
   createWidget(): void {
     if (!this.selectedBlockId) { return; }
     this._createWidget(this.blocks[this.selectedBlockId]).subscribe((w: IWidget | null) => {
       if (!w) { return; }
-      this.selectWidget(w.id);
+      this.editorApi.selectWidget(w.id);
     });
   }
 
@@ -179,7 +172,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
       const id: string | undefined = this.selectedWidgetId;
       if (!id || !this.selectedBlockId) { return; }
-      this.selectWidget(undefined);
+      this.editorApi.selectWidget(undefined);
       const widgetIds: string[] = this.blocks[this.selectedBlockId].widgetIds?.filter((widgetId: string) => widgetId !== id) || [];
       this.blockApi.updateProperty(this.selectedBlockId, { widgetIds }).subscribe(() => {
         this.widgetApi.deleteItem(id).subscribe();
@@ -195,15 +188,15 @@ export class EditorComponent implements OnInit, OnDestroy {
         params: { value: 'LABEL.page' }
       }
     }).subscribe((r: DialogResult) => {
-      if (!this.selectedFunnelId || r?.type !== DialogResultType.CONFIRM) { return; }
-      const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).filter((id: string) => id !== pageId);
+      if (!this.funnel || r?.type !== DialogResultType.CONFIRM) { return; }
+      const pageIds: string[] = (this.funnel.pageIds || []).filter((id: string) => id !== pageId);
       const page: IPage = this.pages[pageId];
       concat(
-        this.funnelApi.updateProperty(this.selectedFunnelId, { pageIds }),
-        ...(page.blockIds || []).map((blockId: string) => this.deleteBlock(blockId, pageId)),
+        this.funnelApi.updateProperty(this.funnel.id, { pageIds }),
+        ...(page.blockIds || []).map((blockId: string) => this.editorApi.deleteBlock(blockId, pageId)),
         this.pageApi.deleteItem(pageId),
       ).subscribe(() => {
-        this.selectPage(undefined);
+        this.editorApi.selectPage(undefined);
       });
     });
   }
@@ -212,38 +205,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (!this.selectedWidgetId) { return undefined; }
     const w: TWidgetType = this.widgets[this.selectedWidgetId];
     return w && w.kind === 'button' && w.linkedTo ? w.linkedTo : undefined;
-  }
-
-  removeBlock(blockId: string, pageId: string): void {
-    this.confirmDialogService.open({
-      title: 'LABEL.confirm',
-      text: {
-        value: 'QUESTION.delete_value',
-        params: { value: 'LABEL.block' }
-      }
-    }).subscribe((r: DialogResult) => {
-      if (r?.type !== DialogResultType.CONFIRM) { return; }
-      this.deleteBlock(blockId, pageId).subscribe();
-    });
-  }
-
-  private deleteBlock(blockId: string, pageId: string): Observable<any> {
-
-    if (!blockId) { return of(null); }
-    this.selectBlock(undefined);
-
-
-    const blockIds: string[] = this.pages[pageId].blockIds?.filter((bId: string) => bId !== blockId) || [];
-
-    return this.pageApi.updateProperty(pageId, { blockIds }).pipe(switchMap(() => {
-      const widgetIds: string[] = this.blocks[blockId].widgetIds || [];
-      if (widgetIds.length <= 0) { return of(null); }
-      return forkJoin(widgetIds.map((widgetId: string) => {
-        return this.widgetApi.deleteItem(widgetId);
-      }));
-    })).pipe(switchMap(() => {
-      return this.blockApi.deleteItem(blockId);
-    }));;
   }
 
   zoomIn(): void { this.zoom += 10; }
@@ -279,31 +240,16 @@ export class EditorComponent implements OnInit, OnDestroy {
     return match;
   }
 
+  selectPage(page: IPage): void {
+    if (!page) { return; }
+    this.editorApi.selectPage(page.id, page.blockIds);
+  }
+
   dragMove(event: { pointerPosition: { x: number; y: number } }, blockId: string): void {
     this.pos = event?.pointerPosition || undefined;
     this.checkIntersection(this.viewChildren, 'activated');
     this.checkIntersection(this.widgetChildren, 'has-drag-over', { listOfIds: this.blocks[blockId].widgetIds, skip: false });
     this.checkIntersection(this.blockChildren, 'has-drag-over', { skip: false });
-  }
-
-
-  selectPage(pageId: string | undefined): void {
-    this.selectedPageId = pageId;
-    this.selectWidget(undefined);
-    if (pageId) {
-      const page: IPage = this.pages[pageId];
-      if (page.blockIds && page.blockIds?.length > 0) {
-        this.selectBlock(page.blockIds[0]);
-      }
-    }
-  }
-
-  selectWidget(widgetId: string | undefined): void {
-    this.selectedWidgetId = widgetId;
-  }
-
-  selectBlock(blockId: string | undefined): void {
-    this.selectedBlockId = blockId;
   }
 
   blockMoved(event: { pointerPosition: { x: number; y: number } }, blockId: string): void {
@@ -414,20 +360,20 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
 
       this.urlShortenerDialogService.open().subscribe((t: DialogResult) => {
-        if (!this.selectedFunnelId) { return; }
-        this.funnelApi.updateProperty(this.selectedFunnelId, { published: true }).subscribe(() => {
+        if (!this.funnel) { return; }
+        this.funnelApi.updateProperty(this.funnel.id, { published: true }).subscribe(() => {
           this.snackbar.open(this.translate.instant('LABEL.publish_value', { value: this.translate.instant('LABEL.funnel') }), undefined, {
             duration: 7500,
           });
-          this.router.navigate(['/', 'viewer', this.selectedFunnelId]);
+          this.router.navigate(['/', 'viewer', this.funnel!.id]);
         });
       });
     });
   }
 
   updateFunnel(property: Record<string, any>): void {
-    if (!this.selectedFunnelId) { return; }
-    this.funnelApi.updateProperty(this.selectedFunnelId, property).subscribe();
+    if (!this.funnel) { return; }
+    this.funnelApi.updateProperty(this.funnel.id, property).subscribe();
   }
 
   home(): void {

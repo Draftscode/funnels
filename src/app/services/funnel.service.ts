@@ -15,7 +15,9 @@ export class FunnelService extends ModelService<IFunnel>{
   constructor(private pageApi: PageService, private translate: TranslateService) {
     super();
     this.STORAGE_NAME = 'funnels';
-    this.load().subscribe((f: Record<string, IFunnel>) => { this.updateItems(f).subscribe(); });
+    this.load().subscribe((f: Record<string, IFunnel>) => {
+      this.updateItems(f).subscribe();
+    });
   }
 
   /**

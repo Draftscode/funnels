@@ -1,0 +1,29 @@
+<ng-scrollbar class="pages-wrapper">
+  <mat-list *ngIf="pages">
+    <div [style.border]="highlightedPageId === pageValue.value.id ? '1px solid red':'unset'" [id]="pageValue.value.id"
+      [class.selected]="selectedPageId ===pageValue.value.id" matRipple
+      (click)="editorApi.selectPage(pageValue.value.id,pageValue.value.blockIds)" class="list-entry" mat-list-item
+      #listItem *ngFor="let pageValue of pages|keyvalue; let pageIdx = index">
+      <app-number [value]="pageIdx+1"></app-number>
+
+      <app-name-editor style="width: calc(100% - 30px)" (changes)="renamePage(pageValue.value.id,$event)"
+        [name]="pageValue.value.name"></app-name-editor>
+      <span class="spacer"></span>
+      <button mat-icon-button class="more" [matMenuTriggerFor]="settingsMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #settingsMenu>
+        <menu mat-menu-item>
+          <mat-icon>edit</mat-icon>Bearbeiten
+        </menu>
+        <!-- <menu mat-menu-item (click)="editorApi.deletePage(funnel,pageId)">
+          <mat-icon>delete</mat-icon>Löschen
+        </menu> -->
+      </mat-menu>
+    </div>
+  </mat-list>
+</ng-scrollbar>
+<button *ngIf="funnelId" (click)="editorApi.createPage(funnelId)" class="add-btn" mat-button>
+  <mat-icon>add</mat-icon> {{'BUTTON.add_value'|translate:{value:'LABEL.page'|translate} }}
+</button>
