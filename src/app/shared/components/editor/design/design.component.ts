@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { TWidgetType } from 'src/app/model/widget.interface';
 import { BlockService } from 'src/app/services/block.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
-import { ImageDialog } from '../../images/dialog/image.dialog';
+import { DialogResult } from 'src/app/shared/dialog/dialog-result.interface';
+import { ImageDialogService } from 'src/app/shared/dialog/image-dialog/image-dialog.service';
 import { IImage } from '../../images/image.interface';
 import { IPage } from '../../page/page.interface';
 import { IBlock } from '../block.interface';
@@ -20,10 +20,10 @@ export class DesignComponent implements OnInit, OnChanges {
   @Input() page: IPage | undefined;
 
   constructor(
-    private dialog: MatDialog,
     private widgetApi: WidgetService,
     private blockApi: BlockService,
     private pageApi: PageService,
+    private imageDialogService: ImageDialogService,
   ) { }
 
   ngOnInit(): void {
@@ -34,18 +34,11 @@ export class DesignComponent implements OnInit, OnChanges {
 
   updateImage(type: 'widget' | 'block'): void {
     const image: IImage | undefined = type === 'widget' ? this.widget?.image : this.block?.image;
-    this.dialog.open(ImageDialog, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '90%',
-      width: '90%',
-      panelClass: 'lightbox',
-      data: { image },
-    }).afterClosed().subscribe((r) => {
-      if (r?.type !== 'confirm') { return; }
+    this.imageDialogService.open({ image }).subscribe((r: DialogResult) => {
+      if (r?.type !== 'confirm' || r?.data) { return; }
 
-      if (type === 'widget') { this.changeWidget({ image: r.image }); }
-      else if (type === 'block') { this.changeBlock({ image: r.image }); }
+      if (type === 'widget') { this.changeWidget({ image: r.data?.image }); }
+      else if (type === 'block') { this.changeBlock({ image: r.data?.image }); }
 
     });
   }

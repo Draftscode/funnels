@@ -6,8 +6,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { PageModule } from '../../page/page.module';
-import { PreviewModule } from '../preview/preview.module';
+import { PageModule } from '../../components/page/page.module';
+import { PreviewModule } from '../../components/table/preview/preview.module';
 import { CreateFunnelDialogComponent } from './create-funnel-dialog.component';
 
 

@@ -1,7 +1,8 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { IImage } from "../image.interface";
+import { IImage } from "../../components/images/image.interface";
+import { ImageDialogData } from "./image-dialog.service";
 
 @Component({
   selector: 'app-image-dialog',
@@ -16,7 +17,7 @@ export class ImageDialog {
   selectedFormat: string = 'original';
   opacity: number = 1;
 
-  constructor(private dialog: MatDialogRef<ImageDialog>, @Inject(MAT_DIALOG_DATA) public data: { image: IImage },) {
+  constructor(private dialog: MatDialogRef<ImageDialog>, @Inject(MAT_DIALOG_DATA) public data: ImageDialogData,) {
     this.curImage = this.data?.image;
     this.term = localStorage.getItem('search') || undefined;
 
@@ -56,11 +57,11 @@ export class ImageDialog {
     this.curImage = undefined;
   }
 
-  close(data:Record<string,any>):void {
+  close(data: Record<string, any>): void {
     this.dialog.close(data);
   }
 
   useImage(): void {
-    this.dialog.close({ type: 'confirm', image: this.curImage });
+    this.dialog.close({ type: 'confirm', data: { image: this.curImage } });
   }
 }

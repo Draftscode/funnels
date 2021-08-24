@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { FunnelService } from 'src/app/services/funnel.service';
-import { DataStorage, ViewerService } from '../viewer/viewer.service';
+import { DataStorage, ViewerService } from '../../components/viewer/viewer.service';
 
 @Component({
   selector: 'app-response',

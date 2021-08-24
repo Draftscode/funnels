@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
-import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
-import { PageService } from 'src/app/services/page.service';
-import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogService } from '../../dialog/confirm-dialog/confirm-dialog.service';
+import { CreateFunnelDialogService } from '../../dialog/create-funnel-dialog/create-funnel-dialog.service';
 import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
-import { ResponseDialogComponent } from '../response/response.component';
-import { CreateFunnelDialogComponent } from './create-funnel-dialog/create-funnel-dialog.component';
+import { ResponseDialogService } from '../../dialog/response/response-dialog.service';
 
 @Component({
   selector: 'app-table',
@@ -23,9 +21,10 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private funnelApi: FunnelService,
-    private pageApi: PageService,
-    private blockApi: BlockService,
     private dialog: MatDialog,
+    private confirmDialogService: ConfirmDialogService,
+    private responseDialogService: ResponseDialogService,
+    private createFunnelDialogService: CreateFunnelDialogService,
   ) {
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((f: Record<string, IFunnel>) => {
       this.funnels = Object.keys(f || {}).map((key: string) => f[key]);
@@ -36,14 +35,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   openResponses(element: IFunnel): void {
-    this.dialog.open(ResponseDialogComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '90%',
-      width: '90%',
-      panelClass: 'lightbox',
-      data: element
-    });
+    this.responseDialogService.open(element).subscribe();
   }
 
   editFunnel(funnel: IFunnel): void {
@@ -51,24 +43,21 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   deleteFunnel(funnel: IFunnel): void {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'LABEL.confirm',
-        text: {
-          value: 'QUESTION.delete_value',
-          params: { value: 'LABEL.funnel' }
-        }
+    this.confirmDialogService.open({
+      title: 'LABEL.confirm',
+      text: {
+        value: 'QUESTION.delete_value',
+        params: { value: 'LABEL.funnel' }
       }
-    })
-      .afterClosed().subscribe((r: DialogResult) => {
-        if (r?.type === DialogResultType.CONFIRM) {
-          this.funnelApi.deleteFunnel(funnel.id).subscribe();
-        }
-      });
+    }).subscribe((r: DialogResult) => {
+      if (r?.type === DialogResultType.CONFIRM) {
+        this.funnelApi.deleteFunnel(funnel.id).subscribe();
+      }
+    });
   }
 
   createFunnel(): void {
-    this.dialog.open(CreateFunnelDialogComponent, { panelClass: 'lightbox' }).afterClosed().subscribe((r: DialogResult) => {
+    this.createFunnelDialogService.open().subscribe((r: DialogResult) => {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
       if (r.data?.selected === 'blank') {
         this.funnelApi.createFunnel().subscribe();

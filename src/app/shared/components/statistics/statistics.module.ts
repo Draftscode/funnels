@@ -7,7 +7,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ImportService } from 'src/app/services/import.service';
-import { ChartModule } from '../chart/chart.module';
 import { TableModule } from '../table/table.module';
 import { StatisticsRoutingModule } from './statistics-routing.module';
 import { StatisticsComponent } from './statistics.component';
@@ -20,7 +19,6 @@ import { StatisticsComponent } from './statistics.component';
   imports: [
     CommonModule,
     MatGridListModule,
-    ChartModule,
     NgScrollbarModule,
     TableModule,
     MatToolbarModule,

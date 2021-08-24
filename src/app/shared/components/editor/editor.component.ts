@@ -13,9 +13,9 @@ import { BlockService } from 'src/app/services/block.service';
 import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
-import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogService } from '../../dialog/confirm-dialog/confirm-dialog.service';
 import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
-import { UrlShortenerComponent } from '../../dialog/url-shortener/url-shortener.component';
+import { UrlShortenerDialogService } from '../../dialog/url-shortener/url-shortender-dialog.service';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
 import { CreateDialogComponent } from './create-dialog/create-dialog.component';
@@ -65,6 +65,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private snackbar: MatSnackBar,
     private translate: TranslateService,
+    private confirmDialogService: ConfirmDialogService,
+    private urlShortenerDialogService: UrlShortenerDialogService,
   ) {
     this.funnelApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IFunnel>) => {
       this.funnels = items;
@@ -167,15 +169,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   deleteWidget(): void {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'LABEL.confirm',
-        text: {
-          value: 'QUESTION.delete_value',
-          params: { value: 'LABEL.widget' }
-        }
+    this.confirmDialogService.open({
+      title: 'LABEL.confirm',
+      text: {
+        value: 'QUESTION.delete_value',
+        params: { value: 'LABEL.widget' }
       }
-    }).afterClosed().subscribe((r: DialogResult) => {
+    }).subscribe((r: DialogResult) => {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
       const id: string | undefined = this.selectedWidgetId;
       if (!id || !this.selectedBlockId) { return; }
@@ -188,15 +188,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   deletePage(pageId: string): void {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'LABEL.confirm',
-        text: {
-          value: 'QUESTION.delete_value',
-          params: { value: 'LABEL.page' }
-        }
+    this.confirmDialogService.open({
+      title: 'LABEL.confirm',
+      text: {
+        value: 'QUESTION.delete_value',
+        params: { value: 'LABEL.page' }
       }
-    }).afterClosed().subscribe((r: DialogResult) => {
+    }).subscribe((r: DialogResult) => {
       if (!this.selectedFunnelId || r?.type !== DialogResultType.CONFIRM) { return; }
       const pageIds: string[] = (this.funnels[this.selectedFunnelId].pageIds || []).filter((id: string) => id !== pageId);
       const page: IPage = this.pages[pageId];
@@ -217,15 +215,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   removeBlock(blockId: string, pageId: string): void {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'LABEL.confirm',
-        text: {
-          value: 'QUESTION.delete_value',
-          params: { value: 'LABEL.block' }
-        }
+    this.confirmDialogService.open({
+      title: 'LABEL.confirm',
+      text: {
+        value: 'QUESTION.delete_value',
+        params: { value: 'LABEL.block' }
       }
-    }).afterClosed().subscribe((r: DialogResult) => {
+    }).subscribe((r: DialogResult) => {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
       this.deleteBlock(blockId, pageId).subscribe();
     });
@@ -408,19 +404,16 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   demo(): void {
-    this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'LABEL.confirm',
-        text: {
-          value: 'QUESTION.publish_value',
-          params: { value: 'LABEL.funnel' }
-        }
+    this.confirmDialogService.open({
+      title: 'LABEL.confirm',
+      text: {
+        value: 'QUESTION.publish_value',
+        params: { value: 'LABEL.funnel' }
       }
-    }).afterClosed().subscribe((r: DialogResult) => {
+    }).subscribe((r: DialogResult) => {
       if (r?.type !== DialogResultType.CONFIRM) { return; }
 
-      this.dialog.open(UrlShortenerComponent).afterClosed().subscribe((t) => {
-
+      this.urlShortenerDialogService.open().subscribe((t: DialogResult) => {
         if (!this.selectedFunnelId) { return; }
         this.funnelApi.updateProperty(this.selectedFunnelId, { published: true }).subscribe(() => {
           this.snackbar.open(this.translate.instant('LABEL.publish_value', { value: this.translate.instant('LABEL.funnel') }), undefined, {

@@ -31,11 +31,11 @@
           <ng-template matTabContent>
             <ng-scrollbar class="pages-wrapper">
               <mat-list *ngIf="pages">
-                <div [class.highlighted]="highlightedPageId === pageId" [id]="pageId"
+                <div [style.border]="highlightedPageId === pageId ? '1px solid red':'unset'" [id]="pageId"
                   [class.selected]="selectedPageId === pages[pageId].id" matRipple
                   (click)="selectPage(pages[pageId].id)" class="list-entry" mat-list-item #listItem
                   *ngFor="let pageId of funnels[selectedFunnelId]?.pageIds; let pageIdx = index">
-                  <span class="num">{{pageIdx+1}}</span>
+                  <app-number [value]="pageIdx+1"></app-number>
 
                   <app-name-editor style="width: calc(100% - 30px)" (changes)="renamePage(pages[pageId].id,$event)"
                     [name]="pages[pageId]?.name"></app-name-editor>

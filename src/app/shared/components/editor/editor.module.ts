@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,9 +16,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ConfirmDialogModule } from '../../dialog/confirm-dialog/confirm-dialog.module';
-import { UrlShortenerModule } from '../../dialog/url-shortener/url-shortener.module';
-import { ImageDialogModule } from '../images/dialog/image-dialog.module';
 import { PageModule } from '../page/page.module';
 import { CreateDialogModule } from './create-dialog/create-dialog.module';
 import { CtxComponent } from './ctx/ctx.component';
@@ -28,6 +24,7 @@ import { EditDialogModule } from './edit-dialog/edit-dialog.module';
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component';
 import { NameEditorModule } from './name-editor/name-editor.module';
+import { NumberModule } from './number/number.module';
 
 @NgModule({
   declarations: [
@@ -49,19 +46,16 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     NameEditorModule,
     TranslateModule,
     MatButtonToggleModule,
-    MatDialogModule,
     MatTooltipModule,
     MatRippleModule,
     FormsModule,
-    ConfirmDialogModule,
     NgScrollbarModule,
     PageModule,
     MatSidenavModule,
     CreateDialogModule,
     EditDialogModule,
-    ImageDialogModule,
     DesignModule,
-    UrlShortenerModule,
+    NumberModule,
   ]
 })
 export class EditorModule { }

@@ -10,9 +10,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ImagesModule } from '../component/images.module';
-import { ImagesRoutingModule } from '../images-routing.module';
-import { ImgModule } from '../img/img.module';
+import { ImagesModule } from '../../components/images/component/images.module';
+import { ImagesRoutingModule } from '../../components/images/images-routing.module';
+import { ImgModule } from '../../components/images/img/img.module';
 import { ImageDialog } from './image.dialog';
 
 

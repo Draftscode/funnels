@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "release": "ng build --configuration production --build-optimizer true --aot true --stats-json",
+    "stats": "webpack-bundle-analyzer dist/funnel/stats.json"
   },
   "private": true,
   "dependencies": {
