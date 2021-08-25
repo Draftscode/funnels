@@ -33,6 +33,7 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.item) { return; }
     this.myHeight = this.height + (this.item?.height || 0);
   }
 

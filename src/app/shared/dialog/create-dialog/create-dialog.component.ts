@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EWidgetType } from 'src/app/model/widget-type.enum';
 import { IButton, ICalendar, ISubscriptionForm, IText, IWidget, TWidgetType } from 'src/app/model/widget.interface';
 import { WidgetService } from 'src/app/services/widget.service';
-import { IBlock } from '../block.interface';
+import { IBlock } from '../../components/editor/block.interface';
 
 @Component({
   selector: 'app-create-dialog',

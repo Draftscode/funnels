@@ -1,7 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 import { IFunnel } from "src/app/model/funnel.interface";
+import { TWidgetType } from "src/app/model/widget.interface";
+import { BlockService } from "src/app/services/block.service";
 import { FunnelService } from "src/app/services/funnel.service";
+import { PageService } from "src/app/services/page.service";
+import { WidgetService } from "src/app/services/widget.service";
+import { IBlock } from "../editor/block.interface";
+import { IPage } from "../page/page.interface";
 
 export interface DataStorage {
   unchecked: boolean;
@@ -16,7 +23,48 @@ const STORAGE_NAME = 'saved-funnels';
 })
 export class ViewerService {
 
-  constructor(private funnelApi: FunnelService) { }
+  // funnel objects
+  private funnel: BehaviorSubject<IFunnel | undefined> = new BehaviorSubject<IFunnel | undefined>(undefined);
+  private pages: BehaviorSubject<Record<string, IPage>> = new BehaviorSubject<Record<string, IPage>>({});
+  private blocks: BehaviorSubject<Record<string, IBlock>> = new BehaviorSubject<Record<string, IBlock>>({});
+  private widgets: BehaviorSubject<Record<string, TWidgetType>> = new BehaviorSubject<Record<string, TWidgetType>>({});
+
+  constructor(
+    private pageApi: PageService,
+    private blockApi: BlockService,
+    private widgetApi: WidgetService,
+    private funnelApi: FunnelService) {
+  }
+  // objects changed
+  public blocksChanged(): Observable<Record<string, IBlock>> { return this.blocks.asObservable(); }
+  public widgetsChanged(): Observable<Record<string, TWidgetType>> { return this.widgets.asObservable(); }
+  public pagesChanged(): Observable<Record<string, IPage>> { return this.pages.asObservable(); }
+  public funnelChanged(): Observable<IFunnel | undefined> { return this.funnel.asObservable(); }
+
+  public getFunnelById(funnelId: string | undefined): Observable<any> {
+    if (!funnelId) { return of(void 0); }
+    return this.funnelApi.getItemById(funnelId).pipe(switchMap((funnel: IFunnel | undefined) => {
+      this.funnel.next(funnel);
+      console.log(funnel);
+      if (!funnel?.pageIds) { return of(void 0); }
+      return this.pageApi.getItemsById(funnel.pageIds).pipe(switchMap((pages: Record<string, IPage>) => {
+        this.pages.next(pages);
+        if (!pages) { return of(void 0); }
+
+        let blockIds: string[] = [];
+        Object.keys(pages).forEach((pageId: string) => blockIds = blockIds.concat(pages[pageId].blockIds));
+        return this.blockApi.getItemsById(blockIds).pipe(switchMap((blocks: Record<string, IBlock>) => {
+          this.blocks.next(blocks);
+          if (!blocks) { return of(void 0); }
+          let widgetIds: string[] = [];
+          Object.keys(blocks).forEach((blockId: string) => widgetIds = widgetIds.concat(blocks[blockId].widgetIds));
+          return this.widgetApi.getItemsById(widgetIds).pipe(tap((widgets: Record<string, TWidgetType>) => {
+            this.widgets.next(widgets);
+          }));
+        }));
+      }));
+    }));
+  }
 
   public loadResponseForFunnel(funnelId: string): Observable<DataStorage[]> {
     const data: Record<string, DataStorage[]> = this.load() || {};

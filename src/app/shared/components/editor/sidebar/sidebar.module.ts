@@ -8,15 +8,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NameEditorModule } from '../name-editor/name-editor.module';
 import { NumberModule } from '../number/number.module';
+import { SidebarRoutingModule } from './sidebar-routing.module';
 import { SidebarComponent } from './sidebar.component';
+import { SortByIndexPipe } from './sort-by-index.pipe';
 
 @NgModule({
   declarations: [
-    SidebarComponent
+    SidebarComponent,
+    SortByIndexPipe,
   ],
   exports: [SidebarComponent],
   imports: [
     CommonModule,
+    SidebarRoutingModule,
     NgScrollbarModule,
     TranslateModule,
     MatListModule,
@@ -25,6 +29,7 @@ import { SidebarComponent } from './sidebar.component';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-  ]
+  ],
+  providers: [],
 })
 export class SidebarModule { }

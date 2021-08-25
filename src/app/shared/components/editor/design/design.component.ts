@@ -1,42 +1,57 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { takeWhile } from 'rxjs/operators';
 import { TWidgetType } from 'src/app/model/widget.interface';
 import { BlockService } from 'src/app/services/block.service';
-import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
-import { DialogResult } from 'src/app/shared/dialog/dialog-result.interface';
+import { DialogResult, DialogResultType } from 'src/app/shared/dialog/dialog-result.interface';
 import { ImageDialogService } from 'src/app/shared/dialog/image-dialog/image-dialog.service';
 import { IImage } from '../../images/image.interface';
-import { IPage } from '../../page/page.interface';
 import { IBlock } from '../block.interface';
+import { EditorService } from '../editor.service';
 
 @Component({
   selector: 'app-design',
   templateUrl: './design.component.html',
   styleUrls: ['./design.component.scss']
 })
-export class DesignComponent implements OnInit, OnChanges {
-  @Input() widget: TWidgetType | undefined;
-  @Input() block: IBlock | undefined;
-  @Input() page: IPage | undefined;
+export class DesignComponent implements OnDestroy {
+  selectedBlockId: string | undefined;
+  selectedWidgetId: string | undefined;
+  blocks: Record<string, IBlock> = {};
+  widgets: Record<string, TWidgetType> = {};
+  private alive: boolean = true;
 
   constructor(
+    private editorApi: EditorService,
     private widgetApi: WidgetService,
     private blockApi: BlockService,
-    private pageApi: PageService,
     private imageDialogService: ImageDialogService,
-  ) { }
+  ) {
+    this.editorApi.selectedBlockIdChanged().pipe(takeWhile(() => this.alive)).subscribe((item: string | undefined) => this.selectedBlockId = item);
+    this.editorApi.selectedWidgetIdChanged().pipe(takeWhile(() => this.alive)).subscribe((item: string | undefined) => this.selectedWidgetId = item);
+    this.editorApi.widgetsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => this.widgets = items);
+    this.editorApi.blocksChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => this.blocks = items);
 
-  ngOnInit(): void {
+    setTimeout(()=>{
+      console.log(this.selectedBlockId,this.blocks,this.selectedWidgetId,this.widgets);
+    },4000)
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  get block(): IBlock | undefined {
+    if (!this.selectedBlockId) { return undefined; }
+    return this.blocks[this.selectedBlockId];
+  }
+
+  get widget(): TWidgetType | undefined {
+    if (!this.selectedWidgetId) { return undefined; }
+    return this.widgets[this.selectedWidgetId];
   }
 
   updateImage(type: 'widget' | 'block'): void {
     const image: IImage | undefined = type === 'widget' ? this.widget?.image : this.block?.image;
     this.imageDialogService.open({ image }).subscribe((r: DialogResult) => {
-      if (r?.type !== 'confirm' || r?.data) { return; }
 
+      if (r?.type !== DialogResultType.CONFIRM || !r?.data) { return; }
       if (type === 'widget') { this.changeWidget({ image: r.data?.image }); }
       else if (type === 'block') { this.changeBlock({ image: r.data?.image }); }
 
@@ -73,16 +88,7 @@ export class DesignComponent implements OnInit, OnChanges {
     this.blockApi.updateProperty(this.block.id, changes).subscribe();
   }
 
-  /**
-   * changes properties of a page
-   * @param {Record<string,any>} changes map of the properties changed
-   * @returns void
-   */
-  changePage(changes: Record<string, any>): void {
-    if (!this.page) { return; }
-    this.pageApi.updateProperty(this.page.id, changes).subscribe();
-  }
-
-  change(a: any): void {
+  ngOnDestroy(): void {
+    this.alive = false;
   }
 }

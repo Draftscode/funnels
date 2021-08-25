@@ -14,11 +14,11 @@ import { FunnelService } from 'src/app/services/funnel.service';
 import { PageService } from 'src/app/services/page.service';
 import { WidgetService } from 'src/app/services/widget.service';
 import { ConfirmDialogService } from '../../dialog/confirm-dialog/confirm-dialog.service';
+import { CreateWidgetDialogService } from '../../dialog/create-dialog/create-widget-dialog.service';
 import { DialogResult, DialogResultType } from '../../dialog/dialog-result.interface';
 import { UrlShortenerDialogService } from '../../dialog/url-shortener/url-shortender-dialog.service';
 import { IPage } from '../page/page.interface';
 import { IBlock } from './block.interface';
-import { CreateDialogComponent } from './create-dialog/create-dialog.component';
 import { EditorService } from './editor.service';
 
 @Component({
@@ -37,6 +37,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   @ViewChildren('container', { read: ElementRef }) blockChildren!: QueryList<ElementRef>;
   @ViewChildren('widgetRef', { read: ElementRef }) widgetChildren!: QueryList<ElementRef>;
   nameEditable: boolean = false;
+  activeRoute: 'pages' | 'design' = 'pages';
 
   pos: { x: number; y: number } | undefined;
 
@@ -68,32 +69,19 @@ export class EditorComponent implements OnInit, OnDestroy {
     private confirmDialogService: ConfirmDialogService,
     private urlShortenerDialogService: UrlShortenerDialogService,
     public editorApi: EditorService,
+    private createWidgetDialogService: CreateWidgetDialogService,
   ) {
     this.editorApi.selectedPageIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedPageId = id);
     this.editorApi.selectedBlockIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedBlockId = id);
     this.editorApi.selectedWidgetIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedWidgetId = id);
 
     this.editorApi.blocksChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => this.blocks = items);
-
     this.editorApi.widgetsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => this.widgets = items);
-  }
-
-  /**
-   * loads related details like the pages connected to the funnel
-   * @returns void
-   */
-  private init(): void {
-    if (!this.pages || !this.funnel) { return; }
-    const keys: string[] = Object.keys(this.pages || {}).filter((k: string) => this.funnel?.pageIds.includes(k));
-
-    if (!this.selectedPageId && keys.length > 0) {
-      const pageId: string = keys.sort((a: string, b: string) => this.pages[a].index < this.pages[b].index ? -1 : 1)[0];
-      this.editorApi.selectPage(pageId, this.pages[pageId].blockIds);
-    }
+    this.editorApi.pagesChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => this.pages = items);
+    this.editorApi.funnelChanged().pipe(takeWhile(() => this.alive)).subscribe((item: IFunnel | undefined) => this.funnel = item);
   }
 
   renamePage(pageId: string, name: string): void { this.pageApi.updateProperty(pageId, { name }).subscribe(); }
-
 
   /** Predicate function that only allows even numbers to be dropped into a list. */
   enterPredicate(index: number, item: CdkDrag<IBlock>): boolean {
@@ -112,17 +100,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentRoute.params.pipe(takeWhile(() => this.alive)).subscribe(params => {
-      this.funnelApi.getItemById(params.funnelId).subscribe((funnel: IFunnel | undefined) => {
-        this.funnel = funnel;
-        if (this.funnel?.pageIds) {
-          this.pageApi.getItemsById(this.funnel.pageIds).subscribe((pages: Record<string, IPage>) => {
-            this.pages = pages;
-            this.init();
-          });
-        }
-        this.init();
-      });
+      this.editorApi.selectFunnel(params.funnelId);
     });
+
+    this.navTo(this.activeRoute);
   }
 
   ngOnDestroy(): void {
@@ -147,9 +128,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private _createWidget(block: IBlock): Observable<IWidget | null> {
-    return this.dialog.open(CreateDialogComponent, {
-      data: { block, }, panelClass: 'lightbox'
-    }).afterClosed().pipe(switchMap((r) => {
+    return this.createWidgetDialogService.open({ block }).pipe(switchMap((r) => {
       if (!r) { return of(null); }
       const widgetIds: string[] = (block.widgetIds || []).concat(r.widget.id);
 
@@ -157,7 +136,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       return this.blockApi.updateProperty(block.id, { widgetIds }).pipe(switchMap(() => {
         return this.widgetApi.create(r.widget.id, r.widget);
       }));
-
     }));
   }
 
@@ -201,15 +179,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  get highlightedPageId(): string | undefined {
-    if (!this.selectedWidgetId) { return undefined; }
-    const w: TWidgetType = this.widgets[this.selectedWidgetId];
-    return w && w.kind === 'button' && w.linkedTo ? w.linkedTo : undefined;
-  }
-
   zoomIn(): void { this.zoom += 10; }
 
   zoomOut(): void { this.zoom -= 10; }
+
+
+  navTo(type: 'pages' | 'design'): void {
+    this.activeRoute = type;
+    this.router.navigate(['./', type], { relativeTo: this.currentRoute });
+  }
 
   isPointerOverContainer(container: HTMLElement): boolean {
     if (!this.pos) { return false; }
@@ -242,7 +220,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   selectPage(page: IPage): void {
     if (!page) { return; }
-    this.editorApi.selectPage(page.id, page.blockIds);
+    this.editorApi.selectPage(page.id);
   }
 
   dragMove(event: { pointerPosition: { x: number; y: number } }, blockId: string): void {

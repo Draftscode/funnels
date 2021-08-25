@@ -10,8 +10,8 @@
       <app-name-editor (changes)="updateFunnel({name:$event})" [name]="funnel.name">
       </app-name-editor>
       <span class="spacer"></span>
-      <mat-slide-toggle style="margin-right:20px" (change)="updateFunnel({isTemplate:$event.checked})"
-        *ngIf="funnel" [checked]="funnel.isTemplate">Use as template</mat-slide-toggle>
+      <mat-slide-toggle style="margin-right:20px" (change)="updateFunnel({isTemplate:$event.checked})" *ngIf="funnel"
+        [checked]="funnel.isTemplate">Use as template</mat-slide-toggle>
       <button mat-stroked-button (click)="demo()" appearance="outline">
         <mat-icon>visibility</mat-icon> {{'BUTTON.publish'|translate}}
       </button>
@@ -22,34 +22,25 @@
   <mat-sidenav-container style="width: 100%;height: calc(100% - 64px)">
     <mat-sidenav [disableClose]="!(layoutSmall$|async)" #drawer class="sidenav" style="width: 300px; background: white"
       [opened]="!(layoutSmall$|async)" [mode]="(layoutSmall$|async)?'over':'side'">
-      <mat-tab-group>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">auto_stories</mat-icon>
-            {{'LABEL.pages'|translate}}
-          </ng-template>
-          <ng-template matTabContent>
-            <app-sidebar [pages]="pages" [selectedPageId]="selectedPageId" [highlightedPageId]="highlightedPageId"
-              [funnelId]="funnel?.id"></app-sidebar>
-          </ng-template>
-        </mat-tab>
-        <mat-tab [disabled]="!selectedPageId || !selectedBlockId">
-          <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">palette</mat-icon>
-            {{'LABEL.design'|translate}}
-          </ng-template>
-          <ng-template matTabContent>
-            <app-design [page]="selectedPageId?pages[selectedPageId]:undefined"
-              [block]="selectedBlockId ? blocks[selectedBlockId] : undefined"
-              [widget]="selectedWidgetId ? widgets[selectedWidgetId] : undefined"></app-design>
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link [active]="activeRoute == 'pages'" (click)="navTo('pages')">
+          <mat-icon class="example-tab-icon">auto_stories</mat-icon>
+          {{'LABEL.pages'|translate}}
+        </a>
+        <a [disabled]="!selectedWidgetId && !selectedBlockId" mat-tab-link [active]="activeRoute == 'design'"
+          (click)="navTo('design')">
+          <mat-icon class="example-tab-icon">palette</mat-icon>
+          {{'LABEL.design'|translate}}
+        </a>
+      </nav>
+      <div style="display: flex;height: calc(100% - 49px);">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content class="bg">
       <ng-template #noPage>
         Es wurde noch keine Seite erstellt <br>
-        <button mat-button (click)="editorApi.createPage(funnel.id)">
+        <button mat-button (click)="editorApi.createPage()">
           <mat-icon>add</mat-icon>{{'BUTTON.add_value'|translate:{value:'LABEL.page'|translate} }}
         </button>
       </ng-template>
@@ -68,8 +59,9 @@
                 <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
               </ng-container>
 
-              <app-block [displayEmpty]="true" (selected)="activateWidget(undefined,blockRef.elementRef,blockId)"
-                #blockRef [height]="blockId === selectedBlockId ? curDragHeight:0"
+              <app-block *ngIf="blocks[blockId]" [displayEmpty]="true"
+                (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef
+                [height]="blockId === selectedBlockId ? curDragHeight:0"
                 [class.activated]="blockId === selectedBlockId && (blocks[blockId]?.widgetIds || []).length === 0"
                 [item]="blocks[blockId]">
                 <ng-template #widgetTemplate let-widgetId>

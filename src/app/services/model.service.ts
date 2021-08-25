@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, of, Subject } from "rxjs";
-import { map, switchMap, tap } from "rxjs/operators";
+import { delay, map, switchMap, tap } from "rxjs/operators";
 
 export class ModelService<T> {
   protected items: BehaviorSubject<Record<string, T>> = new BehaviorSubject<Record<string, T>>({});
@@ -21,9 +21,10 @@ export class ModelService<T> {
   }
 
   public getItemById(id: string | undefined): Observable<T | undefined> {
+    console.warn(`[HTTP] get item by id for ${this.STORAGE_NAME}`, id);
     if (!id) { return of(undefined); }
     const items: Record<string, any> = this.items.getValue() || {};
-    return of(items[id]);
+    return of(items[id]).pipe(delay(100));
   }
 
   /**
@@ -32,13 +33,14 @@ export class ModelService<T> {
    * @returns Observable<Record<string, T>>
    */
   public getItemsById(ids: string[] | undefined): Observable<Record<string, T>> {
+    console.warn(`[HTTP] get items for ${this.STORAGE_NAME}`, ids);
     if (!ids || ids.length === 0) { return of({}); }
     const items: Record<string, T> = JSON.parse(JSON.stringify(this.items.getValue()));
     Object.keys(items || []).forEach((key: string) => {
       if (ids.includes(key)) { return; }
       delete items[key];
     });
-    return of(items);
+    return of(items).pipe(delay(100));
 
   }
 
@@ -76,12 +78,12 @@ export class ModelService<T> {
   public updateProperty(id: string, changes: Record<string, any>): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     const item: T = items[id];
-    console.warn(`[update property]`, changes, item);
+    console.warn(`[HTTP] update property for ${this.STORAGE_NAME}`, changes, item);
     const newItem: T = Object.assign(item, changes);
     items[id] = newItem;
     return this.updateItems(items).pipe(tap(() => {
       this.updated.next(items[id]);
-    }));
+    })).pipe(delay(100));
   }
 
   public deleteItem(itemId: string): Observable<Record<string, T>> {

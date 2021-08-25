@@ -2,7 +2,7 @@
   <!-- button -->
   <ng-container *ngIf="widget.kind==='button'">
     <app-button [enableBadges]="mode === 'editor'" [activated]="activated"
-      [badge]="widget.linkedTo ? (pages[widget.linkedTo].index +1).toString() : undefined"
+      [badge]="widget.linkedTo && pages[widget.linkedTo] ? (pages[widget.linkedTo].index +1).toString() : undefined"
       (afterClicked)="onClick($event)" [widget]="widget"></app-button>
   </ng-container>
   <!-- text -->
