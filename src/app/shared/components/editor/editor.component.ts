@@ -1,7 +1,6 @@
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ElementRef, OnDestroy, OnInit, Query, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,9 +32,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   curDragHeight: number = 0;
 
-  @ViewChildren('listItem') viewChildren!: QueryList<ElementRef>;
   @ViewChildren('container', { read: ElementRef }) blockChildren!: QueryList<ElementRef>;
   @ViewChildren('widgetRef', { read: ElementRef }) widgetChildren!: QueryList<ElementRef>;
+  private viewChildren: QueryList<ElementRef> = new QueryList();
   nameEditable: boolean = false;
   activeRoute: 'pages' | 'design' = 'pages';
 
@@ -62,7 +61,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     private widgetApi: WidgetService,
     private router: Router,
     private currentRoute: ActivatedRoute,
-    private dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
     private snackbar: MatSnackBar,
     private translate: TranslateService,
@@ -71,6 +69,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     public editorApi: EditorService,
     private createWidgetDialogService: CreateWidgetDialogService,
   ) {
+    this.editorApi.pageItemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: QueryList<ElementRef>) => this.viewChildren = items);
     this.editorApi.selectedPageIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedPageId = id);
     this.editorApi.selectedBlockIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedBlockId = id);
     this.editorApi.selectedWidgetIdChanged().pipe(takeWhile(() => this.alive)).subscribe((id: string | undefined) => this.selectedWidgetId = id);

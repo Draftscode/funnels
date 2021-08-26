@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.highlighted {
+  border: 2px dashed rgb(var(--main-highlight-color));
+}
+
 .list-entry:hover {
   .more {
     display: unset;

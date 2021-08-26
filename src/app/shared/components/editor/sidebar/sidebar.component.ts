@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 import { IFunnel } from 'src/app/model/funnel.interface';
 import { TWidgetType } from 'src/app/model/widget.interface';
@@ -12,6 +12,10 @@ import { EditorService } from '../editor.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  @ViewChildren('listItem') set children(viewChildren: QueryList<ElementRef>) {
+    this.editorApi.changePageItems(viewChildren);
+  }
+
   pages: Record<string, IPage> = {};
   widgets: Record<string, TWidgetType> = {};
   selectedPageId: string | undefined;

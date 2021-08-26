@@ -1,6 +1,6 @@
 <ng-scrollbar class="pages-wrapper">
   <mat-list *ngIf="pages">
-    <div [style.border]="highlightedPageId === pageValue.value.id ? '1px solid red':'unset'" [id]="pageValue.value.id"
+    <div [class.highlighted]="highlightedPageId === pageValue.value.id" [id]="pageValue.value.id"
       [class.selected]="selectedPageId ===pageValue.value.id" matRipple
       (click)="editorApi.selectPage(pageValue.value.id)" class="list-entry" mat-list-item #listItem
       *ngFor="let pageValue of pages|keyvalue|sortByIndex; let pageIdx = index">

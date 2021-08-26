@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { ElementRef, Injectable, QueryList } from "@angular/core";
 import { BehaviorSubject, concat, forkJoin, Observable, of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 import { IFunnel } from "src/app/model/funnel.interface";
@@ -14,6 +14,7 @@ import { IBlock } from "./block.interface";
 
 @Injectable({ providedIn: 'root' })
 export class EditorService {
+  private pageItems: BehaviorSubject<QueryList<ElementRef>> = new BehaviorSubject<QueryList<ElementRef>>(new QueryList());
   // funnel objects
   private funnel: BehaviorSubject<IFunnel | undefined> = new BehaviorSubject<IFunnel | undefined>(undefined);
   private pages: BehaviorSubject<Record<string, IPage>> = new BehaviorSubject<Record<string, IPage>>({});
@@ -25,6 +26,9 @@ export class EditorService {
   private selectedWidgetId: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(undefined);
   private selectedBlockId: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(undefined);
   private selectedFunnelId: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(undefined);
+
+  public pageItemsChanged(): Observable<QueryList<ElementRef>> { return this.pageItems.asObservable(); }
+  public changePageItems(items: QueryList<ElementRef>): void { this.pageItems.next(items); }
 
   constructor(private pageApi: PageService,
     private blockApi: BlockService,
