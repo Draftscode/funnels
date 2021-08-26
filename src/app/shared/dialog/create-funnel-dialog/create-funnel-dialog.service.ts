@@ -12,7 +12,7 @@ export class CreateFunnelDialogService {
   public open(): Observable<DialogResult> {
     // the magical part of importing a module asynchronously
     return from(import('./create-funnel-dialog.module')).pipe(switchMap(() => {
-      return this.matDialog.open(CreateFunnelDialogComponent, { panelClass: 'lightbox' }).afterClosed();
+      return this.matDialog.open(CreateFunnelDialogComponent, { }).afterClosed();
     }));
   }
 

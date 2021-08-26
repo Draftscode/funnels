@@ -38,7 +38,6 @@ export class ViewerComponent implements OnInit, OnDestroy {
   }
 
   private init(): void {
-    console.log('INIT', this.pages);
     if (Object.keys(this.pages).length <= 0 && !this.selectedPageId) { return this.selectedPageId = undefined; }
 
     this.selectedPageId = Object.keys(this.pages)

@@ -10,7 +10,7 @@ import { CreateDialogComponent } from './create-dialog.component';
 export class CreateWidgetDialogService {
   constructor(protected matDialog: MatDialog) { }
 
-  public open(data: { block: IBlock }): Observable<{ widget: TWidgetType }> {
+  public open(data: { block?: IBlock }): Observable<{ widget?: TWidgetType; area?: boolean }> {
     // the magical part of importing a module asynchronously
     return from(import('./create-dialog.module')).pipe(switchMap(() => {
       return this.matDialog.open(CreateDialogComponent, { data }).afterClosed();

@@ -92,25 +92,15 @@
       </div>
       <div class="actions" *ngIf="selectedPageId">
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-          <mat-button-toggle [disabled]="!selectedBlockId" value="bold" (click)="createWidget()"
+          <mat-button-toggle value="bold" (click)="createWidget()"
             [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.widget'|translate}">
             <mat-icon>add</mat-icon>
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="!selectedPageId" value="bold" (click)="createBlock()"
-            [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
-            <mat-icon>add_box</mat-icon>
-          </mat-button-toggle>
-          <mat-button-toggle [disabled]="!selectedWidgetId"
+          <mat-button-toggle [disabled]="!selectedWidgetId && !selectedBlockId"
             [matTooltip]="'BUTTON.delete_value'|translate:{value:'LABEL.widget'|translate}" value="italic"
             (click)="deleteWidget()">
             <mat-icon>delete</mat-icon>
           </mat-button-toggle>
-          <mat-button-toggle [disabled]="!selectedBlockId"
-            [matTooltip]="'BUTTON.delete_value'|translate:{value:'LABEL.block'|translate}" value="italic"
-            (click)="editorApi.removeBlock(selectedBlockId!,selectedPageId!)">
-            <mat-icon>layers_clear</mat-icon>
-          </mat-button-toggle>
-          <!-- <mat-button-toggle value="underline"><mat-icon>add</mat-icon></mat-button-toggle> -->
         </mat-button-toggle-group>
       </div>
     </mat-sidenav-content>

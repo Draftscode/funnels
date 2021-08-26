@@ -33,6 +33,26 @@ export class EditorService {
     private funnelApi: FunnelService) {
     this.funnelApi.afterItemUpdated().subscribe((f: IFunnel) => { this.funnel.next(f); });
 
+    // delete
+    this.pageApi.afterItemDeleted().subscribe((pageId: string) => {
+      const pages: Record<string, IPage> = JSON.parse(JSON.stringify(this.pages.getValue()));
+      delete pages[pageId];
+      this.pages.next(pages);
+    });
+
+    this.blockApi.afterItemDeleted().subscribe((blockId: string) => {
+      const blocks: Record<string, IBlock> = JSON.parse(JSON.stringify(this.blocks.getValue()));
+      delete blocks[blockId];
+      this.blocks.next(blocks);
+    });
+
+    this.widgetApi.afterItemDeleted().subscribe((widgetId: string) => {
+      const widgets: Record<string, TWidgetType> = JSON.parse(JSON.stringify(this.widgets.getValue()));
+      delete widgets[widgetId];
+      this.widgets.next(widgets);
+    });
+
+    // update
     this.pageApi.afterItemUpdated().subscribe((p: IPage) => {
       const pages: Record<string, IPage> = JSON.parse(JSON.stringify(this.pages.getValue()));
       pages[p.id] = p;
@@ -81,7 +101,6 @@ export class EditorService {
       if (!funnel?.pageIds) { return of(void 0); }
       return this.pageApi.getItemsById(funnel.pageIds).pipe(switchMap((pages: Record<string, IPage>) => {
         this.pages.next(pages);
-        console.log(pages);
         if (!pages) { return of(void 0); }
 
         // select page

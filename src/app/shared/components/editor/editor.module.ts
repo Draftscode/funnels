@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -28,7 +27,6 @@ import { NameEditorModule } from './name-editor/name-editor.module';
     DragDropModule,
     CommonModule,
     MatIconModule,
-    MatMenuModule,
     MatToolbarModule,
     MatSlideToggleModule,
     MatTabsModule,

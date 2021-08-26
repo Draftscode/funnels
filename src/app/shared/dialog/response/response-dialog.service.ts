@@ -18,7 +18,7 @@ export class ResponseDialogService {
         maxHeight: '100vh',
         height: '90%',
         width: '90%',
-        panelClass: 'lightbox', data
+        data,
       }).afterClosed();
     }));
   }

@@ -31,10 +31,6 @@ export class DesignComponent implements OnDestroy {
     this.editorApi.selectedWidgetIdChanged().pipe(takeWhile(() => this.alive)).subscribe((item: string | undefined) => this.selectedWidgetId = item);
     this.editorApi.widgetsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, TWidgetType>) => this.widgets = items);
     this.editorApi.blocksChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IBlock>) => this.blocks = items);
-
-    setTimeout(()=>{
-      console.log(this.selectedBlockId,this.blocks,this.selectedWidgetId,this.widgets);
-    },4000)
   }
 
   get block(): IBlock | undefined {

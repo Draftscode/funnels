@@ -5,10 +5,15 @@ export class ModelService<T> {
   protected items: BehaviorSubject<Record<string, T>> = new BehaviorSubject<Record<string, T>>({});
   protected STORAGE_NAME = '';
   protected updated: Subject<T> = new Subject<T>();
+  protected deleted: Subject<string> = new Subject<string>();
 
   public afterItemUpdated(): Observable<T> {
     return this.updated.asObservable().pipe(map((r: T) =>
       JSON.parse(JSON.stringify(r))));
+  }
+
+  public afterItemDeleted(): Observable<string> {
+    return this.deleted.asObservable();
   }
 
   protected load(): Observable<Record<string, T>> {
@@ -47,7 +52,6 @@ export class ModelService<T> {
   private store(items: Record<string, T>): Observable<Record<string, T>> {
     const saveString: string = JSON.stringify(items);
     localStorage.setItem(this.STORAGE_NAME, saveString);
-
     return of(items);
   }
 
@@ -55,6 +59,7 @@ export class ModelService<T> {
     const list: Record<string, T> = this.items.getValue();
     list[id] = item;
     this.updateItems(list);
+    this.updated.next(item);
     return of(item);
   }
 
@@ -81,14 +86,14 @@ export class ModelService<T> {
     console.warn(`[HTTP] update property for ${this.STORAGE_NAME}`, changes, item);
     const newItem: T = Object.assign(item, changes);
     items[id] = newItem;
-    return this.updateItems(items).pipe(tap(() => {
-      this.updated.next(items[id]);
-    })).pipe(delay(100));
+    return this.updateItems(items)
+      .pipe(tap(() => this.updated.next(items[id])), delay(100));
   }
 
   public deleteItem(itemId: string): Observable<Record<string, T>> {
     const items: Record<string, T> = this.items.getValue();
     delete items[itemId];
+    this.deleted.next(itemId);
     return this.updateItems(items);
   }
 }

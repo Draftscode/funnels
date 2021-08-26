@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { DirectivesModule } from 'src/app/shared/directives/directive.module';
 import { NameEditorComponent } from './name-editor.component';
 
 
@@ -17,6 +18,7 @@ import { NameEditorComponent } from './name-editor.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    DirectivesModule,
   ]
 })
 export class NameEditorModule { }

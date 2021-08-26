@@ -24,10 +24,15 @@ export class CreateDialogComponent implements OnInit {
     if (!type) { this.dialogRef.close(); return; }
 
     const index: number = this.data?.block?.widgetIds?.length || 0;
-    const w: IWidget = this.createtWidget(type, this.getDefaultText(type), index);
+    if (type === 'area') {
+      this.dialogRef.close({ area: true });
+    } else {
+      const w: IWidget = this.createtWidget(type, this.getDefaultText(type), index);
 
-    this.dialogRef.close({ widget: w });
+      this.dialogRef.close({ widget: w });
+    }
   }
+
 
   private createtWidget(type: string, text: string, index: number): TWidgetType | IWidget {
     const w: IWidget = this.widgetApi.createWidget(text, index);

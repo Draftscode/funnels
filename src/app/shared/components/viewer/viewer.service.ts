@@ -45,7 +45,6 @@ export class ViewerService {
     if (!funnelId) { return of(void 0); }
     return this.funnelApi.getItemById(funnelId).pipe(switchMap((funnel: IFunnel | undefined) => {
       this.funnel.next(funnel);
-      console.log(funnel);
       if (!funnel?.pageIds) { return of(void 0); }
       return this.pageApi.getItemsById(funnel.pageIds).pipe(switchMap((pages: Record<string, IPage>) => {
         this.pages.next(pages);

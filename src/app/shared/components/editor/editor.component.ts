@@ -120,42 +120,52 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   createWidget(): void {
-    if (!this.selectedBlockId) { return; }
-    this._createWidget(this.blocks[this.selectedBlockId]).subscribe((w: IWidget | null) => {
+
+    this._createWidget(this.selectedBlockId).subscribe((w: IWidget | null) => {
       if (!w) { return; }
       this.editorApi.selectWidget(w.id);
     });
   }
 
-  private _createWidget(block: IBlock): Observable<IWidget | null> {
+  private _createWidget(blockId: string | undefined): Observable<IWidget | null> {
+    const block: IBlock | undefined = blockId ? this.blocks[blockId] : undefined;
     return this.createWidgetDialogService.open({ block }).pipe(switchMap((r) => {
-      if (!r) { return of(null); }
-      const widgetIds: string[] = (block.widgetIds || []).concat(r.widget.id);
+      if (r?.widget && block) {
+        const widget: TWidgetType = r.widget;
+        const widgetIds: string[] = (block.widgetIds || []).concat(widget.id);
+        return this.blockApi.updateProperty(block.id, { widgetIds }).pipe(switchMap(() => {
+          return this.widgetApi.create(widget.id, widget);
+        }));
+      } else if (r?.area) {
+        this.createBlock().subscribe();
+      }
 
-
-      return this.blockApi.updateProperty(block.id, { widgetIds }).pipe(switchMap(() => {
-        return this.widgetApi.create(r.widget.id, r.widget);
-      }));
+      return of(null);
     }));
   }
 
+
   deleteWidget(): void {
-    this.confirmDialogService.open({
-      title: 'LABEL.confirm',
-      text: {
-        value: 'QUESTION.delete_value',
-        params: { value: 'LABEL.widget' }
-      }
-    }).subscribe((r: DialogResult) => {
-      if (r?.type !== DialogResultType.CONFIRM) { return; }
-      const id: string | undefined = this.selectedWidgetId;
-      if (!id || !this.selectedBlockId) { return; }
-      this.editorApi.selectWidget(undefined);
-      const widgetIds: string[] = this.blocks[this.selectedBlockId].widgetIds?.filter((widgetId: string) => widgetId !== id) || [];
-      this.blockApi.updateProperty(this.selectedBlockId, { widgetIds }).subscribe(() => {
-        this.widgetApi.deleteItem(id).subscribe();
+    if (!this.selectedWidgetId) {
+      this.editorApi.removeBlock(this.selectedBlockId!, this.selectedPageId!)
+    } else {
+      this.confirmDialogService.open({
+        title: 'LABEL.confirm',
+        text: {
+          value: 'QUESTION.delete_value',
+          params: { value: 'LABEL.widget' }
+        }
+      }).subscribe((r: DialogResult) => {
+        if (r?.type !== DialogResultType.CONFIRM) { return; }
+        const id: string | undefined = this.selectedWidgetId;
+        if (!id || !this.selectedBlockId) { return; }
+        this.editorApi.selectWidget(undefined);
+        const widgetIds: string[] = this.blocks[this.selectedBlockId].widgetIds?.filter((widgetId: string) => widgetId !== id) || [];
+        this.blockApi.updateProperty(this.selectedBlockId, { widgetIds }).subscribe(() => {
+          this.widgetApi.deleteItem(id).subscribe();
+        });
       });
-    });
+    }
   }
 
   deletePage(pageId: string): void {
@@ -299,10 +309,10 @@ export class EditorComponent implements OnInit, OnDestroy {
    * @returns void
    */
   private moveWidgetToBlock(widgetId: string, curBlock: IBlock, targetBlock: IBlock): void {
-    concat([
+    concat(
       this.blockApi.updateProperty(curBlock.id, { widgetIds: curBlock.widgetIds?.filter((id: string) => id !== widgetId) }),
       this.blockApi.updateProperty(targetBlock.id, { widgetIds: (targetBlock.widgetIds || []).concat(widgetId) }),
-    ]).subscribe();
+    ).subscribe();
   }
 
   private swapWidgets(curWidget: IWidget, targetWidget: IWidget, block: IBlock): void {
@@ -318,13 +328,14 @@ export class EditorComponent implements OnInit, OnDestroy {
 
 
 
-  createBlock(): void {
+  createBlock(): Observable<IBlock | undefined> {
     const pageId: string | undefined = this.selectedPageId;
-    if (!pageId) { return; }
-    this.blockApi.createBlock().pipe(switchMap((block: IBlock) => {
+    if (!pageId) { return of(undefined); }
+
+    return this.blockApi.createBlock().pipe(switchMap((block: IBlock) => {
       const blockIds: string[] = (this.pages[pageId].blockIds || []).concat(block.id);
-      return this.pageApi.updateProperty(pageId, { blockIds });
-    })).subscribe();
+      return this.pageApi.updateProperty(pageId, { blockIds }).pipe(map(() => block));
+    }));
   }
 
   demo(): void {

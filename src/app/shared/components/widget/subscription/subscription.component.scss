@@ -33,7 +33,7 @@
 }
 
 .activated {
-  border: 1px solid red;
-  height: calc(100% - 2px);
-  width: calc(100% - 2px);
+  border: 2px dashed rgb(var(--main-highlight-color));
+  height: calc(100% - 4px);
+  width: calc(100% - 4px);
 }

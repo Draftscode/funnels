@@ -4,7 +4,7 @@
 }
 
 .selected {
-  border: 3px solid red;
+  border: 3px solid rgb(var(--main-highlight-color));
   height: calc(100% - 6px);
   width: calc(100% - 6px);
 }
