@@ -1,13 +1,20 @@
 <div *ngIf="item" (click)="activateBlock(item)" class="block" [style.height]="myHeight+'px'"
   [style.background]="item.background|alpha:item.backgroundOpacity">
-  <app-img *ngIf="item?.image" [style.opacity]="item?.opacity" [image]="item.image"></app-img>
-  <mat-grid-list class="grid-list" [cols]="(item?.widgetIds?.length ||0) > 1 ? 2:1" rowHeight="fit">
-    <ng-container *ngFor="let widgetId of item?.widgetIds">
-      <mat-grid-tile [colspan]="1" [rowspan]="1">
-        <ng-container *ngIf="template">
-          <ng-container *ngTemplateOutlet="template; context:{$implicit: widgetId}"></ng-container>
-        </ng-container>
-      </mat-grid-tile>
-    </ng-container>
-  </mat-grid-list>
+  <app-img *ngIf="item?.image" [style.opacity]="item?.imageOpacity" [image]="item.image"></app-img>
+  <ng-container *ngIf="item.widgetIds && item.widgetIds.length>0; else noWidgets">
+    <mat-grid-list class="grid-list" [cols]="item.widgetIds.length > 1 ? 2:1" rowHeight="fit">
+      <ng-container *ngFor="let widgetId of item?.widgetIds">
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <ng-container *ngIf="template">
+            <ng-container *ngTemplateOutlet="template; context:{$implicit: widgetId}"></ng-container>
+          </ng-container>
+        </mat-grid-tile>
+      </ng-container>
+    </mat-grid-list>
+  </ng-container>
+  <ng-template #noWidgets>
+    <div *ngIf="displayEmpty" class="empty-area">
+      {{'LABEL.empty_value'|translate:{value:'LABEL.block'|translate} }}
+    </div>
+  </ng-template>
 </div>

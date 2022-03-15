@@ -5,8 +5,6 @@ import { DateAdapter, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/mate
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
-
-
 @NgModule({
   declarations: [
     CalendarComponent

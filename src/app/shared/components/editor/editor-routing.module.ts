@@ -8,6 +8,13 @@ const routes: Routes = [{
 }, {
   path: ':funnelId',
   component: EditorComponent,
+  children: [{
+    path:'design',
+    loadChildren: () => import('./design/design.module').then(m => m.DesignModule),
+  },{
+    path:'pages',
+    loadChildren: () => import('./sidebar/sidebar.module').then(m => m.SidebarModule),
+  }]
 }];
 
 @NgModule({

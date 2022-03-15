@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { takeWhile } from 'rxjs/operators';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TWidgetType } from 'src/app/model/widget.interface';
-import { PageService } from 'src/app/services/page.service';
 import { IPage } from '../page/page.interface';
 
 @Component({
@@ -9,19 +7,19 @@ import { IPage } from '../page/page.interface';
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.scss']
 })
-export class WidgetComponent implements OnDestroy {
+export class WidgetComponent {
   @Input() widget: TWidgetType | undefined;
   @Output() afterClicked: EventEmitter<void> = new EventEmitter<void>();
   @Input() activated: boolean = false;
-  private alive: boolean = true;
-  pages: Record<string, IPage> = {};
+  @Output('afterChanges') afterChanges: EventEmitter<Record<string, any>> = new EventEmitter<Record<string, any>>();
+  @Input() pages: Record<string, IPage> = {};
+  @Input() mode: 'viewer' | 'editor' = 'editor';
 
-  constructor(private pageApi: PageService) {
-    this.pageApi.itemsChanged().pipe(takeWhile(() => this.alive)).subscribe((items: Record<string, IPage>) => this.pages = items);
+  constructor() {
   }
 
-  ngOnDestroy(): void {
-    this.alive = false;
+  afterChanged(event: Record<string, any>): void {
+    this.afterChanges.emit(event);
   }
 
   storeIt(widget: TWidgetType, value: any): void {
@@ -29,7 +27,6 @@ export class WidgetComponent implements OnDestroy {
   }
 
   onClick(event: MouseEvent): void {
-    if (!this.widget?.linkedTo) { return; }
     this.afterClicked.emit();
   }
 }

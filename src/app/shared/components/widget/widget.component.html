@@ -1,19 +1,21 @@
 <ng-container *ngIf="widget">
   <!-- button -->
   <ng-container *ngIf="widget.kind==='button'">
-    <app-button [activated]="activated" [badge]="widget.linkedTo ? (pages[widget.linkedTo].index +1).toString() : undefined"
+    <app-button [enableBadges]="mode === 'editor'" [activated]="activated"
+      [badge]="widget.linkedTo && pages[widget.linkedTo] ? (pages[widget.linkedTo].index +1).toString() : undefined"
       (afterClicked)="onClick($event)" [widget]="widget"></app-button>
   </ng-container>
   <!-- text -->
   <ng-container *ngIf="widget.kind === 'text'">
-    <p [style.color]="widget.textColor" [style.font-size]="widget.fontSize+'px'" class="text">{{widget.text}}</p>
+    <app-text [activated]="activated" [widget]="widget"></app-text>
   </ng-container>
   <!-- subscription -->
   <!-- calendar -->
   <ng-container *ngIf="widget.kind === 'calendar'">
-    <app-calendar></app-calendar>
+    <app-calendar (afterChanges)="afterChanged($event)" [widget]="widget"></app-calendar>
   </ng-container>
   <ng-container *ngIf="widget.kind === 'subscription'">
-    <app-subscription [widget]="widget"></app-subscription>
+    <app-subscription [activated]="activated" (afterChanges)="afterChanged($event)" [widget]="widget">
+    </app-subscription>
   </ng-container>
 </ng-container>

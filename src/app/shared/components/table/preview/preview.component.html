@@ -1,0 +1,12 @@
+<ng-container *ngIf="pageId">
+  <app-page [page]="pages[pageId]">
+    <ng-container *ngFor="let blockId of pages[pageId].blockIds">
+      <app-block [item]="blocks[blockId]">
+        <ng-template #widgetTemplate let-widgetId>
+          <app-widget [slot]="widgetId" [widget]="widgets[widgetId]">
+          </app-widget>
+        </ng-template>
+      </app-block>
+    </ng-container>
+  </app-page>
+</ng-container>

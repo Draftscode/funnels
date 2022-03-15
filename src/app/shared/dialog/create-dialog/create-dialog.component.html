@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Widget hinzufügen</h1>
+<div mat-dialog-content>
+  <mat-grid-list [gutterSize]="'20px'" [cols]="3" [rowHeight]="124" style="margin-bottom: 20px;min-width: 380px">
+    <ng-container *ngIf="data.block">
+      <mat-grid-tile>
+        <button (click)="close('text')" style="padding: 20px; width: 100%;" mat-stroked-button>
+          <mat-icon style="font-size: 48px; height: 48px; width: 48px">font_download</mat-icon>
+          <div>{{'LABEL.WIDGET.text'|translate}}</div>
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button (click)="close('button')" style="padding: 20px;width: 100%;" mat-stroked-button>
+          <mat-icon style="font-size: 48px; height: 48px; width: 48px">smart_button</mat-icon>
+          <div>{{'LABEL.WIDGET.button'|translate}}</div>
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button (click)="close('calendar')" style="padding: 20px;width: 100%;" mat-stroked-button>
+          <mat-icon style="font-size: 48px; height: 48px; width: 48px">event</mat-icon>
+          <div>{{'LABEL.WIDGET.calendar'|translate}}</div>
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button (click)="close('subscription')" style="padding: 20px;width: 100%;" mat-stroked-button>
+          <mat-icon style="font-size: 48px; height: 48px; width: 48px">view_agenda</mat-icon>
+          <div>{{'LABEL.WIDGET.subscription'|translate}}</div>
+        </button>
+      </mat-grid-tile>
+    </ng-container>
+    <mat-grid-tile>
+      <button (click)="close('area')" style="padding: 20px;width: 100%;" mat-stroked-button>
+        <mat-icon style="font-size: 48px; height: 48px; width: 48px">horizontal_split</mat-icon>
+        <div>{{'LABEL.block'|translate}}</div>
+      </button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">
+    {{'BUTTON.cancel'|translate}}
+  </button>
+</div>

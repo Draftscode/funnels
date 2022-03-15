@@ -7,12 +7,11 @@ export interface IBlock {
   height: number;
   activated?: boolean;
   index: number;
-  widgets: Record<string, TWidgetType>;
   styles?: IStyles;
-  widgetIds?: string[];
-  background?: string;
+  widgetIds: string[];
+  background: string;
   image?: IImage;
   opacity?: number;
-  backgroundOpacity?: number;
-  imageOpacity?: number;
+  backgroundOpacity: number;
+  imageOpacity: number;
 }

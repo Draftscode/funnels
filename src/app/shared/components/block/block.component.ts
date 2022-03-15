@@ -15,6 +15,7 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   @Output() selected: EventEmitter<IBlock> = new EventEmitter<IBlock>();
   @Input() height: number = 0;
   @ContentChild('widgetTemplate') template: TemplateRef<WidgetComponent> | undefined;
+  @Input() displayEmpty: boolean = false
 
   constructor(private funnelApi: FunnelService, public elementRef: ElementRef) {
     // this.el.nativeElement.style.height = '300px';
@@ -32,6 +33,7 @@ export class BlockComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.item) { return; }
     this.myHeight = this.height + (this.item?.height || 0);
   }
 

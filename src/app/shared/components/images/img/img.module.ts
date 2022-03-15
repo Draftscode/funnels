@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { DirectivesModule } from 'src/app/shared/directives/directive.module';
 import { ImgComponent } from './img.component';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -11,8 +12,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule,
+    TranslateModule,
+    DirectivesModule,
   ],
-  exports:[ImgComponent],
+  exports: [ImgComponent],
 })
 export class ImgModule { }

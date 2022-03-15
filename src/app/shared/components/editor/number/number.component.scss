@@ -1,0 +1,18 @@
+.num {
+  padding: 5px;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  margin-right: 5px;
+  display: inline-block;
+  border-radius: 99px;
+  background-color: rgb(60, 118, 185);
+  color: white;
+}
+
+.num.activated {
+  background-color: white;
+  color: black;
+}

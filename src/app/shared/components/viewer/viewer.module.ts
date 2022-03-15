@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ViewerRoutingModule } from './viewer-routing.module';
 import { ViewerComponent } from './viewer.component';
 import { PageModule } from '../page/page.module';
+import { ViewerService } from './viewer.service';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { PageModule } from '../page/page.module';
     CommonModule,
     ViewerRoutingModule,
     PageModule,
-  ]
+  ],
+  providers: [],
 })
 export class ViewerModule { }

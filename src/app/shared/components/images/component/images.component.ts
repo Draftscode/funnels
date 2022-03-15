@@ -44,7 +44,7 @@ export class ImagesComponent implements OnInit, OnChanges {
   trigger(): void {
     this.imageApi.search(this.term || '', 100, 0)
       .subscribe((r) => {
-        this.slices = Math.ceil(r.total / 3);
+        this.slices = r?.total ? Math.ceil(r?.total / 3) : 0;
         this.images = r.hits;
       });
   }

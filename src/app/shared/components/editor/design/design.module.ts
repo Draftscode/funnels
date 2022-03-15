@@ -13,7 +13,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { PipeModule } from 'src/app/shared/pipes/pipe.module';
+import { DesignRoutingModule } from './design-routing.module';
 import { DesignComponent } from './design.component';
 
 @NgModule({
@@ -23,6 +25,7 @@ import { DesignComponent } from './design.component';
     TranslateModule,
     MatCardModule,
     CommonModule,
+    DesignRoutingModule,
     MatSelectModule,
     MatButtonToggleModule,
     MatButtonModule,
@@ -35,6 +38,7 @@ import { DesignComponent } from './design.component';
     MatSliderModule,
     MatMenuModule,
     MatTooltipModule,
+    NgScrollbarModule,
   ]
 })
 export class DesignModule { }

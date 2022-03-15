@@ -5,7 +5,7 @@ export interface IPage {
   index: number;
   name?: string;
   funnelId?: string;
-  blockIds?: string[];
+  blockIds: string[];
   background?: string;
   opacity?: number;
 }

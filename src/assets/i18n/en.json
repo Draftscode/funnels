@@ -6,19 +6,50 @@
     "add_value": "add {{value}}",
     "delete_value": "remove {{value}}",
     "confirm": "Confirm",
-    "apply": "Apply"
+    "apply": "Apply",
+    "close": "close",
+    "publish": "publish"
   },
   "LABEL": {
+    "copy": "copy",
+    "new": "new",
+    "name": "name",
+    "responses": "responses",
+    "confirm": "confirm",
+    "created": "created",
+    "published": "published",
+    "rowNumber": "#",
+    "selectedDate": "selected date",
+    "unchecked": "new",
+    "loading": "loading",
+    "true": "yes",
+    "empty_value": "{{value}} is empty",
+    "false": "no",
+    "pages": "pages",
+    "page": "page",
+    "design": "design",
+    "finish": "finish funnel",
+    "phone": "phone",
+    "mail": "e-mail",
+    "fullname": "first- and lastname",
     "block": "area",
     "widget": "widget",
     "text": "text",
+    "italics": "italics",
     "funnel": "Funnel",
     "image": "image",
     "background": "background",
     "font_color": "text color",
     "font_style": "font style",
+    "opacity": "opacity",
+    "publish_value": "{{value}} was published",
     "font_size": "font-size",
     "font_weight": "font weight",
+    "FONT": {
+      "left": "left-aligned",
+      "center": "centered",
+      "right": "right-aligned"
+    },
     "WIDGET": {
       "button": "button",
       "subscription": "subscription form",
@@ -29,5 +60,14 @@
   "STYLE": {
     "fontSize": "font-size",
     "textColor": "text-color"
+  },
+  "DATE": {
+    "datetime": "MM-dd-YYYY HH:mm a",
+    "date": "MM-dd-YYYY",
+    "time": "HH:mm a"
+  },
+  "QUESTION": {
+    "delete_value": "Do you really want to delete this {{value}}?",
+    "publish_value": "Do you really want to publish this {{value}}?"
   }
 }

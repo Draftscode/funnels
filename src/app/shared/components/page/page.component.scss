@@ -1,5 +1,9 @@
 $white: #f8f8f8;
 
+:host {
+  position: relative;
+}
+
 ::ng-deep {
 
 
@@ -33,3 +37,12 @@ $white: #f8f8f8;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+img.logo {
+  height: 48px;
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  cursor: pointer;
+}

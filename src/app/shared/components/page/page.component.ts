@@ -28,6 +28,10 @@ export class PageComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
   }
 
+  openWebsite():void {
+
+  }
+
   ngOnInit(): void {
   }
 

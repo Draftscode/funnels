@@ -1,34 +1,16 @@
-<mat-toolbar>
-  <mat-toolbar-row>Dashboard</mat-toolbar-row>
+<mat-toolbar class="main">
+  <mat-toolbar-row>Übersicht<span class="spacer"></span><button (click)="import()" mat-icon-button
+      [matTooltip]="'import'">
+      <mat-icon>sync</mat-icon>
+    </button></mat-toolbar-row>
 </mat-toolbar>
 
 
-    <mat-grid-list cols="4" [gutterSize]="'10px'" rowHeight="250px" style="margin-top: 40px">
-      <!-- <mat-grid-tile [style.background-color]="'#19214d'" [colspan]="(layoutLarge$ | async) ? 3 : 4" [rowspan]="1"
-        class="mat-elevation-z4">
-        <div class="chart-wrapper">
-          <h2>Monatsübersicht</h2>
-          <app-chart></app-chart>
-        </div>
-      </mat-grid-tile> -->
-      <!-- <mat-grid-tile [style.background-color]="'white'" class="mat-elevation-z4"
-        [colspan]="(layoutSmall$ | async) ? 4:  (layoutLarge$ | async) ? 1:2" [rowspan]="2">Hallo 2
-      </mat-grid-tile> -->
-      <!-- <mat-grid-tile [style.background-color]="'white'" class="mat-elevation-z4"
-        [colspan]="(layoutSmall$ | async) ? 4:2" [rowspan]="(layoutLarge$ | async) ? 1 : 2">
-        <div class="chart-wrapper">
-          <h2 [style.color]="'black'">Funnels</h2>
-          <app-table></app-table>
-        </div>
-      </mat-grid-tile> -->
-      <mat-grid-tile [style.background-color]="'white'" class="mat-elevation-z4"
-      [colspan]="4" [rowspan]="2">
-      <div class="chart-wrapper">
-        <h2 [style.color]="'black'">Funnels</h2>
-        <app-table></app-table>
-      </div>
-    </mat-grid-tile>
-      <!-- <mat-grid-tile class="mat-elevation-z4" [colspan]="(layoutLarge$ | async) ? 1:4" [rowspan]="1">Hallo 4
-      </mat-grid-tile> -->
-    </mat-grid-list>
-    <div class="other"></div>
+<mat-grid-list cols="4" [gutterSize]="'10px'" rowHeight="250px" style="margin-top: 40px">
+  <mat-grid-tile [style.background-color]="'white'" class="mat-elevation-z4" [colspan]="4" [rowspan]="2">
+    <div class="wrapper">
+      <h2 [style.color]="'black'">Funnels</h2>
+      <app-table></app-table>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

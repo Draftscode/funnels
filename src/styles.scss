@@ -28,8 +28,15 @@ ng-scrollbar.virtual-scroll {
   --scrollbar-border-radius: 10px;
 }
 
+.bg {
+  background-color: #f9f5ff;
+  background-image: url("./assets/images/background.svg");
+  background-attachment: fixed;
+  background-size: cover;
+}
 
-mat-toolbar.mat-toolbar {
+
+mat-toolbar.mat-toolbar.main {
   color: rgb(245, 245, 245);
   background: var(--main-color-primary);
   background: linear-gradient(90deg, var(--main-color-primary) 0%, var(--main-color-secondary) 89%);
@@ -55,29 +62,6 @@ div.page-content {
 span.spacer {
   flex: 1 1 auto;
 }
-
-.lightbox {
-  .mat-dialog-container {
-    margin: 0;
-    padding-top: 0;
-
-    div[mat-dialog-actions] {
-      border-top: 1px solid rgba(0, 0, 0, 0.4);
-      padding: 0;
-      margin: 0;
-    }
-
-    h1[mat-dialog-title] {
-      padding: 16px;
-    }
-
-    div[mat-dialog-content] {
-      // padding: 16px;
-      padding: 0;
-    }
-  }
-}
-
 
 .times {
   font-family: "Times New Roman", Times, serif;

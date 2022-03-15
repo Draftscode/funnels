@@ -1,0 +1,12 @@
+table.mat-table {
+  width: 100%;
+}
+
+div.mat-dialog-content.content {
+  max-height: unset;
+  height: calc(100% - 133px);
+}
+
+tr.mat-header-row {
+  background: #E6E6E6;
+}

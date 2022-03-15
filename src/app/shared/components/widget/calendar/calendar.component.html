@@ -1,1 +1,1 @@
-<mat-calendar></mat-calendar>
+<mat-calendar (selectedChange)="onChange($event)"[selected]="selected" (viewChanged)="update()"></mat-calendar>

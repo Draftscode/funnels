@@ -1,99 +1,71 @@
-<ng-container *ngIf="selectedFunnelId">
-  <mat-toolbar>
+<ng-container *ngIf="funnel">
+  <mat-toolbar class="main">
     <mat-toolbar-row>
+      <button mat-icon-button (click)="drawer.toggle()" *ngIf="(layoutSmall$|async)">
+        <mat-icon>menu</mat-icon>
+      </button>
       <button mat-icon-button (click)="home()">
         <mat-icon>home</mat-icon>
       </button>
-      <app-name-editor (changes)="renameFunnel(selectedFunnelId,$event)" [name]="funnels[selectedFunnelId]?.name">
+      <app-name-editor (changes)="updateFunnel({name:$event})" [name]="funnel.name">
       </app-name-editor>
       <span class="spacer"></span>
-      <button mat-icon-button (click)="zoomIn()" [disabled]="zoom >= 200">
-        <mat-icon>zoom_in</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="zoomOut()" [disabled]="zoom <= 50">
-        <mat-icon>zoom_out</mat-icon>
-      </button>
+      <mat-slide-toggle style="margin-right:20px" (change)="updateFunnel({isTemplate:$event.checked})" *ngIf="funnel"
+        [checked]="funnel.isTemplate">Use as template</mat-slide-toggle>
       <button mat-stroked-button (click)="demo()" appearance="outline">
-        <mat-icon>visibility</mat-icon> publish
+        <mat-icon>visibility</mat-icon> {{'BUTTON.publish'|translate}}
       </button>
 
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #drawer class="sidenav" [opened]="true" [mode]="'side'">
-      <mat-tab-group>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">auto_stories</mat-icon>
-            Seiten
-          </ng-template>
-          <ng-template matTabContent>
-            <ng-scrollbar class="pages-wrapper">
-              <mat-list *ngIf="pages">
-                <div [id]="pageId" [class.selected]="selectedPageId === pages[pageId].id" matRipple
-                  (click)="selectPage(pages[pageId].id)" class="list-entry" mat-list-item #listItem
-                  *ngFor="let pageId of funnels[selectedFunnelId]?.pageIds; let pageIdx = index">
-                  <span class="num">{{pageIdx+1}}</span>
-
-                  <app-name-editor class="list-entry-editor" (changes)="renamePage(pages[pageId].id,$event)"
-                    [name]="pages[pageId]?.name"></app-name-editor>
-                  <span class="spacer"></span>
-                  <button mat-icon-button class="more" [matMenuTriggerFor]="settingsMenu">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-
-                  <mat-menu #settingsMenu>
-                    <menu mat-menu-item>
-                      <mat-icon>edit</mat-icon>Bearbeiten
-                    </menu>
-                    <menu mat-menu-item (click)="deletePage(pageId)">
-                      <mat-icon>delete</mat-icon>Löschen
-                    </menu>
-                  </mat-menu>
-                </div>
-              </mat-list>
-            </ng-scrollbar>
-            <button (click)="createPage()" class="add-btn" mat-button>
-              <mat-icon>add</mat-icon> Erstellen
-            </button>
-          </ng-template>
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">palette</mat-icon>
-            Design
-          </ng-template>
-          <ng-template matTabContent>
-            <app-design [page]="selectedPageId?pages[selectedPageId]:undefined"
-              [block]="selectedBlockId ? blocks[selectedBlockId] : undefined"
-              [widget]="selectedWidgetId ? widgets[selectedWidgetId] : undefined"></app-design>
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
+  <mat-sidenav-container style="width: 100%;height: calc(100% - 64px)">
+    <mat-sidenav [disableClose]="!(layoutSmall$|async)" #drawer class="sidenav" style="width: 300px; background: white"
+      [opened]="!(layoutSmall$|async)" [mode]="(layoutSmall$|async)?'over':'side'">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link [active]="activeRoute == 'pages'" (click)="navTo('pages')">
+          <mat-icon class="example-tab-icon">auto_stories</mat-icon>
+          {{'LABEL.pages'|translate}}
+        </a>
+        <a [disabled]="!selectedWidgetId && !selectedBlockId" mat-tab-link [active]="activeRoute == 'design'"
+          (click)="navTo('design')">
+          <mat-icon class="example-tab-icon">palette</mat-icon>
+          {{'LABEL.design'|translate}}
+        </a>
+      </nav>
+      <div style="display: flex;height: calc(100% - 49px);">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content class="bg">
-      <div class="page-wrapper" [style.zoom]="zoom+'%'">
+      <ng-template #noPage>
+        Es wurde noch keine Seite erstellt <br>
+        <button mat-button (click)="editorApi.createPage()">
+          <mat-icon>add</mat-icon>{{'BUTTON.add_value'|translate:{value:'LABEL.page'|translate} }}
+        </button>
+      </ng-template>
+      <div class="page-wrapper mat-elevation-z8" [style.zoom]="zoom+'%'" *ngIf="selectedPageId; else noPage">
         <app-page #pageContainer cdkDropList [cdkDropListSortPredicate]="enterPredicate" cdkDropListclass="app-page"
           [editable]="true" *ngIf="selectedPageId" [zoom]="1" [page]="pages[selectedPageId]">
 
           <ng-container *ngFor="let blockId of pages[selectedPageId]?.blockIds">
             <div [id]="blockId" (cdkDragStarted)="startBlockDrag($event,blockId)"
               (cdkDragMoved)="blockMoved($event,blockId)" (cdkDragDropped)="blockDropped($event,blockId,selectedPageId)"
-              #container cdkDrag [cdkDragLockAxis]="'y'">
+              #container cdkDrag [cdkDragLockAxis]="'y'" class="drag-container">
 
+              <!-- <div *cdkDragPreview >DAS IST MEIN PREVIEW</div> -->
+              <div *cdkDragPlaceholder style="display: none"></div>
+              <ng-container *ngIf="previewId === blockId && previewPosition === 'start'">
+                <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
+              </ng-container>
 
-              <div class="block-placeholder" *ngIf="previewId === blockId && previewPosition === 'start'">
-                ICH BIN EIN PLATZ
-              </div>
-
-              <app-block (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef
+              <app-block *ngIf="blocks[blockId]" [displayEmpty]="true"
+                (selected)="activateWidget(undefined,blockRef.elementRef,blockId)" #blockRef
                 [height]="blockId === selectedBlockId ? curDragHeight:0"
-                [class.activated]="blockId === selectedBlockId && (blocks[blockId].widgetIds || []).length === 0"
+                [class.activated]="blockId === selectedBlockId && (blocks[blockId]?.widgetIds || []).length === 0"
                 [item]="blocks[blockId]">
                 <ng-template #widgetTemplate let-widgetId>
-                  <app-widget #widgetRef [id]="widgetId" [activated]="widgetId === selectedWidgetId"
+                  <app-widget [pages]="pages" #widgetRef [id]="widgetId" [activated]="widgetId === selectedWidgetId"
                     (cdkDragEnded)="dragExited($event,widgetId,blockId)" cdkDrag
                     (cdkDragMoved)="dragMove($event,blockId)"
                     (click)="activateWidget($event,blockRef.elementRef,blockId,widgetId)" [slot]="widgetId"
@@ -102,8 +74,9 @@
                 </ng-template>
               </app-block>
 
-              <div class="block-placeholder" *ngIf="previewId === blockId && previewPosition === 'end'">
-              </div>
+              <ng-container *ngIf="previewId === blockId && previewPosition === 'end'">
+                <ng-container *ngTemplateOutlet="dragPlaceholder"></ng-container>
+              </ng-container>
 
               <div *ngIf="blockId === selectedBlockId" [style.position]="'relative'">
                 <span (cdkDragMoved)="startResize($event,blockId)" (cdkDragEnded)="endResize($event,blockId)"
@@ -115,29 +88,27 @@
             </div>
           </ng-container>
         </app-page>
-        <div class="actions">
-          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle [disabled]="!selectedBlockId" value="bold" (click)="createWidget()"
-              [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
-              <mat-icon>add</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedPageId" value="bold" (click)="createBlock()"
-              [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.block'|translate}">
-              <mat-icon>add_box</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedWidgetId" [matTooltip]="'Widget löschen'" value="italic"
-              (click)="deleteWidget()">
-              <mat-icon>delete</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle [disabled]="!selectedBlockId" [matTooltip]="'Bereich löschen'" value="italic"
-              (click)="deleteBlock(selectedBlockId!,selectedPageId!)">
-              <mat-icon>layers_clear</mat-icon>
-            </mat-button-toggle>
-            <!-- <mat-button-toggle value="underline"><mat-icon>add</mat-icon></mat-button-toggle> -->
-          </mat-button-toggle-group>
-        </div>
-      </div>
 
+      </div>
+      <div class="actions" *ngIf="selectedPageId">
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+          <mat-button-toggle value="bold" (click)="createWidget()"
+            [matTooltip]="'BUTTON.create_value'|translate:{value:'LABEL.widget'|translate}">
+            <mat-icon>add</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle [disabled]="!selectedWidgetId && !selectedBlockId"
+            [matTooltip]="'BUTTON.delete_value'|translate:{value:'LABEL.widget'|translate}" value="italic"
+            (click)="deleteWidget()">
+            <mat-icon>delete</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </ng-container>
+
+
+<ng-template #dragPlaceholder>
+  <div class="block-placeholder">
+  </div>
+</ng-template>

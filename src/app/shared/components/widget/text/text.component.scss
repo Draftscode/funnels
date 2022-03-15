@@ -1,0 +1,12 @@
+:host {
+  width: 100%;
+}
+
+.text {
+  padding: 0px 16px;
+  margin: 0;
+}
+
+.activated {
+  border: 2px dashed rgb(var(--main-highlight-color));
+}

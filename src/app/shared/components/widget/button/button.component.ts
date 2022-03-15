@@ -15,6 +15,7 @@ export class ButtonComponent implements OnInit {
   @Input() badge: string | undefined;
   @Input() type: TDisplayType = 'original';
   @Input() activated: boolean = false;
+  @Input() enableBadges: boolean = true;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -33,7 +34,6 @@ export class ButtonComponent implements OnInit {
 
 
   onClick(event: MouseEvent): void {
-    if (!this.widget?.linkedTo) { return; }
     this.afterClicked.emit(event);
   }
 }

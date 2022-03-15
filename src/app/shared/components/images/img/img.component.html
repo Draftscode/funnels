@@ -1,3 +1,5 @@
-<img [src]="src"
-  [style.opacity]="image?.opacity" intersectsAt (intersects)="inter($event,ima)" #ima class="app-img" (click)="click()"
+<div *ngIf="!src" class="no-image" #bg intersectsAt (intersects)="inter($event)">
+  {{'LABEL.loading'|translate}}
+</div>
+<img *ngIf="src" [src]="src" [style.opacity]="image?.opacity" #ima class="app-img" (click)="click()"
   [ngClass]="format || []">

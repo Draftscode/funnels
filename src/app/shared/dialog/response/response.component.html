@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Auswertung</h1>
+<div mat-dialog-content class="content">
+
+
+  <table mat-table [dataSource]="datasource" class="mat-elevation-z8">
+    <!-- generated columns -->
+    <ng-container *ngFor="let colKey of displayedColumns">
+      <ng-container [matColumnDef]="colKey">
+        <th mat-header-cell *matHeaderCellDef> {{'LABEL.'+colKey|translate}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[colKey]}} </td>
+      </ng-container>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+<div mat-dialog-actions>
+  <span class="spacer"></span>
+  <button mat-button mat-dialog-close>{{'BUTTON.close'|translate}}</button>
+</div>

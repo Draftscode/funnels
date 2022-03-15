@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "release": "ng build --configuration production --build-optimizer true --aot true",
+    "release:stats": "ng build --configuration production --build-optimizer true --aot true --stats-json",
+    "stats": "webpack-bundle-analyzer dist/funnel/stats.json",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -24,8 +28,6 @@
     "@juggle/resize-observer": "^3.3.1",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
-    "@swimlane/ngx-charts": "^18.0.1",
-    "angular-split": "^5.0.0",
     "moment": "^2.29.1",
     "ngx-scrollbar": "^7.6.1",
     "rxjs": "~6.6.0",
@@ -44,6 +46,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "typescript": "~4.3.2"
+    "typescript": "~4.3.2",
+    "webpack-bundle-analyzer": "^4.4.2"
   }
 }
